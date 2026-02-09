@@ -1,0 +1,64 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@layer utilities {
+  /* Định nghĩa hành động chạy: từ vị trí -100% (bên trái) sang 200% (bên phải) */
+  @keyframes shimmer {
+    0% { transform: translateX(-100%) skewX(-20deg); }
+    100% { transform: translateX(200%) skewX(-20deg); }
+  }
+
+  /* Tạo class để gọi hành động trên */
+  .animate-shimmer {
+    animation: shimmer 1.5s infinite linear;
+  }
+
+  /* Class để ẩn thanh cuộn */
+  .scrollbar-hide::-webkit-scrollbar {
+      display: none;
+  }
+  .scrollbar-hide {
+      -ms-overflow-style: none; /* IE and Edge */
+      scrollbar-width: none;    /* Firefox */
+  }
+
+  /* Class để hiện lại thanh cuộn (dành cho màn hình to) */
+  .scrollbar-default::-webkit-scrollbar {
+      display: block;
+  }
+  .scrollbar-default {
+      -ms-overflow-style: auto;
+      scrollbar-width: auto;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Ẩn scrollbar cho IE, Edge and Firefox */
+  .no-scrollbar {
+      -ms-overflow-style: none;  /* IE and Edge */
+      scrollbar-width: none;  /* Firefox */
+  }
+}
+
+@media (min-width: 1024px){
+/* Tùy chỉnh cho Webkit (Chrome, Edge, Safari) */
+  ::-webkit-scrollbar {
+    width: 10px; /* Độ rộng thanh cuộn */
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent; /* Nền trong suốt */
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: theme('colors.zinc.600'); /* Màu xám (gray-600) */
+    border-radius: 20px;       /* Bo tròn */
+    border: 3px solid transparent; /* Tạo khoảng hở giúp thanh cuộn nhìn thanh thoát hơn */
+    background-clip: content-box;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: theme('colors.zinc.400'); /* Hover sáng hơn (gray-400) */
+  }
+}

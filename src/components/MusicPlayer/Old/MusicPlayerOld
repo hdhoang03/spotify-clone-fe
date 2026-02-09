@@ -1,0 +1,168 @@
+// import React, { useState } from 'react';
+// import { motion } from 'framer-motion';
+// // Import các icon xịn xò từ Lucide
+// import { 
+//     Play, Pause, SkipBack, SkipForward, Shuffle, Repeat, 
+//     Mic2, ListMusic, Volume2, ChevronUp, ChevronDown, Heart 
+// } from 'lucide-react';
+
+// const MusicPlayer = () => {
+//     // State giả lập dữ liệu (sau này nối Backend thì thay bằng dữ liệu thật)
+//     const [isPlaying, setIsPlaying] = useState(false);
+//     const [isVisible, setIsVisible] = useState(true); // Trạng thái ẩn/hiện Player
+//     const [currentTime, setCurrentTime] = useState(45); // Đang ở giây thứ 45
+//     const [duration, setDuration] = useState(240); // Tổng bài hát là 4 phút (240s)
+
+//     // Hàm format giây thành phút:giây (ví dụ: 70s -> 1:10)
+//     const formatTime = (time: number) => {
+//         const minutes = Math.floor(time / 60);
+//         const seconds = Math.floor(time % 60);
+//         return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+//     };
+
+//     return (
+//         <>
+//             {/* NÚT ẨN/HIỆN PLAYER (Nổi lềnh bềnh ở góc) */}
+//             {!isVisible && (
+//                 <motion.button
+//                     initial={{ y: 100 }}
+//                     animate={{ y: 0 }}
+//                     onClick={() => setIsVisible(true)}
+//                     className="fixed bottom-4 right-4 z-50 bg-green-500 text-black p-3 rounded-full shadow-lg hover:scale-110 transition flex items-center gap-2 font-bold"
+//                 >
+//                     <ListMusic size={20} />
+//                     <span className="text-xs">Hiện Player</span>
+//                 </motion.button>
+//             )}
+
+//             {/* KHUNG PLAYER CHÍNH */}
+//             <motion.div 
+//                 // Hiệu ứng trượt lên xuống
+//                 initial={{ y: 100 }}
+//                 animate={{ y: isVisible ? 0 : 100 }} // Nếu ẩn thì đẩy xuống 100% (y: 100)
+//                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                
+//                 className={`
+//                     fixed bottom-0 left-0 right-0 z-50 px-4 py-3
+//                     border-t transition-colors duration-300
+//                     /* LIGHT MODE */
+//                     bg-white border-gray-200 
+//                     /* DARK MODE */
+//                     dark:bg-black dark:border-zinc-800
+//                     /* Ẩn hẳn khỏi DOM visual nếu tắt (để không bấm nhầm) */
+//                     ${!isVisible ? 'pointer-events-none opacity-0' : 'opacity-100'}
+//                 `}
+//             >
+//                 {/* Nút thu gọn nhỏ xíu nằm trên mép Player */}
+//                 <div className="absolute -top-6 left-1/2 -translate-x-1/2">
+//                     <button 
+//                         onClick={() => setIsVisible(false)}
+//                         className="bg-white dark:bg-zinc-800 border border-gray-200
+//                         dark:border-zinc-700 rounded-t-lg px-3 py-0.5 shadow-sm hover:bg-gray-100 
+//                         dark:hover:bg-zinc-700 transition"
+//                         title="Thu gọn"
+//                     >
+//                         <ChevronDown size={16} className="text-gray-500 dark:text-gray-400" />
+//                     </button>
+//                 </div>
+
+//                 <div className="flex items-center justify-between h-full">
+                    
+//                     {/* --- PHẦN 1: THÔNG TIN BÀI HÁT (Trái) --- */}
+//                     <div className="flex items-center gap-4 w-[30%]">
+//                         <div className="w-14 h-14 rounded overflow-hidden shadow-md relative group cursor-pointer">
+//                             <img src="https://placehold.co/60" alt="Cover" className="object-cover w-full h-full transition group-hover:opacity-80"/>
+//                             {/* Nút mũi tên mở rộng full màn hình (sau này làm) */}
+//                             <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition bg-black/40">
+//                                 <ChevronUp size={20} className="text-white"/>
+//                             </div>
+//                         </div>
+//                         <div className="hidden md:block">
+//                             <h4 className="text-sm font-bold text-gray-900 dark:text-white cursor-pointer hover:underline">
+//                                 Tên bài hát demo
+//                             </h4>
+//                             <p className="text-xs text-gray-500 dark:text-gray-400 hover:underline cursor-pointer">
+//                                 Ca sĩ demo
+//                             </p>
+//                         </div>
+//                         {/* Nút thả tim */}
+//                         <button className="text-gray-400 hover:text-green-500 transition hidden md:block ml-2">
+//                             <Heart size={18} />
+//                         </button>
+//                     </div>
+
+//                     {/* --- PHẦN 2: ĐIỀU KHIỂN (Giữa) --- */}
+//                     <div className="flex flex-col items-center w-[40%] gap-1">
+                        
+//                         {/* Hàng nút bấm */}
+//                         <div className="flex items-center gap-6">
+//                             <button className="text-gray-400 hover:text-black dark:hover:text-white transition" title="Trộn bài">
+//                                 <Shuffle size={18} />
+//                             </button>
+                            
+//                             <button className="text-gray-400 hover:text-black dark:hover:text-white transition">
+//                                 <SkipBack size={24} fill="currentColor" />
+//                             </button>
+                            
+//                             {/* Nút Play to nhất */}
+//                             <button 
+//                                 onClick={() => setIsPlaying(!isPlaying)}
+//                                 className="w-8 h-8 rounded-full flex items-center justify-center hover:scale-105 transition shadow-lg
+//                                 bg-black text-white dark:bg-white dark:text-black"
+//                             >
+//                                 {isPlaying ? <Pause size={20} fill="currentColor"/> : <Play size={20} fill="currentColor" className="ml-0.5"/>}
+//                             </button>
+                            
+//                             <button className="text-gray-400 hover:text-black dark:hover:text-white transition">
+//                                 <SkipForward size={24} fill="currentColor" />
+//                             </button>
+                            
+//                             <button className="text-gray-400 hover:text-black dark:hover:text-white transition" title="Lặp lại">
+//                                 <Repeat size={18} />
+//                             </button>
+//                         </div>
+
+//                         {/* Thanh thời gian (Progress Bar) */}
+//                         <div className="w-full flex items-center gap-2 text-xs text-gray-400 font-medium">
+//                             <span className="w-10 text-right">{formatTime(currentTime)}</span>
+                            
+//                             {/* Input Range: Kỹ thuật dùng CSS accent-color để đổi màu thanh trượt */}
+//                             <input 
+//                                 type="range" 
+//                                 min="0" 
+//                                 max={duration}
+//                                 value={currentTime}
+//                                 onChange={(e) => setCurrentTime(Number(e.target.value))}
+//                                 className="flex-1 h-1 bg-gray-300 dark:bg-zinc-600 rounded-lg appearance-none cursor-pointer accent-green-500 hover:accent-green-400"
+//                             />
+                            
+//                             <span className="w-10">{formatTime(duration)}</span>
+//                         </div>
+//                     </div>
+
+//                     {/* --- PHẦN 3: ÂM LƯỢNG & OPTIONS (Phải) --- */}
+//                     <div className="flex items-center justify-end w-[30%] gap-3">
+//                         <button className="text-gray-400 hover:text-black dark:hover:text-white hidden lg:block" title="Lời bài hát">
+//                             <Mic2 size={18} />
+//                         </button>
+//                         <button className="text-gray-400 hover:text-black dark:hover:text-white hidden lg:block" title="Danh sách chờ">
+//                             <ListMusic size={18} />
+//                         </button>
+                        
+//                         <div className="flex items-center gap-2 w-32">
+//                             <Volume2 size={20} className="text-gray-400" />
+//                             <input 
+//                                 type="range" 
+//                                 min="0" 
+//                                 max="100"
+//                                 className="w-full h-1 bg-gray-300 dark:bg-zinc-600 rounded-lg appearance-none cursor-pointer accent-green-500 hover:accent-green-400"
+//                             />
+//                         </div>
+//                     </div>
+//                 </div>
+//             </motion.div>
+//         </>
+//     );
+// };
+
+// export default MusicPlayer;
