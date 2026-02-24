@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Menu, Bell } from 'lucide-react';
-import { useNavigate } from 'react-router-dom'; // Thêm hook điều hướng
+import { useNavigate } from 'react-router-dom';
 import ThemeToggle from './ThemeToggle';
 import UserAvatar from './UserAvatar';
 import AuthModal from '../Auth';
@@ -8,7 +8,6 @@ import ProfileDropdown from './ProfileDropdown';
 import { useHeader } from './useHeader';
 import NotificationDropdown from './NotificationDropdown';
 import DesktopNavigation from './DesktopNavigation';
-import { useUserProfile } from '../../hooks/useUserProfile';
 import LogoutModal from '../Auth/LogoutModal';
 
 interface HeaderProps {
@@ -18,10 +17,11 @@ interface HeaderProps {
 }
 
 const Header = ({ onMenuClick, onNaviagate, activeTab }: HeaderProps) => {
-    const navigate = useNavigate(); // Khởi tạo navigate
-    const { user: syncedUser } = useUserProfile();
+    const navigate = useNavigate();
+    
+    // Sử dụng hook useHeader đã sửa ở trên
     const {
-        user: authUser,
+        user,
         isAuthModalOpen,
         isProfileMenuOpen,
         menuRef,
@@ -31,32 +31,26 @@ const Header = ({ onMenuClick, onNaviagate, activeTab }: HeaderProps) => {
         setIsAuthModalOpen,
         setIsProfileMenuOpen,
         handleLoginSuccess,
-        handleLogout,
+        // handleLogout // Chúng ta dùng logic logout riêng bên dưới cho Modal
     } = useHeader(undefined, onNaviagate);
 
-    const user = syncedUser || authUser;
-
     const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
-    // Hàm xử lý về trang chủ
+
     const handleGoHome = () => {
         navigate('/');
-        // Nếu bạn muốn reset tab đang chọn trong state cha:
-        // onNaviagate('home'); 
     };
 
     const handleConfirmLogout = () => {
-        // Xóa dữ liệu (như bài trước mình hướng dẫn)
+        // 1. Xóa dữ liệu
         localStorage.removeItem('user');
         localStorage.removeItem('user_profile');
-
-        window.dispatchEvent(new Event('user-profile-updated'));
-
-        // Gọi hàm logout của hook cũ nếu cần
-        if (handleLogout) handleLogout();
+        
+        // 2. Bắn sự kiện cập nhật (Để MainLayout ẩn Sidebar ngay)
+        window.dispatchEvent(new Event('user-update')); 
 
         setIsProfileMenuOpen(false);
-        setIsLogoutModalOpen(false); // Đóng modal
-        navigate('/'); // Về trang chủ
+        setIsLogoutModalOpen(false);
+        navigate('/');
     };
 
     return (
@@ -67,31 +61,23 @@ const Header = ({ onMenuClick, onNaviagate, activeTab }: HeaderProps) => {
 
                 {/* Left Section */}
                 <div className="flex items-center gap-4 shrink-0">
-                    {/* Mobile Logo */}
                     <div className="md:hidden flex items-center gap-2">
-                        <span
-                            onClick={handleGoHome}
-                            className="text-xl font-extrabold bg-gradient-to-r from-green-500 to-emerald-400 bg-clip-text text-transparent cursor-pointer"
-                        >
+                        <span onClick={handleGoHome} className="text-xl font-extrabold bg-gradient-to-r from-green-500 to-emerald-400 bg-clip-text text-transparent cursor-pointer">
                             SpringTunes
                         </span>
                     </div>
 
-                    {/* Desktop Menu Button */}
+                    {/* SỬA: hidden md:block -> hidden sm:block (Hiện từ Tablet trở lên) */}
                     {user && (
                         <button
                             onClick={onMenuClick}
-                            className="hidden md:block p-2 rounded-md hover:bg-gray-100 dark:hover:bg-zinc-800 transition"
+                            className="hidden sm:block p-2 rounded-md hover:bg-gray-100 dark:hover:bg-zinc-800 transition"
                         >
                             <Menu size={24} />
                         </button>
                     )}
 
-                    {/* Desktop Logo */}
-                    <span
-                        onClick={handleGoHome}
-                        className="text-xl font-bold bg-gradient-to-r from-green-500 to-emerald-400 ml-2 hidden md:block bg-clip-text text-transparent cursor-pointer hover:opacity-80 transition-opacity"
-                    >
+                    <span onClick={handleGoHome} className="text-xl font-bold bg-gradient-to-r from-green-500 to-emerald-400 ml-2 hidden md:block bg-clip-text text-transparent cursor-pointer hover:opacity-80 transition-opacity">
                         SpringTunes
                     </span>
                 </div>
@@ -102,61 +88,33 @@ const Header = ({ onMenuClick, onNaviagate, activeTab }: HeaderProps) => {
 
                 {/* Right Section */}
                 <div className="flex items-center gap-4">
-                    {/* Notifications */}
                     {user && (
                         <div className="relative" ref={notificationRef}>
-                            <button
-                                onClick={() => setIsNotificationOpen(!isNotificationOpen)}
-                                className={`relative p-2 transition rounded-full hover:bg-gray-100 dark:hover:bg-zinc-800 ${isNotificationOpen
-                                    ? 'text-green-500 bg-gray-100 dark:bg-zinc-800'
-                                    : 'text-gray-500 hover:text-black dark:text-gray-400 dark:hover:text-white'
-                                    }`}
-                            >
+                            <button onClick={() => setIsNotificationOpen(!isNotificationOpen)} className="relative p-2 transition rounded-full hover:bg-gray-100 dark:hover:bg-zinc-800 text-gray-500 dark:text-gray-400">
                                 <Bell size={24} />
-                                <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white dark:border-black"></span>
+                                {isNotificationOpen && <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full"></span>}
                             </button>
-
-                            {isNotificationOpen && (
-                                <NotificationDropdown onClose={() => setIsNotificationOpen(false)} />
-                            )}
+                            {isNotificationOpen && <NotificationDropdown onClose={() => setIsNotificationOpen(false)} />}
                         </div>
                     )}
 
-                    {/* Theme Toggle (Desktop) */}
-                    <div className="hidden md:block">
-                        <ThemeToggle />
-                    </div>
+                    <div className="hidden md:block"><ThemeToggle /></div>
 
-                    {/* User Actions / Auth */}
                     {user ? (
                         <div className="relative" ref={menuRef}>
-                            <div className="flex items-center gap-3">
-                                <UserAvatar
-                                    name={user.name}
-                                    avatarUrl={user.avatarUrl}
-                                    onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
-                                />
-                            </div>
+                            <UserAvatar name={user.name} avatarUrl={user.avatarUrl} onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)} />
                             {isProfileMenuOpen && (
                                 <ProfileDropdown
                                     user={user}
-                                    onLogout={() => {
-                                        setIsProfileMenuOpen(false); // Đóng dropdown cho gọn
-                                        setIsLogoutModalOpen(true);  // Mở modal xác nhận
-                                    }}
+                                    onLogout={() => { setIsProfileMenuOpen(false); setIsLogoutModalOpen(true); }}
                                     onClose={() => setIsProfileMenuOpen(false)}
                                 />
                             )}
                         </div>
                     ) : (
                         <div className="flex items-center gap-4">
-                            <div className="md:hidden">
-                                <ThemeToggle />
-                            </div>
-                            <button
-                                onClick={() => setIsAuthModalOpen(true)}
-                                className="bg-green-500 text-white dark:bg-white dark:text-black font-bold px-6 py-2 rounded-full text-sm hover:scale-105 transition shadow-lg"
-                            >
+                            <div className="md:hidden"><ThemeToggle /></div>
+                            <button onClick={() => setIsAuthModalOpen(true)} className="bg-green-500 text-white font-bold px-6 py-2 rounded-full text-sm hover:scale-105 transition shadow-lg">
                                 Đăng nhập
                             </button>
                         </div>
@@ -164,17 +122,8 @@ const Header = ({ onMenuClick, onNaviagate, activeTab }: HeaderProps) => {
                 </div>
             </header>
 
-            <AuthModal
-                isOpen={isAuthModalOpen}
-                onClose={() => setIsAuthModalOpen(false)}
-                onLoginSuccess={handleLoginSuccess}
-            />
-
-            <LogoutModal
-                isOpen={isLogoutModalOpen}
-                onClose={() => setIsLogoutModalOpen(false)}
-                onConfirm={handleConfirmLogout}
-            />
+            <AuthModal isOpen={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)} onLoginSuccess={handleLoginSuccess} />
+            <LogoutModal isOpen={isLogoutModalOpen} onClose={() => setIsLogoutModalOpen(false)} onConfirm={handleConfirmLogout} />
         </>
     );
 };

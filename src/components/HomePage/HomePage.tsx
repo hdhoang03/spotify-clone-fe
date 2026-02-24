@@ -13,7 +13,10 @@ interface HomePageProps {
 const HomePage = ({ onNavigate }: HomePageProps) => {
     const [activeTab, setActiveTab] = useState<TabType>('ALL');
     const [isFollowingMode, setIsFollowingMode] = useState(false);
-    const user = JSON.parse(localStorage.getItem('user') || 'null'); 
+    const userString = localStorage.getItem('user');
+
+    // Chỉ parse khi chuỗi tồn tại và KHÔNG phải là chuỗi "undefined"
+    const user = userString && userString !== 'undefined' ? JSON.parse(userString) : null;
     const isLoggedIn = !!user;
     const navigate = useNavigate();
 
@@ -51,16 +54,16 @@ const HomePage = ({ onNavigate }: HomePageProps) => {
 
     return (
         <div className="bg-white dark:bg-[#121212] min-h-screen transition-colors duration-300">
-            
+
             {/* 2. FilterBar: Khôi phục padding (pt-6 px-6) để nó không dính sát lề */}
             <div className="sticky top-0 z-10 bg-white/95 dark:bg-[#121212]/95 backdrop-blur-md pt-6 px-6">
-                <FilterBar 
-                    activeTab={activeTab} 
+                <FilterBar
+                    activeTab={activeTab}
                     onTabChange={setActiveTab}
                     isFollowingMode={isFollowingMode}
                     onToggleFollowing={() => setIsFollowingMode(!isFollowingMode)}
                     isLoggedIn={isLoggedIn}
-                    />
+                />
             </div>
             <div className="min-h-screen mt-4 space-y-8 pb-32">
                 {activeTab === 'ALL' && (
@@ -87,7 +90,7 @@ const HomePage = ({ onNavigate }: HomePageProps) => {
                                     // onClick={() => {if (onNavigate) onNavigate('ARTIST');}}
                                     onClick={() => {
                                         navigate(`/artist/${item.id}`)
-                                    }}        
+                                    }}
                                 />
                             ))}
                         </Section>
@@ -120,10 +123,10 @@ const HomePage = ({ onNavigate }: HomePageProps) => {
                     </Section>
                 )}
             </div>
-            
+
             {/* 4. FOOTER */}
-            <Footer/>
-        </div>    
+            <Footer />
+        </div>
     );
 };
 

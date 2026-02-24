@@ -1,5 +1,3 @@
-import React from 'react';
-
 export type TabType = 'ALL' | 'MUSIC' | 'POSTCARD';
 
 interface FilterBarProps {

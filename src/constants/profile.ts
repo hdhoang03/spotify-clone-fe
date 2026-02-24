@@ -22,6 +22,8 @@ export interface Playlist {
     owner: string;
 }
 
+export type UserRole = 'USER' | 'ADMIN';
+
 export interface UserProfile {
     id: string;
     name: string;
@@ -31,4 +33,5 @@ export interface UserProfile {
     publicPlaylistsCount: number;
     followingCount: number;
     followersCount: number; // Thêm cho giống thật
+    role: UserRole;
 }

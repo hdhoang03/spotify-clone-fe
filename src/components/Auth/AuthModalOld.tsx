@@ -58,7 +58,7 @@ const AuthModal = ({ isOpen, onClose, onLoginSuccess }: AuthModalProps) => {
         e.preventDefault();
         // TODO: Call API login
         // TODO: Handle OAuth2 (Google/Facebook) here later
-        onLoginSuccess({ name: "Hoang Developer", email: "dev@test.com" }); // Mock data
+        // onLoginSuccess({ name: "Hoang Developer", email: "dev@test.com" }); // Mock data
         onClose();
     };
 
