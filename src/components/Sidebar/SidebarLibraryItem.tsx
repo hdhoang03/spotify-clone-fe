@@ -84,7 +84,7 @@ const SidebarItem = ({ icon, label, isActive, onClick, imageUrl, variant = 'nav'
                             </span>
                             {isPlaylist && (
                                 <span className="text-[12px] mt-0.5 text-zinc-500 dark:text-zinc-500 truncate">
-                                    Playlist • Spotify
+                                    Playlist • SpringTunes
                                 </span>
                             )}
                         </div>

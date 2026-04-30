@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import type { PanInfo } from 'framer-motion';
 import MainOptionsView from './MainOptionsView';
 import ArtistSelectionView from './ArtistSelectionView';
+import PlaylistSelectionView from './PlaylistSelectionView';
 
 interface OptionsBottomSheetProps {
     isOpen: boolean;
@@ -12,20 +13,31 @@ interface OptionsBottomSheetProps {
     onNavigate?: (Screen: string) => void;
 }
 
-type SheetView = 'OPTIONS' | 'ARTIST_SELECTION';
+type SheetView = 'OPTIONS' | 'ARTIST_SELECTION' | 'PLAYLIST_SELECTION';
 
 const OptionsBottomSheet = ({ isOpen, onClose, song, onShare, onNavigate }: OptionsBottomSheetProps) => {
     const [currentView, setCurrentView] = useState<SheetView>('OPTIONS');
 
-    // --- LOGIC XỬ LÝ DỮ LIỆU ---
+    // const artistList = useMemo(() => {
+    //     if (song.title === "Thằng Điên") {
+    //         return [
+    //             { id: 'justatee', name: 'JustaTee', avatar: 'https://tse1.explicit.bing.net/th/id/OIP.I547t6IIKHLCs7gshGWw0QHaFj?rs=1&pid=ImgDetMain&o=7&rm=3' },
+    //             { id: 'phuongly', name: 'Phương Ly', avatar: 'https://th.bing.com/th/id/OIP.i2IqTwWWYeR0eQ9iHCBxAwHaJP?o=7rm=3&rs=1&pid=ImgDetMain&o=7&rm=3' }
+    //         ];
+    //     }
+    //     return [{ id: 'main', name: song.artist || 'Unknown', avatar: song.coverUrl }];
+    // }, [song]);
+
     const artistList = useMemo(() => {
-        if (song.title === "Thằng Điên") {
-            return [
-                { id: 'justatee', name: 'JustaTee', avatar: 'https://tse1.explicit.bing.net/th/id/OIP.I547t6IIKHLCs7gshGWw0QHaFj?rs=1&pid=ImgDetMain&o=7&rm=3' },
-                { id: 'phuongly', name: 'Phương Ly', avatar: 'https://th.bing.com/th/id/OIP.i2IqTwWWYeR0eQ9iHCBxAwHaJP?o=7rm=3&rs=1&pid=ImgDetMain&o=7&rm=3' }
-            ];
-        }
-        return [{ id: 'main', name: song.artist || 'Unknown', avatar: song.coverUrl }];
+        if (!song) return [];
+        const artistStr = song.artist || song.artistName;
+        if (!artistStr) return [];
+
+        return artistStr.split(',').map((name: string, index: number) => ({
+            id: `artist_${index}`,
+            name: name.trim(),
+            avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(name.trim())}&background=random`
+        }));
     }, [song]);
 
     // Reset view khi đóng mở
@@ -79,7 +91,7 @@ const OptionsBottomSheet = ({ isOpen, onClose, song, onShare, onNavigate }: Opti
                 </div>
 
                 {/* Content Container - Switch Views Here */}
-                <div className="flex-1 overflow-y-auto px-6 pb-12 pt-2 scrollbar-hide">
+                {/* <div className="flex-1 overflow-y-auto px-6 pb-12 pt-2 scrollbar-hide">
 
                     {currentView === 'OPTIONS' ? (
                         <MainOptionsView
@@ -100,6 +112,31 @@ const OptionsBottomSheet = ({ isOpen, onClose, song, onShare, onNavigate }: Opti
                         />
                     )}
 
+                </div> */}
+
+                <div className="flex-1 overflow-y-auto px-6 pb-12 pt-2 scrollbar-hide">
+                    {currentView === 'OPTIONS' ? (
+                        <MainOptionsView
+                            song={song}
+                            artistList={artistList}
+                            onShare={() => { onShare(); onClose(); }}
+                            onRequestArtistSelection={() => setCurrentView('ARTIST_SELECTION')}
+                            onNavigateToArtist={handleNavigateToArtist}
+                            onRequestPlaylistSelection={() => setCurrentView('PLAYLIST_SELECTION')}
+                        />
+                    ) : currentView === 'ARTIST_SELECTION' ? (
+                        <ArtistSelectionView
+                            artists={artistList}
+                            onBack={() => setCurrentView('OPTIONS')}
+                            onSelectArtist={handleNavigateToArtist}
+                        />
+                    ) : (
+                        <PlaylistSelectionView
+                            songId={song.id || song.songId}
+                            onBack={() => setCurrentView('OPTIONS')}
+                            onClose={onClose}
+                        />
+                    )}
                 </div>
             </motion.div>
         </>

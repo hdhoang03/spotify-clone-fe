@@ -14,16 +14,16 @@ interface ArtistActionBarProps {
     isSticky?: boolean;
 }
 
-const ArtistActionBar = ({ 
-    isPlaying, 
-    isFollowing, 
-    isShuffling, 
-    onTogglePlay, 
-    onToggleFollow, 
+const ArtistActionBar = ({
+    isPlaying,
+    isFollowing,
+    isShuffling,
+    onTogglePlay,
+    onToggleFollow,
     onToggleShuffle,
     artistName,
     artistImage,
-    isSticky = false 
+    isSticky = false
 }: ArtistActionBarProps & { artistName: string, artistImage: string }) => {
     const [isSheetOpen, setIsSheetOpen] = useState(false);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -48,16 +48,16 @@ const ArtistActionBar = ({
     };
 
     return (
-        <div 
+        <div
             className={`flex items-center justify-between md:justify-start gap-4 md:gap-6 px-6 md:px-8 py-3 
                 sticky top-0 z-40 transition-all duration-300 ease-in-out border-b
-                ${isSticky 
+                ${isSticky
                     /* SỬA 2: Thêm background đặc để che nội dung trôi bên dưới */
-                    ? 'bg-white dark:bg-[#121212] dark:border-white/10' 
-                    : 'bg-white/95 dark:bg-[#121212]/0 border-transparent' 
+                    ? 'bg-white dark:bg-[#121212] dark:border-white/10'
+                    : 'bg-white/95 dark:bg-[#121212]/0 border-transparent'
                 }`}
         >
-            
+
             {/* --- KHỐI TRÁI: Play Button + Tên Nghệ Sĩ (Ẩn/Hiện) --- */}
             <div className="flex items-center gap-4">
                 <button onClick={onTogglePlay} className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-green-500 text-black flex items-center justify-center transition hover:scale-105 shadow-lg active:scale-95 flex-shrink-0">
@@ -74,15 +74,15 @@ const ArtistActionBar = ({
             </div>
 
             <div className="flex items-center gap-4 md:gap-6 ml-auto md:ml-0">
-                
+
                 {/* Nút Shuffle (Hiện trên cả Mobile và Desktop nhưng style khác nhau) */}
-                <button 
+                <button
                     onClick={onToggleShuffle}
                     className={`transition relative ${isShuffling ? "text-green-500" : "text-zinc-400 hover:text-zinc-900 dark:hover:text-white"}`}
                 >
                     {/* Icon nhỏ hơn trên mobile (20) và to hơn trên desktop (24) */}
                     <Shuffle className="w-5 h-5 md:w-6 md:h-6" />
-                    
+
                     {/* Dấu chấm xanh khi active */}
                     {isShuffling && (
                         <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-green-500 rounded-full" />
@@ -96,7 +96,7 @@ const ArtistActionBar = ({
 
                 {/* Nút More (3 chấm) */}
                 <div className="relative" ref={dropdownRef}>
-                    <button 
+                    <button
                         onClick={handleMoreClick}
                         className="text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition flex items-center"
                     >
@@ -107,19 +107,19 @@ const ArtistActionBar = ({
                     {isDropdownOpen && (
                         <div className="hidden md:block absolute right-0 top-full mt-2 rounded shadow-2xl p-1 w-56 z-50 
                                         bg-white dark:bg-[#282828] border border-zinc-200 dark:border-white/10 animate-in fade-in zoom-in-95 duration-100 origin-top-right">
-                                <MenuItem icon={<Ban size={16}/>} label="Don't play this artist" />
-                                <MenuItem icon={<Flag size={16}/>} label="Report" />
-                                <div className="h-[1px] bg-zinc-200 dark:bg-white/10 my-1"/>
-                                <MenuItem icon={<Share2 size={16}/>} label="Share" />
-                                <MenuItem icon={<Copy size={16}/>} label="Copy link to artist" />
+                            <MenuItem icon={<Ban size={16} />} label="Don't play this artist" />
+                            <MenuItem icon={<Flag size={16} />} label="Report" />
+                            <div className="h-[1px] bg-zinc-200 dark:bg-white/10 my-1" />
+                            <MenuItem icon={<Share2 size={16} />} label="Share" />
+                            <MenuItem icon={<Copy size={16} />} label="Copy link to artist" />
                         </div>
                     )}
                 </div>
             </div>
 
             {/* Action Sheet (Mobile) - Nằm ngoài layout chính để không ảnh hưởng vị trí */}
-            <ArtistActionSheet 
-                isOpen={isSheetOpen} 
+            <ArtistActionSheet
+                isOpen={isSheetOpen}
                 onClose={() => setIsSheetOpen(false)}
                 artistName={artistName}
                 artistImage={artistImage}

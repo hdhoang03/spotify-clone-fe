@@ -40,6 +40,7 @@ export interface SongResponse {
     albumId?: string;
     albumName?: string;
     category?: string;
+    categoryId?: string;
     coverUrl: string;
     audioUrl: string;
     uploadedBy: string;
@@ -120,4 +121,27 @@ export interface CategoryResponse {
     songCount: number; //
     active: boolean;
     displayOrder?: number; //
+}
+
+export interface UserProfileResponse {
+    id: string;
+    username: string;
+    name: string;
+    email: string;
+    avatarUrl: string;
+    bio: string;
+    followerCount: number;
+    followingCount: number;
+    playlistCount: number;
+    followingArtistCount: number;
+    isFollowedByMe: boolean;
+    isPublicProfile: booleanz;
+}
+
+export interface ArtistFollowResponse {
+    id: string;
+    artistId: string;
+    artistName: string;
+    avatarUrl: string;
+    followedAt: string;
 }

@@ -34,4 +34,5 @@ export interface UserProfile {
     followingCount: number;
     followersCount: number; // Thêm cho giống thật
     role: UserRole;
+    isPublicProfile: boolean;
 }

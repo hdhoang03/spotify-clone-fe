@@ -1,10 +1,10 @@
 //Service
 import { useState, useRef, useEffect } from 'react';
+import { useMusic } from '../../contexts/MusicContent';
 
 export type RepeatMode = 'off' | 'all' | 'one';
 
 export const useAudioPlayer = (onSongEndedCallback?: () => void, isGuest: boolean = false) => {
-    //Ref thẻ audio HTML
     const audioRef = useRef<HTMLAudioElement | null>(null);
 
     // 1. Quản lý State (Giống Database tạm thời)
@@ -16,8 +16,9 @@ export const useAudioPlayer = (onSongEndedCallback?: () => void, isGuest: boolea
     const [volume, setVolume] = useState(1);
     const [isMuted, setIsMuted] = useState(false);
     const [prevVolume, setPrevVolume] = useState(1);
-    const [isShuffling, setIsShuffling] = useState(false);
+    // const [isShuffling, setIsShuffling] = useState(false);
     const [repeatMode, setRepeatMode] = useState<RepeatMode>('off');
+    const { isShuffling, toggleShuffle } = useMusic();
 
     // Xử lý cập nhật thanh thời gian khi nhạc chạy
     const onLoadedMetadata = () => {
@@ -41,7 +42,7 @@ export const useAudioPlayer = (onSongEndedCallback?: () => void, isGuest: boolea
                 audioRef.current.pause();
                 audioRef.current.currentTime = 0; // Reset hoặc giữ nguyên
                 setIsPlaying(false);
-                
+
                 // Bạn có thể dispatch 1 custom event hoặc dùng state để hiện Modal Login
                 alert("Bạn đang nghe thử. Vui lòng đăng nhập để nghe trọn vẹn bài hát!");
                 // window.dispatchEvent(new Event('REQUIRE_LOGIN')); // Ví dụ nâng cao
@@ -53,9 +54,9 @@ export const useAudioPlayer = (onSongEndedCallback?: () => void, isGuest: boolea
     const onEnded = () => {
         // Nếu là Repeat One: Thẻ Audio tự loop lại (do useEffect đã set audioRef.loop = true)
         if (repeatMode === 'one') {
-            return; 
+            return;
         }
-        
+
         // Nếu có callback (hàm next bài), gọi nó
         if (onSongEndedCallback) {
             onSongEndedCallback();
@@ -69,10 +70,10 @@ export const useAudioPlayer = (onSongEndedCallback?: () => void, isGuest: boolea
     const togglePlay = () => {
         setIsPlaying(!isPlaying);
     };
-    
-    const toggleShuffle = () => {
-        setIsShuffling(prev => !prev);
-    };
+
+    // const toggleShuffle = () => {
+    //     setIsShuffling(prev => !prev);
+    // };
 
     // --- Logic MỚI: Toggle Repeat (Off -> All -> One -> Off) ---
     const toggleRepeat = () => {
@@ -90,7 +91,7 @@ export const useAudioPlayer = (onSongEndedCallback?: () => void, isGuest: boolea
             setCurrentTime(time);
         }
     };
-    
+
     const handleSpeedChange = (newSpeed: number) => { //hàm thay đổi tốc độ phát
         setSpeed(newSpeed);
         console.log("Speed changed to:", newSpeed);
@@ -173,7 +174,7 @@ export const useAudioPlayer = (onSongEndedCallback?: () => void, isGuest: boolea
         handleTimeChange,
         handleSpeedChange,
         formatTime,
-        onLoadedMetadata, 
+        onLoadedMetadata,
         onTimeUpdate,
         onEnded,
         handleVolumeChange,

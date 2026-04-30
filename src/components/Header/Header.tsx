@@ -18,7 +18,7 @@ interface HeaderProps {
 
 const Header = ({ onMenuClick, onNaviagate, activeTab }: HeaderProps) => {
     const navigate = useNavigate();
-    
+
     // Sử dụng hook useHeader đã sửa ở trên
     const {
         user,
@@ -41,16 +41,14 @@ const Header = ({ onMenuClick, onNaviagate, activeTab }: HeaderProps) => {
     };
 
     const handleConfirmLogout = () => {
-        // 1. Xóa dữ liệu
+        // Xóa dữ liệu
         localStorage.removeItem('user');
         localStorage.removeItem('user_profile');
-        
-        // 2. Bắn sự kiện cập nhật (Để MainLayout ẩn Sidebar ngay)
-        window.dispatchEvent(new Event('user-update')); 
+        localStorage.removeItem('token');
 
         setIsProfileMenuOpen(false);
         setIsLogoutModalOpen(false);
-        navigate('/');
+        window.location.href = '/';
     };
 
     return (

@@ -131,3 +131,130 @@ const HomePage = ({ onNavigate }: HomePageProps) => {
 };
 
 export default HomePage;
+
+// import { useState } from 'react';
+// import Section from './Section';
+// import CardItem from '../common/CardItem';
+// import Footer from './Footer';
+// import FilterBar, { type TabType } from './FilterBar';
+// import { useNavigate } from 'react-router-dom';
+// import { useHomeData } from './useHomeData';
+// import { Loader2 } from 'lucide-react';
+
+// const HomePage = () => {
+//     const [activeTab, setActiveTab] = useState<TabType>('ALL');
+//     const [isFollowingMode, setIsFollowingMode] = useState(false);
+//     const navigate = useNavigate();
+
+//     // Gọi Hook lấy dữ liệu
+//     const { data, isLoading } = useHomeData(activeTab);
+
+//     // Xử lý kiểm tra đăng nhập (để FilterBar biết đường render)
+//     const userString = localStorage.getItem('user');
+//     const isLoggedIn = !!(userString && userString !== 'undefined');
+
+//     return (
+//         <div className="bg-[#121212] min-h-screen">
+//             <FilterBar
+//                 activeTab={activeTab}
+//                 onTabChange={setActiveTab}
+//                 isFollowingMode={isFollowingMode}
+//                 onToggleFollowing={() => setIsFollowingMode(!isFollowingMode)}
+//                 isLoggedIn={isLoggedIn}
+//             />
+
+//             {isLoading ? (
+//                 <div className="flex flex-col items-center justify-center pt-32 text-zinc-500 gap-4">
+//                     <Loader2 size={40} className="animate-spin text-green-500" />
+//                     <p className="font-medium">Đang tải không gian âm nhạc của bạn...</p>
+//                 </div>
+//             ) : (
+//                 <div className="space-y-8 pt-4 pb-10">
+
+//                     {/* --- TAB: TẤT CẢ --- */}
+//                     {activeTab === 'ALL' && (
+//                         <>
+//                             {/* PHÁT GẦN ĐÂY (Đang dùng Mock) */}
+//                             <Section title="Phát gần đây">
+//                                 {data.recentlyPlayed.map(item => (
+//                                     <CardItem
+//                                         key={item.songId}
+//                                         title={item.songTitle}
+//                                         description={item.artistName}
+//                                         imageUrl={item.coverUrl}
+//                                         onClick={() => console.log('Sẽ chuyển hướng sau')}
+//                                     />
+//                                 ))}
+//                             </Section>
+
+//                             {/* BÀI HÁT YÊU THÍCH NHẤT (Từ LikeSongController) */}
+//                             {data.topLikedSongs.length > 0 && (
+//                                 <Section title="Thịnh hành & Yêu thích">
+//                                     {data.topLikedSongs.map(song => (
+//                                         <CardItem
+//                                             key={song.songId}
+//                                             title={song.songTitle}
+//                                             description={song.artistName}
+//                                             imageUrl={song.coverUrl}
+//                                             // Tùy vào luồng của bạn, có thể phát nhạc luôn hoặc chuyển trang
+//                                             onClick={() => console.log('Play song:', song.songId)}
+//                                         />
+//                                     ))}
+//                                 </Section>
+//                             )}
+
+//                             {/* TOP STREAM (Từ SongStreamService) */}
+//                             {data.topStreamedSongs.length > 0 && (
+//                                 <Section title="Đang HOT hiện nay">
+//                                     {data.topStreamedSongs.map(song => (
+//                                         <CardItem
+//                                             key={song.songId}
+//                                             title={song.songTitle}
+//                                             description={song.artistName}
+//                                             imageUrl={song.coverUrl}
+//                                             onClick={() => console.log('Play song:', song.songId)}
+//                                         />
+//                                     ))}
+//                                 </Section>
+//                             )}
+
+//                             {/* ALBUM MỚI */}
+//                             {data.newAlbums.length > 0 && (
+//                                 <Section title="Album mới phát hành">
+//                                     {data.newAlbums.map(album => (
+//                                         <CardItem
+//                                             key={album.id}
+//                                             title={album.name}
+//                                             description={album.artistName || 'Various Artists'}
+//                                             imageUrl={album.avatarUrl}
+//                                             isRound={false}
+//                                             onClick={() => navigate(`/album/${album.id}`)}
+//                                         />
+//                                     ))}
+//                                 </Section>
+//                             )}
+//                         </>
+//                     )}
+
+//                     {/* --- TAB: MUSIC --- */}
+//                     {activeTab === 'MUSIC' && (
+//                         <div className="pt-10 flex flex-col items-center justify-center text-zinc-500">
+//                             <p>Tính năng lọc chuyên sâu Âm nhạc đang được phát triển...</p>
+//                         </div>
+//                     )}
+
+//                     {/* --- TAB: POSTCARD --- */}
+//                     {activeTab === 'POSTCARD' && (
+//                         <div className="pt-10 flex flex-col items-center justify-center text-zinc-500">
+//                             <p>Tính năng Postcard/Podcast đang được phát triển...</p>
+//                         </div>
+//                     )}
+//                 </div>
+//             )}
+
+//             <Footer />
+//         </div>
+//     );
+// };
+
+// export default HomePage;

@@ -144,7 +144,7 @@ const ProfileShareCard = ({ user, dominantColor, isOpen, onClose }: ProfileShare
 
                             {/* Stats nhỏ (Optional - nhìn sẽ uy tín hơn) */}
                             <p className="text-sm font-medium opacity-90 uppercase tracking-widest bg-white/10 px-3 py-1 rounded-full">
-                                {user.followersCount || 0} Followers
+                                {user.followerCount || 0} Followers
                             </p>
                         </div>
 

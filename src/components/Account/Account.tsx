@@ -32,7 +32,7 @@ const AccountPage = () => {
                     </div>
 
                     {/* Hàng 3: Danger Zone */}
-                    <div className="mt-8 pt-8 border-t border-zinc-200 dark:border-zinc-800">
+                    {/* <div className="mt-8 pt-8 border-t border-zinc-200 dark:border-zinc-800">
                         <h3 className="text-red-500 font-bold mb-2">Vùng nguy hiểm</h3>
                         <div className="flex items-center justify-between p-4 border border-red-200 dark:border-red-900/30 bg-red-50 dark:bg-red-900/10 rounded-xl">
                             <div>
@@ -43,7 +43,7 @@ const AccountPage = () => {
                                 Xóa
                             </button>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             </div>
             <Footer />

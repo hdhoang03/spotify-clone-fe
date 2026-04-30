@@ -43,11 +43,11 @@ const Footer = () => {
                 {/* Social Icons - Move to separate column or span */}
                 <div className="col-span-2 md:col-span-1 lg:col-span-2 flex justify-start md:justify-end gap-4">
                     <a href="http://www.instagram.com/hoang.ho3/" target="_blank" rel="noreferrer">
-                        <SocialIcon path={ICONS.instagram} />
+                        <SocialIcon path={ICONS.facebook} />
                     </a>
 
                     <a href="http://www.facebook.com/thotslayer213" target="_blank" rel="noreferrer">
-                        <SocialIcon path={ICONS.facebook} />
+                        <SocialIcon path={ICONS.instagram} />
                     </a>
 
                     <a href="https://www.reddit.com/user/Hide_on_bush003/" target="_blank" rel="noreferrer">

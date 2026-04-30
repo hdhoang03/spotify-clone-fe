@@ -1,12 +1,13 @@
 import { ListPlus, Disc, Mic2, Share2, Info, Heart, ChevronRight } from 'lucide-react';
-import ScrollingText from '../MusicPlayer/ScrollingText'; // Nhớ sửa đường dẫn import cho đúng
+import ScrollingText from '../MusicPlayer/ScrollingText';
 
 interface MainOptionsViewProps {
     song: any;
     artistList: any[];
     onShare: () => void;
-    onRequestArtistSelection: () => void; // Hàm yêu cầu chuyển sang màn hình chọn Artist
-    onNavigateToArtist: (id: string) => void; // Hàm đi thẳng tới Artist (nếu chỉ có 1)
+    onRequestArtistSelection: () => void;
+    onNavigateToArtist: (id: string) => void;
+    onRequestPlaylistSelection: () => void;
 }
 
 const MainOptionsView = ({
@@ -14,7 +15,8 @@ const MainOptionsView = ({
     artistList,
     onShare,
     onRequestArtistSelection,
-    onNavigateToArtist
+    onNavigateToArtist,
+    onRequestPlaylistSelection
 }: MainOptionsViewProps) => {
 
     // Cấu hình danh sách options ngay tại đây
@@ -23,7 +25,7 @@ const MainOptionsView = ({
             id: 'add_playlist',
             icon: ListPlus,
             label: 'Thêm vào Playlist',
-            action: () => console.log('API: Add to playlist')
+            action: onRequestPlaylistSelection
         },
         {
             id: 'go_artist',

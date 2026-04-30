@@ -1,4 +1,3 @@
-import React from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface ArtistSelectionViewProps {
@@ -12,7 +11,7 @@ const ArtistSelectionView = ({ artists, onBack, onSelectArtist }: ArtistSelectio
         <div className="animate-in fade-in slide-in-from-right-8 duration-300 h-full flex flex-col">
             {/* Sub Header */}
             <div className="flex items-center gap-3 mb-6 pb-4 border-b border-white/10">
-                <button 
+                <button
                     onClick={onBack}
                     className="p-2 -ml-2 rounded-full hover:bg-white/10 text-white transition"
                 >
@@ -29,15 +28,15 @@ const ArtistSelectionView = ({ artists, onBack, onSelectArtist }: ArtistSelectio
                         onClick={() => onSelectArtist(artist.id)}
                         className="flex items-center gap-4 p-3 rounded-xl hover:bg-white/10 active:scale-[0.98] transition-all text-left"
                     >
-                        <img 
-                            src={artist.avatar} 
+                        <img
+                            src={artist.avatar}
                             alt={artist.name}
                             className="w-12 h-12 rounded-full object-cover border border-white/10"
                         />
                         <span className="text-base font-bold text-white flex-1">
                             {artist.name}
                         </span>
-                        <ChevronRight size={20} className="text-zinc-500"/>
+                        <ChevronRight size={20} className="text-zinc-500" />
                     </button>
                 ))}
             </div>

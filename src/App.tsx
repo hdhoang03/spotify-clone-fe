@@ -27,6 +27,8 @@ import CategoriesManagement from './components/Admin/Categories/Categories';
 import CategoryDetail from './components/Admin/Categories/CategoryDetail';
 import AlbumDetail from './components/Admin/Albums/AlbumDetail';
 
+import PlaylistDetailPage from './components/Sidebar/PlaylistDetailPage';
+
 // Component con: Chứa logic định tuyến (Nơi được phép dùng useLocation)
 const AppRoutes = () => {
     const location = useLocation();
@@ -36,7 +38,7 @@ const AppRoutes = () => {
         if (path === '/') return 'HOME';
         if (path.startsWith('/search')) return 'SEARCH';
         if (path.startsWith('/library')) return 'LIBRARY';
-        if (path.startsWith('/profile')) return 'PROFILE';
+        if (path.startsWith('/profile') || path.includes('/profile')) return 'PROFILE';
         return '';
     };
 
@@ -68,7 +70,9 @@ const AppRoutes = () => {
                             <Route path="/" element={<HomePage />} />
                             <Route path="/search" element={<SearchPage />} />
                             <Route path="/library" element={<LibraryPage />} />
+                            <Route path="/playlist/:id" element={<PlaylistDetailPage />} />
                             <Route path="/profile" element={<ProfilePage />} />
+                            <Route path="/user/:id/profile" element={<ProfilePage />} />
                             <Route path="/settings" element={<SettingsPage />} />
                             <Route path="/support" element={<HelpPage />} />
                             <Route path="/account" element={<AccountPage />} />

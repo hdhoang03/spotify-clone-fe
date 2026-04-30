@@ -1,6 +1,6 @@
 // components/Sidebar/SidebarDrawer.tsx
 import { motion, AnimatePresence } from 'framer-motion';
-import Sidebar from './SidebarLibrary'; // Sidebar nội dung gốc của bạn
+import Sidebar from './SidebarLibrary';
 
 interface SidebarDrawerProps {
 	isOpen: boolean;

@@ -1,9 +1,12 @@
-import { ArrowLeftToLine, Heart, PlusSquare, Library } from 'lucide-react';
+import { useState } from 'react';
+import { ArrowLeftToLine, Plus, Loader2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import type { Variants } from 'framer-motion';
 import SidebarItem from './SidebarLibraryItem';
 import SidebarHeader from './SidebarHeader';
-import { usePlaylists } from '../../hooks/usePlaylists';
+import PlaylistModal from './PlaylistModal';
+import { usePlaylists } from './usePlaylists';
+import { useNavigate } from 'react-router-dom';
 
 interface SidebarProps {
     activeTab?: string;
@@ -18,86 +21,69 @@ const listVariants: Variants = {
     visible: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.1 } }
 };
 
-const itemVariants: Variants = {
-    hidden: { opacity: 0, x: -20 },
-    visible: { opacity: 1, x: 0, transition: { type: 'spring', stiffness: 300, damping: 24 } }
-};
-
 const Sidebar = ({ activeTab, onTabChange, isCollapsed, onToggleCollapse, className = "" }: SidebarProps) => {
-    const { playlists, isLoading, error } = usePlaylists();
+    // 1. Lấy dữ liệu thật
+    const { playlists, isLoading, error, createNewPlaylist } = usePlaylists();
+
+    // 2. Trạng thái Modal Tạo Playlist
+    const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+    const [isCreating, setIsCreating] = useState(false);
+
+    const navigate = useNavigate();
+
+    // 3. Xử lý tạo Playlist
+    const handleCreatePlaylist = async (formData: FormData) => {
+        setIsCreating(true);
+        try {
+            await createNewPlaylist(formData);
+            return true; // Thành công -> Báo cho Modal đóng
+        } catch (err) {
+            alert("Có lỗi xảy ra khi tạo playlist!");
+            return false;
+        } finally {
+            setIsCreating(false);
+        }
+    };
 
     return (
-        <div className={`
-            flex h-full flex-col 
-            transition-all duration-300 ease-in-out
-            bg-white border-r border-gray-200 
-            dark:bg-black/90 dark:border-white/10 
-            pt-2
-            w-full
-            ${className}
-        `}>
-            {/* --- PHẦN 1: HEADER (Giữ nguyên thiết kế cũ) --- */}
-            <div className={`
-                flex items-center mb-2 px-4 shrink-0
-                ${isCollapsed ? 'justify-center py-2' : ''}
-            `}>
-                {!isCollapsed && (
-                    <SidebarHeader
-                        isActive={activeTab === 'LIBRARY'}
-                        onClick={() => onTabChange?.('LIBRARY')}
-                    />
-                )}
+        <div className={`flex h-full flex-col transition-all duration-300 ease-in-out bg-white border-r border-gray-200 dark:bg-[#121212] dark:border-white/5 ${className}`}>
 
-                {/* Khi thu gọn: Chỉ hiện icon Library nhỏ gọn */}
-                {isCollapsed && (
+            {/* Phần Header & Nút Tạo (+) */}
+            <div className="flex items-center justify-between pr-4">
+                <div className="flex-1">
+                    <SidebarHeader isActive={activeTab === 'LIBRARY'} onClick={() => onTabChange?.('LIBRARY')} />
+                </div>
+                {!isCollapsed && (
                     <button
-                        onClick={() => onTabChange?.('LIBRARY')}
-                        className={`p-3 rounded-lg transition-colors
-                            ${activeTab === 'LIBRARY'
-                                ? 'bg-zinc-100 dark:bg-zinc-800 text-green-600 dark:text-green-500'
-                                : 'hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-500 dark:text-zinc-400'
-                            }`}
+                        onClick={() => setIsCreateModalOpen(true)}
+                        className="p-1.5 mt-2 text-zinc-400 hover:text-black dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-full transition-all"
+                        title="Tạo danh sách phát"
                     >
-                        <Library size={24} strokeWidth={activeTab === 'LIBRARY' ? 3 : 2} />
+                        <Plus size={20} />
                     </button>
                 )}
             </div>
 
-            {/* --- PHẦN 2: DANH SÁCH (Cuộn ở giữa) --- */}
-            <div className={`flex-1 overflow-y-auto custom-scrollbar pb-2 ${isCollapsed ? 'px-2' : 'px-3'}`}>
-
-                {/* Item Tĩnh */}
-                <SidebarItem
-                    variant="playlist"
-                    isCollapsed={isCollapsed}
-                    icon={<div className="w-full h-full bg-zinc-200 dark:bg-zinc-800 flex items-center justify-center text-zinc-500 dark:text-zinc-400 group-hover/item:text-black dark:group-hover/item:text-white transition-colors"><PlusSquare size={24} /></div>}
-                    label="Tạo playlist mới"
-                    onClick={() => console.log("Create")}
-                />
-
-                <SidebarItem
-                    variant="playlist"
-                    isCollapsed={isCollapsed}
-                    isActive={activeTab === 'LIKED_SONGS'}
-                    icon={<div className="w-full h-full bg-gradient-to-br from-indigo-500 to-blue-400 flex items-center justify-center text-white shadow-lg"><Heart size={20} fill="currentColor" /></div>}
-                    label="Bài hát đã thích"
-                    onClick={() => onTabChange?.('LIKED_SONGS')}
-                />
-
-                <div className="h-[1px] bg-gray-200 dark:bg-white/10 my-4 mx-3" />
-
-                {/* Playlist từ API */}
-                {!isLoading && !error && (
-                    <motion.div variants={listVariants} initial="hidden" animate="visible">
+            {/* Phần Danh sách */}
+            <div className="flex-1 overflow-y-auto px-3 pb-4 custom-scrollbar mt-2">
+                {isLoading ? (
+                    <div className="flex justify-center py-10"><Loader2 className="animate-spin text-zinc-500" /></div>
+                ) : error ? (
+                    <p className="text-xs text-center text-red-500 py-4">{error}</p>
+                ) : (
+                    <motion.div variants={listVariants} initial="hidden" animate="visible" className="space-y-1">
                         {playlists.map((playlist) => (
-                            <motion.div key={playlist.id} variants={itemVariants}>
+                            <motion.div key={playlist.id} variants={{ hidden: { opacity: 0, x: -20 }, visible: { opacity: 1, x: 0 } }}>
                                 <SidebarItem
-                                    variant="playlist"
                                     isCollapsed={isCollapsed}
-                                    imageUrl={playlist.imageUrl}
+                                    variant="playlist"
+                                    imageUrl={playlist.coverUrl}
                                     label={playlist.name}
                                     isActive={activeTab === `PLAYLIST_${playlist.id}`}
-                                    onClick={() => onTabChange?.(`PLAYLIST_${playlist.id}`)}
+                                    onClick={() => {
+                                        onTabChange?.(`PLAYLIST_${playlist.id}`); // Giữ lại nếu bạn cần quản lý state tab
+                                        navigate(`/playlist/${playlist.id}`);     // Chuyển hướng đến trang chi tiết
+                                    }}
                                 />
                             </motion.div>
                         ))}
@@ -105,25 +91,20 @@ const Sidebar = ({ activeTab, onTabChange, isCollapsed, onToggleCollapse, classN
                 )}
             </div>
 
-            {/* --- PHẦN 3: FOOTER (Nút thu gọn nằm tách biệt ở đây) --- */}
-            <div className={`
-                p-4 border-t border-gray-100 dark:border-white/5 shrink-0
-                flex ${isCollapsed ? 'justify-center' : 'justify-end'}
-            `}>
-                <button
-                    onClick={onToggleCollapse}
-                    className={`
-                        p-2 rounded-full transition-all duration-300
-                        text-zinc-500 hover:text-black dark:text-zinc-400 dark:hover:text-white
-                        hover:bg-zinc-100 dark:hover:bg-zinc-800
-                        ${isCollapsed ? 'rotate-180' : ''} /* Hiệu ứng xoay mũi tên */
-                    `}
-                    title={isCollapsed ? "Mở rộng thư viện" : "Thu gọn thư viện"}
-                >
-                    {/* Chỉ cần dùng 1 icon và xoay nó */}
-                    <ArrowLeftToLine size={20} />
+            {/* Nút Thu gọn */}
+            <div className={`p-4 border-t border-gray-100 dark:border-white/5 shrink-0 flex ${isCollapsed ? 'justify-center' : 'justify-end'}`}>
+                <button onClick={onToggleCollapse} className="p-2 rounded-full transition-all duration-300 text-zinc-500 hover:text-black dark:text-zinc-400 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800">
+                    <ArrowLeftToLine size={20} className={isCollapsed ? 'rotate-180' : ''} />
                 </button>
             </div>
+
+            {/* Popup Tạo Playlist */}
+            <PlaylistModal
+                isOpen={isCreateModalOpen}
+                onClose={() => setIsCreateModalOpen(false)}
+                onSubmit={handleCreatePlaylist}
+                isLoading={isCreating}
+            />
         </div>
     );
 };

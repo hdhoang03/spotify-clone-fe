@@ -23,8 +23,8 @@ const TrackRow = ({ index, coverUrl, title, artist, duration, streamCount, isPla
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     return (
-        <div 
-            className="group flex items-center justify-between p-2 md:px-4 md:py-2 rounded-md hover:bg-black/10 dark:hover:bg-white/10 transition cursor-pointer relative"
+        <div
+            className={`group flex items-center justify-between p-2 md:px-4 md:py-2 rounded-md hover:bg-black/10 dark:hover:bg-white/10 transition cursor-pointer relative ${isMenuOpen ? 'z-50' : 'z-0'}`}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
             onClick={onClick}
@@ -33,7 +33,7 @@ const TrackRow = ({ index, coverUrl, title, artist, duration, streamCount, isPla
             <div className="flex items-center gap-3 md:gap-4 flex-1 min-w-0">
                 <div className="w-6 text-center text-gray-500 font-medium text-sm hidden md:block">
                     {isHovered || isPlaying ? (
-                        isPlaying ? <Pause size={16} className="text-green-500 mx-auto"/> : <Play size={16} className="text-white mx-auto"/>
+                        isPlaying ? <Pause size={16} className="text-green-500 mx-auto" /> : <Play size={16} className="text-white mx-auto" />
                     ) : (
                         <span className="group-hover:hidden">{index + 1}</span>
                     )}
@@ -42,13 +42,13 @@ const TrackRow = ({ index, coverUrl, title, artist, duration, streamCount, isPla
                 {/* Image & Text */}
                 <div className="flex items-center gap-3 flex-1 min-w-0">
                     <img src={coverUrl} alt={title} className="w-10 h-10 md:w-10 md:h-10 rounded shadow-md object-cover shrink-0" />
-                    
+
                     <div className="flex flex-col min-w-0">
                         {/* Title */}
                         <span className={`font-bold truncate text-sm md:text-base ${isPlaying ? 'text-green-500' : 'text-gray-900 dark:text-white'}`}>
                             {title}
                         </span>
-                        
+
                         {/* Mobile View: Artist + Stream Count */}
                         {/* <div className="flex md:hidden items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
                             <span className="truncate max-w-[150px]">{artist}</span>
@@ -107,7 +107,7 @@ const TrackRow = ({ index, coverUrl, title, artist, duration, streamCount, isPla
 
                 {/* Menu Button (...) */}
                 <div className="relative">
-                    <button 
+                    <button
                         className={`text-gray-400 hover:text-black dark:hover:text-white transition p-1
                                     ${isHovered || isMenuOpen ? 'opacity-100' : 'opacity-0 md:opacity-0 opacity-100' /* Mobile luôn hiện */}`}
                         onClick={(e) => { e.stopPropagation(); setIsMenuOpen(!isMenuOpen); }}
@@ -116,10 +116,10 @@ const TrackRow = ({ index, coverUrl, title, artist, duration, streamCount, isPla
                     </button>
 
                     {isMenuOpen && (
-                        <TrackContextMenu 
-                            song={{ title, artist, coverUrl, id: '123' }} 
+                        <TrackContextMenu
+                            song={{ title, artist, coverUrl, id: '123' }}
                             onClose={() => setIsMenuOpen(false)}
-                            position={null} 
+                            position={null}
                         />
                     )}
                 </div>

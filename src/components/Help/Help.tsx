@@ -22,10 +22,6 @@ const HelpPage = () => {
                     </div>
                     <h1 className="text-3xl font-bold">Trung tâm trợ giúp</h1>
                 </div>
-                {/* <div className="mb-10 text-center md:text-left">
-                    <h1 className="text-3xl md:text-4xl font-bold mb-3">Trung tâm trợ giúp</h1>
-                    <p className="text-zinc-500 text-lg">Chúng tôi có thể giúp gì cho bạn?</p>
-                </div> */}
 
                 <div className="grid md:grid-cols-12 gap-8 md:gap-12">
 

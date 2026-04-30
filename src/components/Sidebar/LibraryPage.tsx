@@ -1,7 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import PlaylistCard from './PlaylistCard';
 import { Play, Plus, Search } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { usePlaylists } from './usePlaylists';
+
 
 // Mock Data (Hoặc bạn có thể dùng hook usePlaylists ở đây)
 const MOCK_PLAYLISTS = Array(6).fill({
@@ -18,6 +20,20 @@ const MOCK_ARTISTS = Array(6).fill({
 
 const LibraryPage = () => {
     const [activeFilter, setActiveFilter] = useState('Playlists');
+    const [currentUserId, setCurrentUserId] = useState<string | undefined>(undefined);
+    const { playlists } = usePlaylists();
+
+    useEffect(() => {
+        const userStr = localStorage.getItem('user');
+        if (userStr) {
+            try {
+                const userData = JSON.parse(userStr);
+                setCurrentUserId(userData.id); // Lấy trường ID từ Object (đảm bảo khớp với key trong backend của bạn)
+            } catch (error) {
+                console.error("Lỗi parse user data:", error);
+            }
+        }
+    }, []);
 
     // Content logic (Giữ nguyên logic render của bạn)
     const renderContent = () => {
@@ -57,8 +73,15 @@ const LibraryPage = () => {
                         </motion.div>
 
                         {/* Danh sách Playlist dạng Grid */}
-                        {MOCK_PLAYLISTS.map((pl, idx) => (
-                            <PlaylistCard key={idx} {...pl} title={`${pl.title} ${idx + 1}`} index={idx} />
+                        {playlists.map((pl, idx) => (
+                            <PlaylistCard
+                                key={pl.id}
+                                id={pl.id} // Bắt buộc truyền ID để click vào nhảy đúng trang Detail
+                                title={pl.name} // Dữ liệu thật từ DB là 'name' chứ không phải 'title'
+                                description={pl.description || `Tạo bởi bạn`}
+                                imageUrl={pl.coverUrl || 'https://via.placeholder.com/300'}
+                                index={idx}
+                            />
                         ))}
                     </motion.div>
                 );
@@ -138,7 +161,6 @@ const LibraryPage = () => {
                     </motion.div>
                 );
 
-            // ... (Giữ nguyên cases khác)
             default: return null;
         }
     };

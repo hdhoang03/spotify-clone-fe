@@ -63,21 +63,16 @@ const EditProfileModal = ({ isOpen, onClose, currentName, currentAvatar, onSave 
     };
 
     const handleSave = async () => {
-        try {
-            let finalFile = selectedFile;
-
-            // Nếu có file mới và đang có thông số crop -> Cắt ảnh
-            if (selectedFile && previewUrl && croppedAreaPixels) {
-                const croppedBlob = await getCroppedImg(previewUrl, croppedAreaPixels);
-                // Chuyển Blob thành File để upload
-                finalFile = new File([croppedBlob], selectedFile.name, { type: selectedFile.type });
-            }
-
-            // Truyền ngược ra ngoài: Name, File ảnh (đã crop), và cờ xóa ảnh
-            onSave(name, finalFile, isRemoved); 
-            onClose();
-        } catch (e) {
-            console.error(e);
+        if (isRemoved) {
+            onSave(name, null, true);
+        } else if (selectedFile && croppedAreaPixels) {
+            // Lấy file ảnh đã được cắt (cropped) thay vì file gốc
+            const croppedImageBlob = await getCroppedImg(previewUrl!, croppedAreaPixels);
+            const fileToUpload = new File([croppedImageBlob], "avatar.jpg", { type: "image/jpeg" });
+            onSave(name, fileToUpload, false);
+        } else {
+            // Trường hợp chỉ đổi tên
+            onSave(name, null, false);
         }
     };
 
@@ -91,7 +86,7 @@ const EditProfileModal = ({ isOpen, onClose, currentName, currentAvatar, onSave 
             <span className="text-black font-black text-6xl uppercase drop-shadow-md z-10">
                 {name.charAt(0) || 'U'}
             </span>
-            
+
             {/* Lớp phủ noise hoặc blur nhẹ nếu muốn (optional) */}
             <div className="absolute inset-0 bg-white/10 backdrop-blur-[2px]"></div>
         </div>
@@ -101,8 +96,8 @@ const EditProfileModal = ({ isOpen, onClose, currentName, currentAvatar, onSave 
 
     return (
         <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/70 backdrop-blur-sm animate-in fade-in duration-200">
-           <div className="m-2 bg-white dark:bg-[#282828] w-[524px] rounded-xl shadow-2xl flex flex-col overflow-hidden transition-colors" onClick={(e) => e.stopPropagation()}>
-                
+            <div className="m-2 bg-white dark:bg-[#282828] w-[524px] rounded-xl shadow-2xl flex flex-col overflow-hidden transition-colors" onClick={(e) => e.stopPropagation()}>
+
                 {/* Header */}
                 <div className="flex justify-between items-center p-6 pb-4">
                     <h2 className="text-xl font-bold text-gray-900 dark:text-white">Profile details</h2>
@@ -111,12 +106,12 @@ const EditProfileModal = ({ isOpen, onClose, currentName, currentAvatar, onSave 
 
                 {/* Body */}
                 <div className="p-6 pt-0 flex gap-4 items-center">
-                    
+
                     {/* --- CỘT TRÁI: AVATAR & CROPPER --- */}
                     <div className="flex flex-col items-center gap-3">
                         <div className="relative group">
                             <div className="w-[180px] h-[180px] rounded-full shadow-2xl overflow-hidden relative border-4 border-white dark:border-[#333]">
-                                
+
                                 {selectedFile && previewUrl ? (
                                     /* --- MODE: CROP (Đang chỉnh sửa) --- */
                                     /* Không có Overlay ở đây để kéo thả mượt mà */
@@ -153,11 +148,11 @@ const EditProfileModal = ({ isOpen, onClose, currentName, currentAvatar, onSave 
                             </div>
 
                             {/* Input file ẩn luôn nằm đây */}
-                            <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={handleFileChange}/>
+                            <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={handleFileChange} />
 
                             {/* Nút Remove Photo (Vẫn giữ logic cũ) */}
                             {previewUrl && !selectedFile && (
-                                <button 
+                                <button
                                     onClick={(e) => { e.stopPropagation(); handleRemovePhoto(); }}
                                     className="absolute -bottom-2 -right-2 p-2 bg-red-500 text-white rounded-full shadow-md 
                                             hover:bg-red-600 transition z-20 tooltip"
@@ -171,7 +166,7 @@ const EditProfileModal = ({ isOpen, onClose, currentName, currentAvatar, onSave 
                         {/* --- NÚT ĐỔI ẢNH KHÁC (Khi đang Crop) --- */}
                         {/* Nếu đang chọn file, hiện nút này bên ngoài để user đổi ý */}
                         {selectedFile && (
-                            <button 
+                            <button
                                 onClick={triggerFileSelect}
                                 className="text-xs font-bold text-green-500 hover:text-black dark:hover:text-white transition"
                             >
@@ -182,7 +177,7 @@ const EditProfileModal = ({ isOpen, onClose, currentName, currentAvatar, onSave 
 
                     {/* --- CỘT PHẢI: FORM & SLIDER --- */}
                     <div className="flex-1 flex flex-col gap-4">
-                        <input 
+                        <input
                             type="text" value={name} onChange={(e) => setName(e.target.value)}
                             className="bg-gray-100 dark:bg-[#3e3e3e] border-none rounded-md px-3 py-2
                                     text-gray-900 dark:text-white font-bold focus:ring-1 focus:ring-green-500
@@ -211,7 +206,7 @@ const EditProfileModal = ({ isOpen, onClose, currentName, currentAvatar, onSave 
                         )}
 
                         <div className="flex-1"></div>
-                        <button 
+                        <button
                             onClick={handleSave}
                             className="self-end px-8 py-3 bg-green-500 hover:bg-green-600 dark:bg-white dark:text-black 
                                     dark:hover:scale-105 text-white font-bold rounded-full transition shadow-lg"

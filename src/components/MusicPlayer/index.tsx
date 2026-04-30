@@ -7,15 +7,15 @@ import { useAudioPlayer } from './useAudioPlayer';
 import MiniPlayer from './MiniPlayer';
 import FullScreenPlayer from './FullScreenPlayer';
 // 1. Import Context Hook
-import { useMusic } from '../../contexts/MusicContent'; 
+import { useMusic } from '../../contexts/MusicContent';
 
 const MusicPlayer = () => {
     const { currentSong, playlist, playPlaylist } = useMusic();
     const [dominantColor, setDominantColor] = useState<string>('#121212');
     const [isExpanded, setIsExpanded] = useState(false);
     const [isVisible, setIsVisible] = useState(true);
-    
-    const player = useAudioPlayer(); 
+
+    const player = useAudioPlayer();
     const handleNext = () => {
         if (!currentSong || playlist.length === 0) return;
 
@@ -41,17 +41,14 @@ const MusicPlayer = () => {
                 }
             }
         }
-        // Gọi Context để đổi bài
         playPlaylist(playlist, nextIndex);
     };
 
-    
-    // Đồng bộ thời gian khi bài hát thay đổi (quan trọng để thanh progress chạy đúng)
     useEffect(() => {
         if (currentSong) {
             player.setInitialDuration(currentSong.duration || 0);
             if (!player.isPlaying) {
-                player.togglePlay(); // Bỏ comment dòng này nếu muốn auto-play logic ở đây
+                player.togglePlay();
             }
         }
     }, [currentSong?.id]);
@@ -65,7 +62,7 @@ const MusicPlayer = () => {
         if (player.isShuffling) {
             handleNext();
             return;
-            
+
         } else {
             if (currentIndex > 0) {
                 prevIndex = currentIndex - 1;
@@ -87,8 +84,6 @@ const MusicPlayer = () => {
     };
 
     // --- EFFECTS ---
-
-    // Cập nhật màu khi bài hát thay đổi
     useEffect(() => {
         if (currentSong?.coverUrl) {
             const fac = new FastAverageColor();
@@ -99,7 +94,6 @@ const MusicPlayer = () => {
     }, [currentSong?.id]);
 
 
-    // 3. QUAN TRỌNG: Nếu chưa chọn bài nào thì KHÔNG render player
     if (!currentSong) return null;
 
     const progressPercent = player.duration ? (player.currentTime / player.duration) * 100 : 0;
@@ -109,7 +103,7 @@ const MusicPlayer = () => {
             <audio
                 ref={player.audioRef}
                 src={currentSong.audioUrl} // Dùng audioUrl từ Context
-                crossOrigin="anonymous"      
+                crossOrigin="anonymous"
                 onLoadedMetadata={player.onLoadedMetadata}
                 onTimeUpdate={player.onTimeUpdate}
                 onEnded={handleSongEnded}
@@ -131,7 +125,7 @@ const MusicPlayer = () => {
                                 bg-green-500 text-white 
                                 dark:bg-white dark:text-black"
                     >
-                        <ListMusic size={20}/>
+                        <ListMusic size={20} />
                         <span className="text-xs">Hiện Player</span>
                     </motion.button>
                 )}
@@ -141,7 +135,7 @@ const MusicPlayer = () => {
                 {isVisible && (
                     <>
                         {isExpanded && (
-                            <FullScreenPlayer 
+                            <FullScreenPlayer
                                 key="full-player"
                                 currentSong={currentSong} // Truyền bài hát từ Context
                                 dominantColor={dominantColor}
@@ -168,7 +162,7 @@ const MusicPlayer = () => {
                         )}
 
                         {!isExpanded && (
-                            <MiniPlayer 
+                            <MiniPlayer
                                 key="mini-player"
                                 currentSong={currentSong} // Truyền bài hát từ Context
                                 isPlaying={player.isPlaying}

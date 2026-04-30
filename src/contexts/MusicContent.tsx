@@ -18,6 +18,8 @@ interface MusicContextType {
     playSong: (song: Song) => void;
     playPlaylist: (songs: Song[], startIndex: number) => void;
     togglePlay: () => void;
+    isShuffling: boolean;
+    toggleShuffle: () => void;
 }
 
 const MusicContext = createContext<MusicContextType | undefined>(undefined);
@@ -26,13 +28,17 @@ export const MusicProvider = ({ children }: { children: ReactNode }) => {
     const [currentSong, setCurrentSong] = useState<Song | null>(null);
     const [playlist, setPlaylist] = useState<Song[]>([]);
     const [isPlaying, setIsPlaying] = useState(false);
+    const [isShuffling, setIsShuffling] = useState(false);
+    const toggleShuffle = () => {
+        setIsShuffling(prev => !prev);
+    };
 
     const playSong = (song: Song) => {
         setCurrentSong(song);
         setIsPlaying(true);
         // Nếu bài hát chưa có trong playlist hiện tại, thêm nó vào hoặc reset playlist
         // Ở đây mình làm đơn giản là set playlist chỉ có 1 bài này
-        setPlaylist([song]); 
+        setPlaylist([song]);
     };
 
     const playPlaylist = (songs: Song[], startIndex: number) => {
@@ -44,7 +50,7 @@ export const MusicProvider = ({ children }: { children: ReactNode }) => {
     const togglePlay = () => setIsPlaying(!isPlaying);
 
     return (
-        <MusicContext.Provider value={{ currentSong, playlist, isPlaying, playSong, playPlaylist, togglePlay }}>
+        <MusicContext.Provider value={{ currentSong, playlist, isPlaying, playSong, playPlaylist, togglePlay, isShuffling, toggleShuffle }}>
             {children}
         </MusicContext.Provider>
     );

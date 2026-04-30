@@ -1,7 +1,7 @@
 // src/constants/mockArtistData.ts
 
 export const ARTIST_DETAIL = {
-    id: 'phuongly',
+    id: 'cd3b783f-5617-4972-88b2-9a1871fc2fa5',
     name: 'Phương Ly',
     coverImage: 'https://th.bing.com/th/id/R.d9a8f9c4a5d20df9828351001625f9e3?rik=9ykOwOHNJadujQ&pid=ImgRaw&r=0',
     avatarUrl: 'https://tse1.mm.bing.net/th/id/OIP.5don3GwJXP0OUEyKE8JOogHaHa?rs=1&pid=ImgDetMain&o=7&rm=3',
@@ -13,59 +13,59 @@ export const ARTIST_DETAIL = {
 };
 
 export const ARTIST_POPULAR_TRACKS = [
-    { 
-        id: '1', 
-        title: 'Thằng Điên', 
-        artist: 'JustaTee, Phương Ly', 
-        coverUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/ef/0c/eb/ef0ceb8e-ee43-42d2-07b8-e6061cf0d47d/3615938759684.jpg/1200x1200bf-60.jpg', 
-        duration: 265, 
+    {
+        id: '1',
+        title: 'Thằng Điên',
+        artist: 'JustaTee, Phương Ly',
+        coverUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/ef/0c/eb/ef0ceb8e-ee43-42d2-07b8-e6061cf0d47d/3615938759684.jpg/1200x1200bf-60.jpg',
+        duration: 265,
         audioUrl: 'https://res.cloudinary.com/dfsoeiui1/video/upload/v1760323267/audios/agjnmnhing96bpewr8wh.mp3',
-        streamCount: 16363720 
+        streamCount: 16363720
     },
-    { 
-        id: '2', 
-        title: 'Anh Là Ai', 
-        artist: 'Phương Ly', 
-        coverUrl: 'https://tse3.mm.bing.net/th/id/OIP.dPdi5YNoN_v557nXrDssugHaHa?rs=1&pid=ImgDetMain&o=7&rm=3', 
-        duration: 252.16, 
+    {
+        id: '2',
+        title: 'Anh Là Ai',
+        artist: 'Phương Ly',
+        coverUrl: 'https://tse3.mm.bing.net/th/id/OIP.dPdi5YNoN_v557nXrDssugHaHa?rs=1&pid=ImgDetMain&o=7&rm=3',
+        duration: 252.16,
         audioUrl: 'https://res.cloudinary.com/dfsoeiui1/video/upload/v1765295897/audios/v3tdpsn3e24rpdvwqxao.mp3',
-        streamCount: 13917357 
+        streamCount: 13917357
     },
-    { 
-        id: '3', 
-        title: 'Mặt Trời Của Em', 
-        artist: 'Phương Ly, JustaTee', 
-        coverUrl: 'https://tse3.mm.bing.net/th/id/OIP.bNicNJQrKy7dchlODmH0XQHaHa?rs=1&pid=ImgDetMain&o=7&rm=3', 
-        duration: 265, 
+    {
+        id: '3',
+        title: 'Mặt Trời Của Em',
+        artist: 'Phương Ly, JustaTee',
+        coverUrl: 'https://tse3.mm.bing.net/th/id/OIP.bNicNJQrKy7dchlODmH0XQHaHa?rs=1&pid=ImgDetMain&o=7&rm=3',
+        duration: 265,
         audioUrl: 'https://res.cloudinary.com/dfsoeiui1/video/upload/v1760323267/audios/agjnmnhing96bpewr8wh.mp3',
-        streamCount: 15952861 
+        streamCount: 15952861
     },
-    { 
-        id: '4', 
-        title: 'Missing You', 
-        artist: 'Phương Ly', 
-        coverUrl: 'https://res.cloudinary.com/dfsoeiui1/image/upload/v1765295893/covers/lnspyjq7l4sbalm75ivo.jpg', 
-        duration: 252.16, 
+    {
+        id: '4',
+        title: 'Missing You',
+        artist: 'Phương Ly',
+        coverUrl: 'https://res.cloudinary.com/dfsoeiui1/image/upload/v1765295893/covers/lnspyjq7l4sbalm75ivo.jpg',
+        duration: 252.16,
         audioUrl: 'https://res.cloudinary.com/dfsoeiui1/video/upload/v1765295897/audios/v3tdpsn3e24rpdvwqxao.mp3',
         streamCount: 23988204
     },
-    { 
-        id: '5', 
-        title: 'Đâu Chịu Ngồi Yên', 
-        artist: 'Touliver, Rhymastic, Phương Ly', 
-        coverUrl: 'https://th.bing.com/th/id/OIP.NmAZQwbHwzNYPmkNZWBDwAHaHa?o=7rm=3&rs=1&pid=ImgDetMain&o=7&rm=3', 
-        duration: 265, 
+    {
+        id: '5',
+        title: 'Đâu Chịu Ngồi Yên',
+        artist: 'Touliver, Rhymastic, Phương Ly',
+        coverUrl: 'https://th.bing.com/th/id/OIP.NmAZQwbHwzNYPmkNZWBDwAHaHa?o=7rm=3&rs=1&pid=ImgDetMain&o=7&rm=3',
+        duration: 265,
         audioUrl: 'https://res.cloudinary.com/dfsoeiui1/video/upload/v1760323267/audios/agjnmnhing96bpewr8wh.mp3',
         streamCount: 20063779
     },
-    { 
-        id: '6', 
-        title: 'Crush On You', 
-        artist: 'Phương Ly', 
-        coverUrl: 'https://allvpop.com/wp-content/uploads/2016/08/29046362816_b388181f71_o.jpg', 
-        duration: 252.16, 
+    {
+        id: '6',
+        title: 'Crush On You',
+        artist: 'Phương Ly',
+        coverUrl: 'https://allvpop.com/wp-content/uploads/2016/08/29046362816_b388181f71_o.jpg',
+        duration: 252.16,
         audioUrl: 'https://res.cloudinary.com/dfsoeiui1/video/upload/v1765295897/audios/v3tdpsn3e24rpdvwqxao.mp3',
-        streamCount: 5000000 
+        streamCount: 5000000
     },
 ];
 
