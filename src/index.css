@@ -1,64 +1,337 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@layer utilities {
-  /* Định nghĩa hành động chạy: từ vị trí -100% (bên trái) sang 200% (bên phải) */
-  @keyframes shimmer {
-    0% { transform: translateX(-100%) skewX(-20deg); }
-    100% { transform: translateX(200%) skewX(-20deg); }
-  }
 
-  /* Tạo class để gọi hành động trên */
-  .animate-shimmer {
-    animation: shimmer 1.5s infinite linear;
-  }
+/* ─── 2026 Design Tokens ─── */
+:root {
+	/* Motion curves */
+	--ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+	--ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+	--ease-out: cubic-bezier(0, 0, 0.2, 1);
 
-  /* Class để ẩn thanh cuộn */
-  .scrollbar-hide::-webkit-scrollbar {
-      display: none;
-  }
-  .scrollbar-hide {
-      -ms-overflow-style: none; /* IE and Edge */
-      scrollbar-width: none;    /* Firefox */
-  }
+	/* Glass surfaces */
+	--glass-light: rgba(255, 255, 255, 0.72);
+	--glass-dark: rgba(18, 18, 18, 0.75);
+	--glass-border-light: rgba(0, 0, 0, 0.08);
+	--glass-border-dark: rgba(255, 255, 255, 0.08);
 
-  /* Class để hiện lại thanh cuộn (dành cho màn hình to) */
-  .scrollbar-default::-webkit-scrollbar {
-      display: block;
-  }
-  .scrollbar-default {
-      -ms-overflow-style: auto;
-      scrollbar-width: auto;
-  }
-  .no-scrollbar::-webkit-scrollbar {
-    display: none;
-  }
-
-  /* Ẩn scrollbar cho IE, Edge and Firefox */
-  .no-scrollbar {
-      -ms-overflow-style: none;  /* IE and Edge */
-      scrollbar-width: none;  /* Firefox */
-  }
+	/* Glow palette */
+	--glow-green: rgba(30, 215, 96, 0.35);
+	--glow-white: rgba(255, 255, 255, 0.25);
+	--glow-amber: rgba(251, 191, 36, 0.5);
 }
 
-@media (min-width: 1024px){
-/* Tùy chỉnh cho Webkit (Chrome, Edge, Safari) */
-  ::-webkit-scrollbar {
-    width: 10px; /* Độ rộng thanh cuộn */
-  }
+@layer utilities {
 
-  ::-webkit-scrollbar-track {
-    background: transparent; /* Nền trong suốt */
-  }
+	/* ─── Shimmer sweep (skeleton / loading) ─── */
+	@keyframes shimmer {
+		0% {
+			transform: translateX(-100%) skewX(-20deg);
+		}
 
-  ::-webkit-scrollbar-thumb {
-    background-color: theme('colors.zinc.600'); /* Màu xám (gray-600) */
-    border-radius: 20px;       /* Bo tròn */
-    border: 3px solid transparent; /* Tạo khoảng hở giúp thanh cuộn nhìn thanh thoát hơn */
-    background-clip: content-box;
-  }
+		100% {
+			transform: translateX(200%) skewX(-20deg);
+		}
+	}
 
-  ::-webkit-scrollbar-thumb:hover {
-    background-color: theme('colors.zinc.400'); /* Hover sáng hơn (gray-400) */
-  }
+	.animate-shimmer {
+		animation: shimmer 1.5s infinite linear;
+	}
+
+	/* ─── Premium name shimmer text ─── */
+	@keyframes shimmer-text {
+		0% {
+			background-position: 200% center;
+		}
+
+		100% {
+			background-position: -200% center;
+		}
+	}
+
+	.premium-name {
+		background: linear-gradient(90deg, #f59e0b 0%, #fef08a 30%, #f59e0b 55%, #fbbf24 80%, #f59e0b 100%);
+		background-size: 200% auto;
+		-webkit-background-clip: text;
+		background-clip: text;
+		-webkit-text-fill-color: transparent;
+		color: transparent;
+		animation: shimmer-text 10s linear infinite;
+	}
+
+	/* ─── Pulse glow (playing indicator) ─── */
+	@keyframes pulse-glow {
+
+		0%,
+		100% {
+			box-shadow: 0 0 12px 2px var(--glow-green);
+		}
+
+		50% {
+			box-shadow: 0 0 24px 6px var(--glow-green);
+		}
+	}
+
+	.animate-pulse-glow {
+		animation: pulse-glow 2s ease-in-out infinite;
+	}
+
+	/* ─── Soft float (hover card lift) ─── */
+	@keyframes float-up {
+
+		0%,
+		100% {
+			transform: translateY(0px);
+		}
+
+		50% {
+			transform: translateY(-4px);
+		}
+	}
+
+	.animate-float {
+		animation: float-up 3s ease-in-out infinite;
+	}
+
+	/* ─── Fade-in-up (stagger children) ─── */
+	@keyframes fade-up {
+		from {
+			opacity: 0;
+			transform: translateY(16px);
+		}
+
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	.animate-fade-up {
+		animation: fade-up 0.4s var(--ease-smooth) both;
+	}
+
+	/* ─── Scale-in ─── */
+	@keyframes scale-in {
+		from {
+			opacity: 0;
+			transform: scale(0.92);
+		}
+
+		to {
+			opacity: 1;
+			transform: scale(1);
+		}
+	}
+
+	.animate-scale-in {
+		animation: scale-in 0.3s var(--ease-spring) both;
+	}
+
+	/* ─── Waveform bar (equalizer) ─── */
+	@keyframes bar1 {
+
+		0%,
+		100% {
+			height: 4px
+		}
+
+		50% {
+			height: 14px
+		}
+	}
+
+	@keyframes bar2 {
+
+		0%,
+		100% {
+			height: 10px
+		}
+
+		50% {
+			height: 4px
+		}
+	}
+
+	@keyframes bar3 {
+
+		0%,
+		100% {
+			height: 6px
+		}
+
+		50% {
+			height: 16px
+		}
+	}
+
+	.eq-bar-1 {
+		animation: bar1 0.8s ease-in-out infinite;
+	}
+
+	.eq-bar-2 {
+		animation: bar2 0.65s ease-in-out infinite 0.15s;
+	}
+
+	.eq-bar-3 {
+		animation: bar3 0.9s ease-in-out infinite 0.05s;
+	}
+
+	/* ─── Glass surface utilities ─── */
+	.glass-light {
+		background: var(--glass-light);
+		backdrop-filter: blur(20px) saturate(1.8);
+		-webkit-backdrop-filter: blur(20px) saturate(1.8);
+		border: 1px solid var(--glass-border-light);
+	}
+
+	.glass-dark {
+		background: var(--glass-dark);
+		backdrop-filter: blur(20px) saturate(1.4);
+		-webkit-backdrop-filter: blur(20px) saturate(1.4);
+		border: 1px solid var(--glass-border-dark);
+	}
+
+	/* ─── Scrollbar hide ─── */
+	.scrollbar-hide::-webkit-scrollbar {
+		display: none;
+	}
+
+	.scrollbar-hide {
+		-ms-overflow-style: none;
+		scrollbar-width: none;
+	}
+
+	.scrollbar-default::-webkit-scrollbar {
+		display: block;
+	}
+
+	.scrollbar-default {
+		-ms-overflow-style: auto;
+		scrollbar-width: auto;
+	}
+
+	.no-scrollbar::-webkit-scrollbar {
+		display: none;
+	}
+
+	.no-scrollbar {
+		-ms-overflow-style: none;
+		scrollbar-width: none;
+	}
+
+	/* ─── Interactive tap feedback ─── */
+	.tap-scale {
+		transition: transform 0.15s var(--ease-spring);
+	}
+
+	.tap-scale:active {
+		transform: scale(0.94);
+	}
+
+	/* ─── Glow text utilities ─── */
+	.text-glow-green {
+		text-shadow: 0 0 12px rgba(30, 215, 96, 0.6);
+	}
+
+	.text-glow-white {
+		text-shadow: 0 0 12px rgba(255, 255, 255, 0.5);
+	}
+
+	.text-glow-amber {
+		text-shadow: 0 0 12px rgba(251, 191, 36, 0.7);
+	}
+}
+
+/* ─── Desktop scrollbar ─── */
+@media (min-width: 1024px) {
+	::-webkit-scrollbar {
+		width: 8px;
+	}
+
+	::-webkit-scrollbar-track {
+		background: transparent;
+	}
+
+	::-webkit-scrollbar-thumb {
+		background: rgba(113, 113, 122, 0.4);
+		border-radius: 20px;
+		border: 2px solid transparent;
+		background-clip: content-box;
+		transition: background 0.2s ease;
+	}
+
+	::-webkit-scrollbar-thumb:hover {
+		background: rgba(161, 161, 170, 0.6);
+		border: 2px solid transparent;
+		background-clip: content-box;
+	}
+}
+
+/* ─── Base typography ─── */
+html {
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	text-rendering: optimizeLegibility;
+}
+
+body {
+	font-feature-settings: "liga" 1, "calt" 1, "kern" 1;
+	letter-spacing: 0.01em;
+	font-weight: 500;
+}
+
+/* ─── Smooth focus rings ─── */
+:focus-visible {
+	outline: 2px solid rgba(30, 215, 96, 0.7);
+	outline-offset: 2px;
+	border-radius: 6px;
+}
+
+/* ─── Selection color ─── */
+::selection {
+	background: rgba(30, 215, 96, 0.2);
+	color: inherit;
+}
+
+/* ─── Hide reCAPTCHA badge  ─── */
+.grecaptcha-badge {
+	visibility: hidden !important;
+}
+
+/* ─── Low Performance Mode (Optimizations) ─── */
+html.low-perf {
+	--glass-light: rgba(255, 255, 255, 0.95);
+	--glass-dark: rgba(18, 18, 18, 0.98);
+}
+
+html.low-perf .glass-light,
+html.low-perf .glass-dark,
+html.low-perf [class*="backdrop-blur"] {
+	backdrop-filter: none !important;
+	-webkit-backdrop-filter: none !important;
+}
+
+html.low-perf :is(.dark) .premium-name {
+	animation: none !important;
+	background: #fbbf24 !important;
+	-webkit-background-clip: text;
+	background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
+
+html.low-perf .animate-pulse-glow,
+html.low-perf .animate-float,
+html.low-perf .animate-shimmer,
+html.low-perf .animate-fade-up,
+html.low-perf .animate-scale-in,
+html.low-perf .eq-bar-1,
+html.low-perf .eq-bar-2,
+html.low-perf .eq-bar-3 {
+	animation: none !important;
+	box-shadow: none !important;
+}
+
+html.low-perf * {
+	/* Reduce transitions on all elements to make UI responsive on old devices */
+	transition-duration: 0s !important;
 }

@@ -1,4 +1,5 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 interface ArtistSelectionViewProps {
     artists: any[];
@@ -7,6 +8,8 @@ interface ArtistSelectionViewProps {
 }
 
 const ArtistSelectionView = ({ artists, onBack, onSelectArtist }: ArtistSelectionViewProps) => {
+    const { t } = useTranslation();
+
     return (
         <div className="animate-in fade-in slide-in-from-right-8 duration-300 h-full flex flex-col">
             {/* Sub Header */}
@@ -17,7 +20,7 @@ const ArtistSelectionView = ({ artists, onBack, onSelectArtist }: ArtistSelectio
                 >
                     <ChevronLeft size={24} />
                 </button>
-                <span className="text-lg font-bold text-white">Nghệ sĩ tham gia</span>
+                <span className="text-lg font-bold text-white">{t('player.featured_artists')}</span>
             </div>
 
             {/* List Artists */}

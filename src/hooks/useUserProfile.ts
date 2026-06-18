@@ -5,6 +5,7 @@ import type { UserProfile } from '../constants/profile';
 
 // Event bus đơn giản để báo hiệu update
 const USER_UPDATE_EVENT = 'user-profile-updated';
+const USER_UPDATE_EVENT_GLOBAL = 'user-update'; // Bắn bởi OAuth2Callback, Header
 
 export const useUserProfile = () => {
     const [user, setUser] = useState<UserProfile | null>(null);
@@ -28,12 +29,17 @@ export const useUserProfile = () => {
     }, [fetchUser]);
 
     // Effect 2: Lắng nghe sự kiện update từ nơi khác
+    // Lắng nghe cả 2 event để đồng bộ: 'user-profile-updated' (nội bộ) và 'user-update' (OAuth2/Header)
     useEffect(() => {
         const handleUpdate = () => {
-            fetchUser(); // Load lại data mới nhất từ "Server" (localStorage)
+            fetchUser(); // Load lại data mới nhất từ localStorage
         };
         window.addEventListener(USER_UPDATE_EVENT, handleUpdate);
-        return () => window.removeEventListener(USER_UPDATE_EVENT, handleUpdate);
+        window.addEventListener(USER_UPDATE_EVENT_GLOBAL, handleUpdate);
+        return () => {
+            window.removeEventListener(USER_UPDATE_EVENT, handleUpdate);
+            window.removeEventListener(USER_UPDATE_EVENT_GLOBAL, handleUpdate);
+        };
     }, [fetchUser]);
 
     // Hàm update dùng chung cho cả app

@@ -51,7 +51,7 @@ export const AlbumTable = ({
                                 <td className="px-4 py-4">
                                     <div className="flex items-center gap-3 min-w-0">
                                         <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg overflow-hidden bg-zinc-800 flex-shrink-0">
-                                            <img src={album.avatarUrl} className="w-full h-full object-cover" />
+                                            <img src={album.albumUrl || album.avatarUrl} className="w-full h-full object-cover" />
                                         </div>
                                         <div className="min-w-0 flex-1">
                                             <p className="font-bold text-sm text-gray-900 dark:text-white truncate" title={album.name}>{album.name}</p>

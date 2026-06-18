@@ -4,21 +4,21 @@ import { SongFilter } from './SongFilter';
 import { SongTable } from './SongTable';
 import CreateSongModal from '../Modals/CreateSongModal';
 import UpdateSongModal from '../Modals/UpdateSongModal';
-import ConfirmModal from '../ConfirmModal'; // IMPORT CONFIRM MODAL
+import ConfirmModal from '../ConfirmModal';
+import LyricsModal from '../Modals/LyricsModal';
 
 const SongsManagement = () => {
     const {
         paginatedSongs, totalItems, totalPages, currentPage, startIndex,
         filters, isCreateModalOpen, isUpdateModalOpen, selectedSong,
         isDeletedView, setIsDeletedView,
+        categories,
         handleFilterChange, handlePageChange, handleCreateClick, handleEditClick,
-
-        // Lấy thêm các biến quản lý Modal
         handleDeleteClick, handleRestoreClick, handleHardDeleteClick,
         confirmModal, executeAction, closeConfirmModal,
-
         handleCreateSubmit, handleUpdateSubmit,
-        setIsCreateModalOpen, setIsUpdateModalOpen
+        setIsCreateModalOpen, setIsUpdateModalOpen,
+        isLyricsModalOpen, setIsLyricsModalOpen, selectedLyricsSong, handleManageLyrics
     } = useSongLogic();
 
     return (
@@ -30,6 +30,7 @@ const SongsManagement = () => {
                 onChange={handleFilterChange}
                 isDeletedView={isDeletedView}
                 onToggleView={setIsDeletedView}
+                categories={categories}
             />
 
             <SongTable
@@ -44,6 +45,7 @@ const SongsManagement = () => {
                 onDelete={handleDeleteClick}
                 onRestore={handleRestoreClick}
                 onHardDelete={handleHardDeleteClick}
+                onManageLyrics={handleManageLyrics}
             />
 
             <CreateSongModal
@@ -67,6 +69,13 @@ const SongsManagement = () => {
                 type={confirmModal.type}
                 title={confirmModal.title}
                 message={confirmModal.message}
+            />
+
+            <LyricsModal
+                isOpen={isLyricsModalOpen}
+                onClose={() => setIsLyricsModalOpen(false)}
+                songId={selectedLyricsSong?.id || null}
+                songTitle={selectedLyricsSong?.title || ''}
             />
         </div>
     );

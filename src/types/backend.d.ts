@@ -32,6 +32,12 @@ export interface UserSummaryResponse {
 }
 
 // --- MUSIC ENTITIES ---
+export interface FeaturedArtistInfo {
+    id: string;
+    name: string;
+    avatarUrl?: string;
+}
+
 export interface SongResponse {
     id: string;
     title: string;
@@ -46,25 +52,26 @@ export interface SongResponse {
     uploadedBy: string;
     duration: number; // Double -> number
     createdAt: string; // LocalDateTime -> ISO String
+    releaseDate?: string;
+    playCount?: number;
+    streamCount?: number;
+    featuredArtists?: FeaturedArtistInfo[];
 }
 
 export interface ArtistResponse {
     id: string;
     name: string;
-    avatarUrl?: string;
     description?: string;
-    songCount?: number;
+    avatarUrl?: string;
+    isFollowed?: boolean;
     followerCount?: number;
+    songCount?: number;
+    country?: string;
+    socialAccounts?: Record<string, string>;
     deletedAt?: string;
 }
 
-export interface CategoryResponse {
-    id: string;
-    name: string;
-    coverUrl: string;
-    description: string;
-    songs: SongResponse[];
-}
+
 
 export interface PlaylistResponse {
     id: string;
@@ -88,7 +95,7 @@ export interface TopLikeSongResponse {
     songTitle: string;
     artistName: string;
     coverUrl: string;
-    likeCount: number;
+    streamCount: number;
     duration: number;
 }
 
@@ -104,23 +111,24 @@ export interface AlbumResponse {
     id: string;
     name: string;
     description?: string;
-    avatarUrl?: string; // Khớp với trường avatarUrl bên Java
-    songCount?: number;   // Số lượng bài hát thật
-    artistName?: string;  // Tên nghệ sĩ chủ quản
+    albumUrl?: string;    // Field thực tế từ backend
+    avatarUrl?: string;   // Fallback
+    songCount?: number;
+    artistName?: string;
     releaseDate?: string;
 }
 
 export interface CategoryResponse {
     id: string;
     name: string;
-    slug: string; //
+    slug: string;
     coverUrl: string;
     description?: string;
-    backgroundColor?: string; //
-    type: 'GENRE' | 'MOOD' | 'ARTIST' | 'TRENDING'; //
-    songCount: number; //
+    backgroundColor?: string;
+    type: 'GENRE' | 'MOOD' | 'ARTIST' | 'TRENDING';
+    songCount: number;
     active: boolean;
-    displayOrder?: number; //
+    displayOrder?: number;
 }
 
 export interface UserProfileResponse {
@@ -135,7 +143,8 @@ export interface UserProfileResponse {
     playlistCount: number;
     followingArtistCount: number;
     isFollowedByMe: boolean;
-    isPublicProfile: booleanz;
+    isPublicProfile: boolean;
+    isPremium?: boolean;
 }
 
 export interface ArtistFollowResponse {

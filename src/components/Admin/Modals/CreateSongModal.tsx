@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { X, Music, Disc, Mic2, Image as ImageIcon, FileAudio, Loader2, UploadCloud, Tag } from 'lucide-react';
 import api from '../../../services/api';
 import type { ArtistResponse, AlbumResponse, CategoryResponse } from '../../../types/backend';
+import AsyncArtistSelect from './AsyncArtistSelect';
 
 // --- CÁC COMPONENT CON (UI) ---
 const InputGroup = ({ icon, label, placeholder, value, onChange }: any) => (
@@ -70,33 +71,31 @@ interface CreateSongModalProps {
 const CreateSongModal = ({ isOpen, onClose, onCreate }: CreateSongModalProps) => {
     const [title, setTitle] = useState('');
     const [artistId, setArtistId] = useState('');
+    const [featuredArtistIds, setFeaturedArtistIds] = useState<string[]>([]);
     const [albumId, setAlbumId] = useState('');
     const [categoryId, setCategoryId] = useState('');
     const [coverFile, setCoverFile] = useState<File | null>(null);
     const [audioFile, setAudioFile] = useState<File | null>(null);
     const [isLoading, setIsLoading] = useState(false);
 
-    // Dữ liệu từ Backend
-    const [artists, setArtists] = useState<ArtistResponse[]>([]);
+    // Dữ liệu từ Backend (không cần setArtists nữa vì đã dùng AsyncArtistSelect)
     const [albums, setAlbums] = useState<AlbumResponse[]>([]);
     const [categories, setCategories] = useState<CategoryResponse[]>([]);
 
     useEffect(() => {
         if (!isOpen) {
             // Reset form khi đóng
-            setTitle(''); setArtistId(''); setAlbumId(''); setCategoryId(''); setCoverFile(null); setAudioFile(null);
+            setTitle(''); setArtistId(''); setFeaturedArtistIds([]); setAlbumId(''); setCategoryId(''); setCoverFile(null); setAudioFile(null);
             return;
         }
 
         // Fetch data khi mở modal
         const fetchData = async () => {
             try {
-                const [artistRes, albumRes, categoryRes] = await Promise.all([
-                    api.get('/artist/list', { params: { size: 100 } }),
+                const [albumRes, categoryRes] = await Promise.all([
                     api.get('/albums/list', { params: { size: 100 } }),
                     api.get('/categories/list', { params: { size: 100 } })
                 ]);
-                setArtists(artistRes.data.result.content || []);
                 setAlbums(albumRes.data.result.content || []);
                 setCategories(categoryRes.data.result.content || []);
             } catch (error) {
@@ -118,6 +117,12 @@ const CreateSongModal = ({ isOpen, onClose, onCreate }: CreateSongModalProps) =>
         formData.append('artistId', artistId);
         if (albumId) formData.append('albumId', albumId);
         formData.append('categoryId', categoryId);
+        
+        // Append từng ID của featuredArtists
+        featuredArtistIds.forEach(id => {
+            formData.append('featuredArtistIds', id);
+        });
+
         formData.append('coverUrl', coverFile);
         formData.append('audioUrl', audioFile);
 
@@ -147,9 +152,21 @@ const CreateSongModal = ({ isOpen, onClose, onCreate }: CreateSongModalProps) =>
                             <h3 className="text-sm font-bold border-b border-gray-100 dark:border-zinc-800 pb-2 flex items-center gap-2"><Music size={16} className="text-blue-500" /> Thông tin cơ bản</h3>
                             <InputGroup label="Tên bài hát *" icon={<Music size={14} />} placeholder="Nhập tên bài hát..." value={title} onChange={setTitle} />
 
-                            <SelectGroup
-                                label="Nghệ sĩ *" icon={<Mic2 size={14} />} required value={artistId} onChange={setArtistId}
-                                options={artists.map(a => ({ value: a.id, label: a.name }))}
+                            <AsyncArtistSelect
+                                label="Nghệ sĩ chính *"
+                                icon={<Mic2 size={14} />}
+                                value={artistId}
+                                onChange={setArtistId}
+                                required
+                            />
+
+                            <AsyncArtistSelect
+                                label="Nghệ sĩ hợp tác (Feat)"
+                                icon={<Mic2 size={14} />}
+                                value={featuredArtistIds}
+                                onChange={setFeaturedArtistIds}
+                                isMulti
+                                placeholder="Tìm kiếm và chọn thêm nghệ sĩ..."
                             />
 
                             <SelectGroup

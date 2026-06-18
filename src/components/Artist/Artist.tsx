@@ -6,64 +6,75 @@ import PopularTracks from './PopularTracks';
 import Discography from './Discography';
 import ArtistAbout from './ArtistAbout';
 import RelatedArtists from './RelatedArtists';
-import ProfileSection from '../Profile/ProfileSection';
+import ProfileSection from '../Profile/components/ProfileSection';
 import { useMusic } from '../../contexts/MusicContent';
 import Footer from '../HomePage/Footer';
 import ArtistAboutModal from './ArtistAboutModal';
 import BackButton from '../common/BackButton';
-
-// Import Custom Hook vừa tạo
 import { useArtist } from './useArtist';
-
-// Vẫn giữ MOCK DATA cho bài hát và album chờ API
-import { ARTIST_POPULAR_TRACKS, ARTIST_DISCOGRAPHY, ARTIST_RELATED } from '../../constants/mockArtistData';
+import { Loader2 } from 'lucide-react';
+import ProfileShareCard from '../Profile/components/ProfileShareCard';
+import { useTranslation } from 'react-i18next';
 
 const ArtistPage = () => {
+    const { t } = useTranslation();
     const navigate = useNavigate();
-    const { playPlaylist, currentSong } = useMusic();
-
-    // Sử dụng logic từ Hook
-    const { artistData, isLoading, error } = useArtist();
-
-    // Các State xử lý UI
-    const [isFollowing, setIsFollowing] = useState(false);
+    const { playPlaylist, currentSong, isPlaying: globalIsPlaying, togglePlay } = useMusic();
+    const { artistData, popularTracks, discography, relatedArtists, isLoading, error, toggleFollow } = useArtist();
+    const isLoggedIn = !!localStorage.getItem('token');
     const [isAboutOpen, setIsAboutOpen] = useState(false);
+    const [isShareModalOpen, setIsShareModalOpen] = useState(false);
     const [isShuffling, setIsShuffling] = useState(false);
     const [isSticky, setIsSticky] = useState(false);
     const headerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                setIsSticky(!entry.isIntersecting);
-            },
-            { threshold: 0, rootMargin: "-64px 0px 0px 0px" }
-        );
+        if (isLoading || !artistData) return;
 
-        if (headerRef.current) {
-            observer.observe(headerRef.current);
-        }
+        const observer = new IntersectionObserver(([entry]) => {
+            setIsSticky(!entry.isIntersecting);
+        }, { threshold: 0 });
 
+        if (headerRef.current) observer.observe(headerRef.current);
         return () => observer.disconnect();
-    }, [artistData]); // Chạy lại khi có data
-
-    const handlePlayArtist = () => {
-        playPlaylist(ARTIST_POPULAR_TRACKS, 0);
-    };
+    }, [isLoading, artistData]);
 
     const handlePlayTrack = (index: number) => {
-        playPlaylist(ARTIST_POPULAR_TRACKS, index);
+        if (popularTracks && popularTracks.length > 0) {
+            playPlaylist(popularTracks, index, artistData?.name);
+        }
     };
 
     const handleToggleShuffle = () => {
         setIsShuffling(!isShuffling);
     };
 
+    const isThisArtistActive = currentSong?.artist?.includes(artistData?.name || '') ?? false;
+
+    const handleTogglePlayArtist = () => {
+        if (isThisArtistActive) {
+            // Nếu nhạc của nghệ sĩ này đang active -> Bấm nút to sẽ Pause/Resume
+            if (togglePlay) togglePlay();
+        } else {
+            // Nếu đang nghe người khác -> Bấm nút to sẽ phát từ đầu playlist
+            if (popularTracks && popularTracks.length > 0) {
+                playPlaylist(popularTracks, 0, artistData?.name);
+            }
+        }
+    };
+
+    const handleCopyLink = () => {
+        const url = `${window.location.origin}/artist/${artistData?.id}`;
+        navigator.clipboard.writeText(url).then(() => {
+            alert(t('artist.link_copied'));
+        });
+    };
+
     // --- RENDER TRẠNG THÁI ---
     if (isLoading) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-white dark:bg-[#121212]">
-                <div className="w-8 h-8 border-4 border-green-500 border-t-transparent rounded-full animate-spin"></div>
+            <div className="flex justify-center items-center h-[calc(100vh-200px)]">
+                <Loader2 className="animate-spin text-green-500" size={40} />
             </div>
         );
     }
@@ -73,17 +84,16 @@ const ArtistPage = () => {
             <div className="min-h-screen flex flex-col items-center justify-center bg-white dark:bg-[#121212] text-zinc-900 dark:text-white">
                 <h2 className="text-2xl font-bold mb-4">{error}</h2>
                 <button onClick={() => navigate(-1)} className="px-4 py-2 bg-green-500 rounded-full font-bold text-black">
-                    Quay lại
+                    {t('artist.back')}
                 </button>
             </div>
         );
     }
 
     return (
-        // SỬA 1: Giữ -mt-6 -mx-6 để tràn viền, nhưng XÓA 'p-6' để fix lỗi sticky bị lệch
         <div className="relative min-h-screen transition-colors duration-300 bg-white dark:bg-[#121212]">
 
-            <div className="absolute top-4 left-4 z-20 md:hidden">
+            <div className="absolute top-4 left-4 z-20">
                 <BackButton className="bg-black/20 backdrop-blur-sm p-1 rounded-full text-white" />
             </div>
 
@@ -121,31 +131,38 @@ const ArtistPage = () => {
                     {/* SỬA 3: Đặt sticky ở đây. Vì thẻ cha đã mất p-6 nên top-0 sẽ dính đúng mép trên cùng */}
                     <div className="sticky top-0 z-40 bg-white dark:bg-[#121212]">
                         <ArtistActionBar
-                            isPlaying={currentSong?.artist?.includes(artistData.name) ?? false}
-                            isFollowing={isFollowing}
+                            // isPlaying={currentSong?.artist?.includes(artistData.name) ?? false}
+                            isPlaying={isThisArtistActive && (globalIsPlaying ?? false)}
+                            isFollowing={isLoggedIn ? (artistData?.isFollowed ?? false) : false}
                             isShuffling={isShuffling}
-                            onTogglePlay={handlePlayArtist}
-                            onToggleFollow={() => setIsFollowing(!isFollowing)}
+                            onTogglePlay={handleTogglePlayArtist}
+                            onToggleFollow={toggleFollow}
                             onToggleShuffle={handleToggleShuffle}
                             artistName={artistData.name}
                             artistImage={artistData.avatarUrl}
                             isSticky={isSticky}
+                            isLoggedIn={isLoggedIn}
+                            onShareArtist={() => setIsShareModalOpen(true)}
+                            onCopyLink={handleCopyLink}
                         />
                     </div>
 
                     {/* Nội dung chi tiết */}
                     <div className="px-6 md:px-8 space-y-10 pb-24 pt-4 w-full">
                         <PopularTracks
-                            tracks={ARTIST_POPULAR_TRACKS}
+                            tracks={popularTracks}
                             onPlayTrack={handlePlayTrack}
+                            onTogglePlay={togglePlay} //Pause/Resume
+                            currentSongId={currentSong?.id}
+                            globalIsPlaying={globalIsPlaying}
                         />
 
-                        <Discography items={ARTIST_DISCOGRAPHY} />
+                        <Discography items={discography} />
 
                         <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 delay-300">
                             <ProfileSection
-                                title={`Featuring ${artistData.name}`}
-                                items={[]}
+                                title={t('artist.featuring', { name: artistData.name })}
+                                items={[]} // Chờ API
                             />
                         </div>
 
@@ -154,11 +171,13 @@ const ArtistPage = () => {
                                 artistName={artistData.name}
                                 imageUrl={artistData.avatarUrl}
                                 bio={artistData.bio}
-                                globalRank={artistData.globalRank || undefined}
+                            // globalRank={artistData.globalRank || undefined}
                             />
                         </div>
 
-                        <RelatedArtists artists={ARTIST_RELATED} />
+                        {relatedArtists && relatedArtists.length > 0 && (
+                            <RelatedArtists artists={relatedArtists} />
+                        )}
                     </div>
                     <Footer />
                 </div>
@@ -169,6 +188,16 @@ const ArtistPage = () => {
                 onClose={() => setIsAboutOpen(false)}
                 artist={artistData}
             />
+
+            {artistData && (
+                <ProfileShareCard
+                    user={artistData}
+                    dominantColor="#22c55e"
+                    isOpen={isShareModalOpen}
+                    onClose={() => setIsShareModalOpen(false)}
+                    type="artist"
+                />
+            )}
         </div>
     );
 };

@@ -43,26 +43,28 @@ const SidebarItem = ({ icon, label, isActive, onClick, imageUrl, variant = 'nav'
             >
                 {/* --- Phần nội dung Item (Giữ nguyên code cũ) --- */}
                 <div className={`
-                    relative flex items-center transition-all duration-200 cursor-pointer
-                    ${isCollapsed ? 'justify-center px-2 py-2' : 'gap-3 px-2 py-2'}
-                    ${isPlaylist ? 'rounded-lg' : 'rounded-full'}
+                    relative flex items-center transition-all duration-400 ease-out cursor-pointer active:scale-[0.97]
+                    ${isCollapsed ? 'justify-center px-2 py-2' : 'gap-3 px-3 py-2.5'}
+                    ${isPlaylist ? 'rounded-2xl' : 'rounded-full'}
                     ${isActive
-                        ? (isPlaylist ? 'bg-zinc-200 dark:bg-white/10' : 'bg-green-500 text-white')
-                        : 'hover:bg-zinc-100 dark:hover:bg-white/5'
+                        ? (isPlaylist
+                            ? 'bg-white shadow-[0_2px_10px_rgba(0,0,0,0.05)] dark:bg-white/10 dark:shadow-none border border-black/5 dark:border-transparent'
+                            : 'bg-zinc-900 text-white dark:bg-white dark:text-black shadow-lg')
+                        : 'hover:bg-white/60 dark:hover:bg-white/5 border border-transparent hover:border-black/5 dark:hover:border-white/5'
                     }
                 `}>
-                    {/* Ảnh hoặc Icon */}
                     <div className={`
-                        flex-shrink-0 overflow-hidden flex items-center justify-center transition-all duration-300
+                        flex-shrink-0 overflow-hidden flex items-center justify-center transition-all duration-500 ease-out
                         ${isPlaylist
-                            ? (isCollapsed ? 'w-10 h-10' : 'w-12 h-12')
+                            ? (isCollapsed ? 'w-10 h-10 rounded-[12px]' : 'w-[46px] h-[46px] rounded-[14px]')
                             : 'w-5 h-5 bg-transparent'
                         }
-                        rounded-md shadow-sm border border-black/5 dark:border-white/5
+                        shadow-sm ring-1 ring-black/5 dark:ring-white/10 
+                        group-hover/item:shadow-md group-hover/item:ring-black/10 dark:group-hover/item:ring-white/20
                         ${!imageUrl && isPlaylist ? 'bg-zinc-100 dark:bg-zinc-800' : ''}
                     `}>
                         {imageUrl ? (
-                            <img src={imageUrl} alt={label} className="w-full h-full object-cover" />
+                            <img src={imageUrl} alt={label} className="w-full h-full object-cover group-hover/item:scale-110 transition-transform duration-700 ease-out" />
                         ) : (
                             <div className="w-full h-full flex items-center justify-center">
                                 {React.isValidElement(icon) ? (
@@ -76,17 +78,12 @@ const SidebarItem = ({ icon, label, isActive, onClick, imageUrl, variant = 'nav'
                         )}
                     </div>
 
-                    {/* Text Label (Chỉ hiện khi mở rộng) */}
+                    {/* Text Label (Chỉ hiện khi mở rộngss) */}
                     {!isCollapsed && (
-                        <div className="flex flex-col min-w-0 flex-1 ml-1 animate-in fade-in duration-200">
-                            <span className={`truncate leading-tight ${isPlaylist ? 'text-[15px]' : 'text-sm'} font-medium ${isActive ? 'text-black dark:text-white' : 'text-zinc-600 dark:text-zinc-400'}`}>
+                        <div className="flex flex-col min-w-0 flex-1 ml-1 animate-in fade-in duration-200 justify-center">
+                            <span className={`truncate leading-tight ${isPlaylist ? 'text-[15px]' : 'text-sm'} ${isActive ? 'font-semibold text-black dark:text-white' : 'font-medium text-zinc-600 dark:text-zinc-300 group-hover/item:text-black dark:group-hover/item:text-white'}`}>
                                 {label}
                             </span>
-                            {isPlaylist && (
-                                <span className="text-[12px] mt-0.5 text-zinc-500 dark:text-zinc-500 truncate">
-                                    Playlist • SpringTunes
-                                </span>
-                            )}
                         </div>
                     )}
                 </div>

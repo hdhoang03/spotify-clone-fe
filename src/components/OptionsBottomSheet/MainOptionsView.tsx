@@ -1,5 +1,6 @@
-import { ListPlus, Disc, Mic2, Share2, Info, Heart, ChevronRight } from 'lucide-react';
-import ScrollingText from '../MusicPlayer/ScrollingText';
+import { ListPlus, Disc, Mic2, Share2, Info, ChevronRight } from 'lucide-react';
+import ScrollingText from '../MusicPlayer/MiniPlayer/ScrollingText';
+import { useTranslation } from 'react-i18next';
 
 interface MainOptionsViewProps {
     song: any;
@@ -7,6 +8,7 @@ interface MainOptionsViewProps {
     onShare: () => void;
     onRequestArtistSelection: () => void;
     onNavigateToArtist: (id: string) => void;
+    onNavigateToAlbum: () => void;
     onRequestPlaylistSelection: () => void;
 }
 
@@ -16,48 +18,67 @@ const MainOptionsView = ({
     onShare,
     onRequestArtistSelection,
     onNavigateToArtist,
+    onNavigateToAlbum,
     onRequestPlaylistSelection
 }: MainOptionsViewProps) => {
+    const { t } = useTranslation();
 
     // Cấu hình danh sách options ngay tại đây
     const options = [
         {
             id: 'add_playlist',
             icon: ListPlus,
-            label: 'Thêm vào Playlist',
+            label: t('player.add_to_playlist'),
             action: onRequestPlaylistSelection
         },
+        // {
+        //     id: 'go_artist',
+        //     icon: Mic2,
+        //     label: 'Xem Nghệ sĩ',
+        //     action: () => {
+        //         // Logic quyết định: Chuyển view hay đi thẳng?
+        //         if (artistList.length > 1) {
+        //             onRequestArtistSelection();
+        //         } else if (artistList.length > 0) {
+        //             onNavigateToArtist(artistList[0].id);
+        //         }
+        //     }
+        // },
+
         {
             id: 'go_artist',
             icon: Mic2,
-            label: 'Xem Nghệ sĩ',
+            label: t('player.view_artist'),
             action: () => {
-                // Logic quyết định: Chuyển view hay đi thẳng?
                 if (artistList.length > 1) {
                     onRequestArtistSelection();
                 } else if (artistList.length > 0) {
-                    onNavigateToArtist(artistList[0].id);
+                    const targetArtistId = artistList[0].id;
+
+                    // Gọi trực tiếp để trigger onClose() và onCollapse() bên trong handleNavigateToArtist
+                    onNavigateToArtist(targetArtistId);
                 }
             }
         },
-        {
+        // Chỉ hiện "Xem Album" nếu bài hát có thuộc album (không phải single)
+        ...(song?.albumId ? [{
             id: 'go_album',
             icon: Disc,
-            label: 'Xem Album',
-            action: () => console.log('Nav: Go to Album')
-        },
+            label: t('player.view_album'),
+            action: onNavigateToAlbum
+        }] : []),
         {
             id: 'share',
             icon: Share2,
-            label: 'Chia sẻ',
+            label: t('player.share'),
             action: onShare // Gọi hàm từ props
         },
-        {
-            id: 'credits',
-            icon: Info,
-            label: 'Thông tin bài hát',
-            action: () => console.log('Modal: Show Credits')
-        }
+        // {
+        //     id: 'credits',
+        //     icon: Info,
+        //     label: 'Thông tin bài hát',
+        //     action: () => console.log('Modal: Show Credits')
+        // }
     ];
 
     return (
@@ -73,9 +94,6 @@ const MainOptionsView = ({
                     <ScrollingText content={song.title} className="text-lg font-bold text-white" />
                     <ScrollingText content={artistList.map(a => a.name).join(', ')} className="text-zinc-400 mt-0.5" />
                 </div>
-                <button className="p-2 text-green-500 hover:scale-110 transition">
-                    <Heart fill="currentColor" size={24} />
-                </button>
             </div>
 
             {/* Options List */}

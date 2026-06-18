@@ -1,6 +1,6 @@
-import React from 'react';
 import { Play } from 'lucide-react';
 import { motion } from 'framer-motion';
+import TiltCover from './TiltCover';
 
 interface CardItemProps {
     title: string;
@@ -19,33 +19,41 @@ const CardItem = ({ title, description, imageUrl, isRound = false, onClick }: Ca
     return (
         <motion.div
             variants={itemVariants}
-            // Thêm group vào đây để xử lý hover cho các phần tử con
             onClick={onClick}
-            className="group p-3 rounded-lg cursor-pointer transition-all duration-300
-                       hover:bg-zinc-200/50 dark:hover:bg-zinc-800"
+            className="group p-3 rounded-2xl cursor-pointer transition-all duration-500
+                       hover:bg-black/5 dark:hover:bg-white/5 active:scale-95"
         >
-            {/* Image Container */}
-            <div className={`relative w-full aspect-square mb-4 shadow-lg overflow-hidden
-                            ${isRound ? 'rounded-full' : 'rounded-md'}
-                            bg-zinc-200 dark:bg-zinc-800`}>
-                
-                {imageUrl ? (
-                    <img src={imageUrl} alt={title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
-                ) : (
-                    <div className="w-full h-full flex items-center justify-center text-zinc-400 text-xs font-bold">NO IMG</div>
-                )}
-                
-                {/* Play Button - Chỉ hiện với thẻ vuông */}
-                {!isRound && (
-                    <div className="absolute bottom-2 right-2 translate-y-2 opacity-0 
-                                    group-hover:translate-y-0 group-hover:opacity-100 
-                                    transition-all duration-300 ease-out">
-                        <button className="bg-green-500 rounded-full p-3 text-black shadow-xl 
-                                         hover:scale-105 hover:bg-green-400 active:scale-95 transition-transform">
-                            <Play size={20} fill="currentColor" />
-                        </button>
-                    </div>
-                )}
+            {/* Cover — TiltCover 3D effect */}
+            <div className="mb-4 relative">
+                <TiltCover
+                    src={imageUrl}
+                    alt={title}
+                    sizeClass="w-full aspect-square shadow-md"
+                    radiusClass={isRound ? 'rounded-full' : 'rounded-xl'}
+                    maxTilt={7}
+                    onClick={onClick}
+                    hoverOverlay={
+                        /* Nút Play chỉ hiện với card vuông (playlist), không hiện với artist (tròn) */
+                        !isRound ? (
+                            <div className="absolute inset-0 flex items-end justify-end p-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                <motion.button
+                                    initial={{ opacity: 0, y: 8 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    whileHover={{ scale: 1.1 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        onClick?.();
+                                    }}
+                                    className="w-10 h-10 md:w-12 md:h-12 bg-green-500 dark:bg-[#1ed760] rounded-full
+                                               flex items-center justify-center shadow-[0_4px_15px_rgba(34,197,94,0.3)] dark:shadow-[0_4px_15px_rgba(30,215,96,0.3)] text-black hover:scale-105"
+                                >
+                                    <Play fill="black" size={18} className="ml-0.5" />
+                                </motion.button>
+                            </div>
+                        ) : undefined
+                    }
+                />
             </div>
 
             {/* Content */}

@@ -1,6 +1,7 @@
 // components/MobileNavigation.tsx
 import React from 'react';
 import { Home, Search, Library } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 interface MobileNavigationProps {
 	activeTab?: string;
@@ -8,6 +9,7 @@ interface MobileNavigationProps {
 }
 
 const MobileNavigation = ({ activeTab = 'HOME', onTabChange }: MobileNavigationProps) => {
+	const { t } = useTranslation();
 	return (
 		<div className="
           md:hidden
@@ -18,21 +20,21 @@ const MobileNavigation = ({ activeTab = 'HOME', onTabChange }: MobileNavigationP
       ">
 			<NavItem
 				icon={<Home size={24} />}
-				label="Trang chủ"
+				label={t('mobile_nav.home')}
 				isActive={activeTab === 'HOME'}
 				onClick={() => onTabChange?.('HOME')}
 			/>
 
 			<NavItem
 				icon={<Search size={24} />}
-				label="Tìm kiếm"
+				label={t('mobile_nav.search')}
 				isActive={activeTab === 'SEARCH'}
 				onClick={() => onTabChange?.('SEARCH')}
 			/>
 
 			<NavItem
 				icon={<Library size={24} />}
-				label="Thư viện"
+				label={t('mobile_nav.library')}
 				isActive={activeTab === 'LIBRARY'}
 				onClick={() => onTabChange?.('LIBRARY')}
 			/>

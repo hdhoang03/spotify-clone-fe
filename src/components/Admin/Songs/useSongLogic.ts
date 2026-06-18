@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import api from '../../../services/api';
-import type { SongResponse } from '../../../types/backend';
+import type { SongResponse, CategoryResponse } from '../../../types/backend';
 import type { ConfirmActionType } from '../ConfirmModal'; // IMPORT TYPE CỦA MODAL
 
 const ITEMS_PER_PAGE = 10;
@@ -34,6 +34,22 @@ export const useSongLogic = () => {
     const [confirmModal, setConfirmModal] = useState<{
         isOpen: boolean; type: ConfirmActionType; id: string | null; title: string; message: string;
     }>({ isOpen: false, type: 'DELETE_SOFT', id: null, title: '', message: '' });
+
+    // --- STATE DANH MỤC ---
+    const [categories, setCategories] = useState<CategoryResponse[]>([]);
+
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const res = await api.get('/categories', { params: { page: 1, size: 100 } });
+                // API trả về Page<CategoryResponse>, content nằm trong result.content
+                setCategories(res.data.result?.content ?? []);
+            } catch (err) {
+                console.error('Lỗi fetch categories:', err);
+            }
+        };
+        fetchCategories();
+    }, []);
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -150,16 +166,23 @@ export const useSongLogic = () => {
         }
     };
 
+    const [isLyricsModalOpen, setIsLyricsModalOpen] = useState(false);
+    const [selectedLyricsSong, setSelectedLyricsSong] = useState<SongResponse | null>(null);
+
+    const handleManageLyrics = (song: SongResponse) => {
+        setSelectedLyricsSong(song);
+        setIsLyricsModalOpen(true);
+    };
+
     return {
         paginatedSongs: songs, totalItems, totalPages, currentPage, startIndex: (currentPage - 1) * ITEMS_PER_PAGE,
         filters, isCreateModalOpen, isUpdateModalOpen, selectedSong, isLoading,
         isDeletedView, setIsDeletedView,
+        categories,
         handleFilterChange, handlePageChange, handleCreateClick, handleEditClick,
-
-        // Trả ra các hàm và state của Modal
         handleDeleteClick, handleRestoreClick, handleHardDeleteClick,
         confirmModal, executeAction, closeConfirmModal,
-
-        handleCreateSubmit, handleUpdateSubmit, setIsCreateModalOpen, setIsUpdateModalOpen
+        handleCreateSubmit, handleUpdateSubmit, setIsCreateModalOpen, setIsUpdateModalOpen,
+        isLyricsModalOpen, setIsLyricsModalOpen, selectedLyricsSong, handleManageLyrics
     };
 };

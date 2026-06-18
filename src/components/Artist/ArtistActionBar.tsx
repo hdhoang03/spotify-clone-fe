@@ -1,17 +1,21 @@
 import React, { useRef, useEffect, useState } from 'react';
 import ArtistActionSheet from './ArtistActionSheet';
 import { Play, Pause, Shuffle, MoreHorizontal, Ban, Flag, Share2, Copy } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 interface ArtistActionBarProps {
     isPlaying: boolean;
     isFollowing: boolean;
-    isShuffling: boolean;        // Thêm prop
+    isShuffling: boolean;
     onTogglePlay: () => void;
     onToggleFollow: () => void;
-    onToggleShuffle: () => void; // Thêm prop logic shuffle
+    onToggleShuffle: () => void;
     artistName: string;
     artistImage: string;
     isSticky?: boolean;
+    isLoggedIn?: boolean;
+    onShareArtist?: () => void;
+    onCopyLink?: () => void;
 }
 
 const ArtistActionBar = ({
@@ -23,11 +27,15 @@ const ArtistActionBar = ({
     onToggleShuffle,
     artistName,
     artistImage,
-    isSticky = false
+    isSticky = false,
+    isLoggedIn = false,
+    onShareArtist,
+    onCopyLink
 }: ArtistActionBarProps & { artistName: string, artistImage: string }) => {
+    const { t } = useTranslation();
     const [isSheetOpen, setIsSheetOpen] = useState(false);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const dropdownRef = useRef<HTMLDivElement>(null); // Đảm bảo ref này được sử dụng
+    const dropdownRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -49,75 +57,101 @@ const ArtistActionBar = ({
 
     return (
         <div
-            className={`flex items-center justify-between md:justify-start gap-4 md:gap-6 px-6 md:px-8 py-3 
-                sticky top-0 z-40 transition-all duration-300 ease-in-out border-b
+            className={`flex items-center justify-between md:justify-start gap-4 md:gap-6 px-6 md:px-8 py-3
+                sticky top-0 z-40 transition-all duration-300 ease-in-out
                 ${isSticky
-                    /* SỬA 2: Thêm background đặc để che nội dung trôi bên dưới */
-                    ? 'bg-white dark:bg-[#121212] dark:border-white/10'
-                    : 'bg-white/95 dark:bg-[#121212]/0 border-transparent'
+                    /* Sticky: nền mờ hòa vào background thay vì box trắng/đen đặc */
+                    ? 'bg-black/[0.05] dark:bg-black/[0.30] backdrop-blur-xl border-b border-black/[0.06] dark:border-white/[0.07]'
+                    : 'bg-transparent border-b border-transparent'
                 }`}
         >
 
-            {/* --- KHỐI TRÁI: Play Button + Tên Nghệ Sĩ (Ẩn/Hiện) --- */}
-            <div className="flex items-center gap-4">
-                <button onClick={onTogglePlay} className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-green-500 text-black flex items-center justify-center transition hover:scale-105 shadow-lg active:scale-95 flex-shrink-0">
-                    {isPlaying ? <Pause size={24} fill="black" /> : <Play size={24} fill="black" className="ml-1" />}
+            {/* --- KHỐI TRÁI: Play Button + Tên Nghệ Sĩ (Ẩn/Hiện khi sticky) --- */}
+            <div className="flex items-center gap-4 flex-1 min-w-0">
+                {/* Play/Pause button — shadow xanh lá 2026 */}
+                <button
+                    onClick={onTogglePlay}
+                    className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-green-500 text-black
+                               flex items-center justify-center
+                               transition-all duration-200 hover:scale-105 active:scale-95
+                               shadow-lg shadow-green-500/30 hover:shadow-green-500/50 hover:bg-green-400
+                               flex-shrink-0"
+                >
+                    {isPlaying
+                        ? <Pause size={24} fill="black" />
+                        : <Play size={24} fill="black" className="ml-1" />
+                    }
                 </button>
 
-                {/* Tên nghệ sĩ - Chỉ hiện khi isSticky = true */}
-                <div className={`flex flex-col transition-all duration-500 overflow-hidden
-                                ${isSticky ? 'opacity-100 translate-y-0 w-auto' : 'opacity-0 translate-y-4 w-0'}`}>
-                    <span className="text-xl md:text-2xl font-bold text-zinc-900 dark:text-white truncate max-w-[150px] md:max-w-md">
+                {/* Tên nghệ sĩ — hiện khi sticky */}
+                <div className={`flex flex-col transition-all duration-500 overflow-hidden min-w-0
+                                ${isSticky ? 'opacity-100 translate-y-0 w-full' : 'opacity-0 translate-y-4 w-0'}`}>
+                    <span className="text-xl md:text-2xl font-bold text-zinc-900 dark:text-white truncate block">
                         {artistName}
                     </span>
                 </div>
             </div>
 
-            <div className="flex items-center gap-4 md:gap-6 ml-auto md:ml-0">
+            <div className="flex items-center gap-3 md:gap-5 ml-auto md:ml-0 flex-shrink-0">
 
-                {/* Nút Shuffle (Hiện trên cả Mobile và Desktop nhưng style khác nhau) */}
+                {/* Shuffle button */}
                 <button
                     onClick={onToggleShuffle}
-                    className={`transition relative ${isShuffling ? "text-green-500" : "text-zinc-400 hover:text-zinc-900 dark:hover:text-white"}`}
+                    className={`transition-all duration-200 relative
+                        ${isShuffling
+                            ? 'text-green-500 scale-110'
+                            : 'text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:scale-105'
+                        }`}
                 >
-                    {/* Icon nhỏ hơn trên mobile (20) và to hơn trên desktop (24) */}
                     <Shuffle className="w-5 h-5 md:w-6 md:h-6" />
-
                     {/* Dấu chấm xanh khi active */}
                     {isShuffling && (
-                        <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-green-500 rounded-full" />
+                        <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-1 h-1 bg-green-500 rounded-full" />
                     )}
                 </button>
 
-                {/* Nút Follow */}
-                <button onClick={onToggleFollow} className={`whitespace-nowrap px-4 py-1.5 rounded-full border text-sm font-bold tracking-wider transition ${isFollowing ? 'border-green-500 text-green-500' : 'border-zinc-300 dark:border-zinc-600 text-zinc-900 dark:text-white'}`}>
-                    {isFollowing ? 'Following' : 'Follow'}
-                </button>
-
-                {/* Nút More (3 chấm) */}
-                <div className="relative" ref={dropdownRef}>
+                {/* Follow button — ẩn khi chưa đăng nhập */}
+                {isLoggedIn && (
                     <button
-                        onClick={handleMoreClick}
-                        className="text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition flex items-center"
+                        onClick={onToggleFollow}
+                        className={`whitespace-nowrap px-4 py-1.5 rounded-full text-sm font-bold tracking-wide
+                                    transition-all duration-200 hover:scale-105 active:scale-95
+                                    ${isFollowing
+                                ? 'border border-green-500 text-green-500 hover:bg-green-500/10'
+                                : 'border border-zinc-300/80 dark:border-zinc-600/80 text-zinc-900 dark:text-white hover:border-zinc-500 dark:hover:border-zinc-400 hover:bg-black/5 dark:hover:bg-white/10'
+                            }`}
                     >
-                        <MoreHorizontal size={28} />
+                        {isFollowing ? t('artist.following') : t('artist.follow')}
                     </button>
+                )}
 
-                    {/* Dropdown Menu (Desktop) */}
-                    {isDropdownOpen && (
-                        <div className="hidden md:block absolute right-0 top-full mt-2 rounded shadow-2xl p-1 w-56 z-50 
-                                        bg-white dark:bg-[#282828] border border-zinc-200 dark:border-white/10 animate-in fade-in zoom-in-95 duration-100 origin-top-right">
-                            <MenuItem icon={<Ban size={16} />} label="Don't play this artist" />
-                            <MenuItem icon={<Flag size={16} />} label="Report" />
-                            <div className="h-[1px] bg-zinc-200 dark:bg-white/10 my-1" />
-                            <MenuItem icon={<Share2 size={16} />} label="Share" />
-                            <MenuItem icon={<Copy size={16} />} label="Copy link to artist" />
-                        </div>
-                    )}
-                </div>
+                {/* Nút More (3 chấm) — ẩn khi chưa đăng nhập */}
+                {isLoggedIn && (
+                    <div className="relative" ref={dropdownRef}>
+                        <button
+                            onClick={handleMoreClick}
+                            className="text-zinc-400 hover:text-zinc-900 dark:hover:text-white
+                                       transition-colors duration-200 flex items-center
+                                       hover:scale-105 active:scale-95"
+                        >
+                            <MoreHorizontal size={28} />
+                        </button>
+
+                        {/* Dropdown Menu (Desktop) — glassmorphism 2026 */}
+                        {isDropdownOpen && (
+                            <div className="hidden md:block absolute right-0 top-full mt-2 rounded-xl shadow-2xl p-1.5 w-56 z-50
+                                            bg-white/95 dark:bg-[#1e1e1e]/95 backdrop-blur-xl
+                                            border border-zinc-200/60 dark:border-white/[0.10]
+                                            animate-in fade-in zoom-in-95 duration-150 origin-top-right">
+                                <MenuItem icon={<Share2 size={15} />} label={t('player.share')} onClick={() => { setIsDropdownOpen(false); onShareArtist?.(); }} />
+                                <MenuItem icon={<Copy size={15} />} label={t('player.copy_link')} onClick={() => { setIsDropdownOpen(false); onCopyLink?.(); }} />
+                            </div>
+                        )}
+                    </div>
+                )}
             </div>
 
-            {/* Action Sheet (Mobile) - Nằm ngoài layout chính để không ảnh hưởng vị trí */}
+            {/* Action Sheet (Mobile) */}
             <ArtistActionSheet
                 isOpen={isSheetOpen}
                 onClose={() => setIsSheetOpen(false)}
@@ -128,11 +162,15 @@ const ArtistActionBar = ({
     );
 };
 
-const MenuItem = ({ icon, label }: { icon: React.ReactNode, label: string }) => (
-    <button className="w-full flex items-center gap-3 px-3 py-2.5 text-sm rounded-sm text-left transition-colors
-                      text-zinc-700 dark:text-white/90 
-                      hover:bg-zinc-100 dark:hover:bg-[#3e3e3e]">
-        {icon} <span>{label}</span>
+const MenuItem = ({ icon, label, onClick }: { icon: React.ReactNode, label: string, onClick?: () => void }) => (
+    <button
+        onClick={onClick}
+        className="w-full flex items-center gap-3 px-3 py-2.5 text-sm rounded-lg text-left
+                      transition-colors duration-150
+                      text-zinc-700 dark:text-white/90
+                      hover:bg-zinc-100 dark:hover:bg-white/[0.08]">
+        <span className="text-zinc-500 dark:text-zinc-400">{icon}</span>
+        <span>{label}</span>
     </button>
 );
 

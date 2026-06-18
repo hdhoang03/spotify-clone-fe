@@ -1,0 +1,37 @@
+{
+  "guides": [
+    {
+      "name": "New Style",
+      "tokens": {
+        "colors": {
+          "springtunes": "#22C55E"
+        },
+        "typography": {
+          "headline": {
+            "family": "Inter",
+            "size": "2rem",
+            "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+          },
+          "body": {
+            "family": "Inter",
+            "size": "1rem",
+            "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+          },
+          "label": {
+            "family": "Inter",
+            "size": "0.75rem",
+            "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+          }
+        },
+        "spacing": {},
+        "radius": {
+          "default": "8px"
+        }
+      },
+      "designInstructions": "",
+      "id": "style_39cba465f4aa",
+      "created": "2026-06-18T04:44:28.447Z",
+      "modified": "2026-06-18T04:44:43.930Z"
+    }
+  ]
+}

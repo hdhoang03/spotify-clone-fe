@@ -16,38 +16,72 @@ api.interceptors.request.use((config) => {
     return config;
 });
 
+// --- Mutex để tránh race condition khi nhiều request cùng lúc nhận 401 ---
+let isRefreshing = false;
+let failedQueue: { resolve: (value: any) => void; reject: (reason?: any) => void }[] = [];
+
+const processQueue = (error: any, token: string | null = null) => {
+    failedQueue.forEach((prom) => {
+        if (error) {
+            prom.reject(error);
+        } else {
+            prom.resolve(token);
+        }
+    });
+    failedQueue = [];
+};
+
 // 2. Response Interceptor: Xử lý khi Token hết hạn (Lỗi 401)
 api.interceptors.response.use(
     (response) => response,
     async (error) => {
         const originalRequest = error.config;
+        let token = localStorage.getItem('token');
+        if (token === 'null' || token === 'undefined') token = null;
 
-        // Nếu lỗi 401 và chưa thử Refresh lần nào
-        if (error.response?.status === 401 && !originalRequest._retry) {
+        // Chỉ thử refresh khi: lỗi 401 + có token thực sự + chưa retry
+        if (error.response?.status === 401 && !originalRequest._retry && token) {
+            if (isRefreshing) {
+                // Nếu đang refresh rồi → xếp hàng chờ, không gọi refresh thêm
+                return new Promise((resolve, reject) => {
+                    failedQueue.push({ resolve, reject });
+                }).then((newToken) => {
+                    originalRequest.headers.Authorization = `Bearer ${newToken}`;
+                    return api(originalRequest);
+                }).catch((err) => Promise.reject(err));
+            }
+
             originalRequest._retry = true;
-            const token = localStorage.getItem('token');
+            isRefreshing = true;
 
             try {
-                // Gọi API Refresh của bạn
-                // Dùng axios gốc để tránh bị Interceptor này bắt lại gây lặp vô tận
                 const res = await axios.post('http://localhost:8080/spotify/auth/refresh', { token });
 
                 if (res.data.code === 1000) {
                     const newToken = res.data.result.token;
                     localStorage.setItem('token', newToken);
-
-                    // Thực hiện lại yêu cầu cũ với Token mới
                     originalRequest.headers.Authorization = `Bearer ${newToken}`;
+                    processQueue(null, newToken); // Cho hàng chờ dùng token mới
                     return api(originalRequest);
+                } else {
+                    throw new Error('Refresh failed');
                 }
             } catch (refreshError) {
-                // Nếu refresh cũng thất bại (token đã chết hẳn) -> Đăng xuất
-                localStorage.clear();
-                window.location.href = '/';
+                // Refresh thất bại → xóa session, thông báo cho hàng chờ
+                processQueue(refreshError, null);
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                localStorage.removeItem('user_profile');
+                window.dispatchEvent(new Event('user-update'));
+                return Promise.reject(refreshError);
+            } finally {
+                isRefreshing = false;
             }
         }
+
+        // Guest gọi API yêu cầu auth hoặc API chết → reject bình thường, không redirect
         return Promise.reject(error);
     }
 );
 
-export default api;
+export default api;

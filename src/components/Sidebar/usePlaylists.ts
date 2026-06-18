@@ -1,8 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
 import { playlistApi } from './playlistApi';
 import { usePlaylistStore } from '../../stores/usePlaylistStore'
+import { useTranslation } from 'react-i18next';
 
 export const usePlaylists = () => {
+    const { t } = useTranslation();
     const playlists = usePlaylistStore(state => state.playlists);
     const hasFetched = usePlaylistStore(state => state.hasFetched);
     const setPlaylists = usePlaylistStore(state => state.setPlaylists);
@@ -15,7 +17,7 @@ export const usePlaylists = () => {
         const token = localStorage.getItem('token');
         if (!token) {
             setIsLoading(false);
-            setError("Vui lòng đăng nhập để xem thư viện.");
+            setError(t('library.login_required'));
             return;
         }
 
@@ -27,7 +29,7 @@ export const usePlaylists = () => {
                 setPlaylists(response.data.result.content || []);
             }
         } catch (err) {
-            setError("Không thể tải thư viện playlist. Vui lòng thử lại sau.");
+            setError(t('library.fetch_error'));
             console.error(err);
         } finally {
             setIsLoading(false);

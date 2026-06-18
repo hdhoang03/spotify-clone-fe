@@ -41,6 +41,7 @@ export interface Song {
     duration: number;       // Giây (Double)
     playCount: number;
     likeCount: number;
+    streamCount: number;
     category?: Category;
     createdAt: string;
 }

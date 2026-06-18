@@ -24,6 +24,7 @@ interface PlaylistStore {
     setPlaylists: (playlists: Playlist[]) => void;
     addPlaylist: (playlist: Playlist) => void;
     removePlaylist: (id: string | number) => void;
+    updatePlaylist: (id: string | number, updatedData: Partial<Playlist>) => void;
 }
 
 export const usePlaylistStore = create<PlaylistStore>((set) => ({
@@ -43,4 +44,12 @@ export const usePlaylistStore = create<PlaylistStore>((set) => ({
         );
         return { playlists: newPlaylists };
     }),
+
+    updatePlaylist: (id, updatedData) => set((state) => ({
+        playlists: state.playlists.map(playlist => 
+            String(playlist.id).trim() === String(id).trim()
+                ? { ...playlist, ...updatedData }
+                : playlist
+        )
+    })),
 }));

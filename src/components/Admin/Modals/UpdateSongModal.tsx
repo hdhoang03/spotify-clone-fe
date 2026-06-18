@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { X, Music, Disc, Mic2, Image as ImageIcon, FileAudio, Loader2, UploadCloud, Edit, Tag } from 'lucide-react';
 import api from '../../../services/api';
 import type { SongResponse, ArtistResponse, AlbumResponse, CategoryResponse } from '../../../types/backend';
+import AsyncArtistSelect from './AsyncArtistSelect';
 
 // --- CÁC COMPONENT CON (DÙNG CHUNG VỚI CREATE) ---
 const InputGroup = ({ icon, label, placeholder, value, onChange }: any) => (
@@ -62,6 +63,7 @@ interface UpdateSongModalProps {
 const UpdateSongModal = ({ isOpen, onClose, songData, onUpdate }: UpdateSongModalProps) => {
     const [title, setTitle] = useState('');
     const [artistId, setArtistId] = useState('');
+    const [featuredArtistIds, setFeaturedArtistIds] = useState<string[]>([]);
     const [albumId, setAlbumId] = useState('');
     const [categoryId, setCategoryId] = useState('');
     const [coverFile, setCoverFile] = useState<File | null>(null);
@@ -69,27 +71,22 @@ const UpdateSongModal = ({ isOpen, onClose, songData, onUpdate }: UpdateSongModa
     const [isLoading, setIsLoading] = useState(false);
 
     // Dữ liệu từ Backend
-    const [artists, setArtists] = useState<ArtistResponse[]>([]);
     const [albums, setAlbums] = useState<AlbumResponse[]>([]);
     const [categories, setCategories] = useState<CategoryResponse[]>([]);
 
     useEffect(() => {
         if (!isOpen) {
-            setCoverFile(null); setAudioFile(null);
+            setCoverFile(null); setAudioFile(null); setFeaturedArtistIds([]);
             return;
         }
 
         const fetchData = async () => {
             try {
-                const [artistRes, albumRes, categoryRes] = await Promise.all([
-                    api.get('/artist/list', { params: { size: 100 } }),
+                const [albumRes, categoryRes] = await Promise.all([
                     api.get('/albums/list', { params: { size: 100 } }),
                     api.get('/categories/list', { params: { size: 100 } })
                 ]);
-                const fetchedArtists = artistRes.data.result.content || [];
                 const fetchedCategories = categoryRes.data.result.content || [];
-
-                setArtists(fetchedArtists);
                 setAlbums(albumRes.data.result.content || []);
                 setCategories(fetchedCategories);
 
@@ -103,6 +100,12 @@ const UpdateSongModal = ({ isOpen, onClose, songData, onUpdate }: UpdateSongModa
                         setAlbumId(songData.albumId || '');
                         setArtistId(songData.artistId || '');
                         setCategoryId(songData.categoryId || '');
+                        
+                        if (songData.featuredArtists) {
+                            setFeaturedArtistIds(songData.featuredArtists.map(f => f.id));
+                        } else {
+                            setFeaturedArtistIds([]);
+                        }
                     }
 
                     const matchedCategory = fetchedCategories.find((c: any) => c.name === songData.category);
@@ -127,6 +130,10 @@ const UpdateSongModal = ({ isOpen, onClose, songData, onUpdate }: UpdateSongModa
         formData.append('artistId', artistId);
         if (albumId) formData.append('albumId', albumId);
         formData.append('categoryId', categoryId);
+
+        featuredArtistIds.forEach(id => {
+            formData.append('featuredArtistIds', id);
+        });
 
         // Cập nhật API chỉ nhận file mới nếu có chọn
         if (coverFile) formData.append('coverUrl', coverFile);
@@ -158,9 +165,23 @@ const UpdateSongModal = ({ isOpen, onClose, songData, onUpdate }: UpdateSongModa
                             <h3 className="text-sm font-bold border-b border-gray-100 dark:border-zinc-800 pb-2">Thông tin cơ bản</h3>
                             <InputGroup label="Tên bài hát *" icon={<Music size={14} />} value={title} onChange={setTitle} />
 
-                            <SelectGroup
-                                label="Nghệ sĩ *" icon={<Mic2 size={14} />} required value={artistId} onChange={setArtistId}
-                                options={artists.map(a => ({ value: a.id, label: a.name }))}
+                            <AsyncArtistSelect
+                                label="Nghệ sĩ chính *"
+                                icon={<Mic2 size={14} />}
+                                value={artistId}
+                                onChange={setArtistId}
+                                required
+                                initialOptions={songData?.artistId && songData?.artist ? [{ id: songData.artistId, name: songData.artist, avatarUrl: '' }] : []}
+                            />
+
+                            <AsyncArtistSelect
+                                label="Nghệ sĩ hợp tác (Feat)"
+                                icon={<Mic2 size={14} />}
+                                value={featuredArtistIds}
+                                onChange={setFeaturedArtistIds}
+                                isMulti
+                                placeholder="Tìm kiếm và chọn thêm nghệ sĩ..."
+                                initialOptions={songData?.featuredArtists || []}
                             />
 
                             <SelectGroup

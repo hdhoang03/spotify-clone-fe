@@ -1,58 +1,4 @@
-// import React, { useState } from 'react';
-// import { Lock, ArrowRight } from 'lucide-react';
-// import AuthInputField from './AuthInputField';
-// import { AuthService } from '../../services/authService';
-// import type { UserResponse } from '../../types/backend'; // Import Type chuẩn
-
-
-// interface OtpVerifyFormProps {
-//     email: string;
-//     onVerifySuccess: (userData: UserResponse) => void;
-//     onBackToLogin: () => void;
-// }
-
-// const OtpVerifyForm: React.FC<OtpVerifyFormProps> = ({ email, onVerifySuccess, onBackToLogin }) => {
-//     const [otpCode, setOtpCode] = useState('');
-
-//     const handleSubmit = async (e: React.FormEvent) => {
-//         e.preventDefault();
-//         try {
-//             const userData = await AuthService.verifyOtp(email, otpCode);
-//             onVerifySuccess(userData); // Truyền thông tin user về Modal cha
-//         } catch (error) {
-//             alert("Mã OTP không đúng hoặc đã hết hạn");
-//         }
-//     };
-
-//     return (
-//         <form onSubmit={handleSubmit} className="space-y-4">
-//             <div className="text-center mb-4">
-//                 <p className="text-3xl font-bold tracking-widest text-green-500">
-//                     {email || "example@mail.com"}
-//                 </p>
-//             </div>
-//             <AuthInputField
-//                 icon={<Lock size={18} />}
-//                 placeholder="Nhập mã OTP 6 số"
-//                 maxLength={6}
-//                 className="text-center tracking-widest text-lg font-bold"
-//                 value={otpCode}
-//                 onChange={e => setOtpCode(e.target.value)}
-//             />
-
-//             <button type="submit" className="w-full bg-green-500 hover:bg-green-600 text-black font-bold py-3 rounded-full transition flex items-center justify-center gap-2">
-//                 Xác thực <ArrowRight size={18} />
-//             </button>
-//             <button type="button" onClick={onBackToLogin} className="w-full text-sm text-gray-500 hover:text-gray-900 dark:hover:text-white mt-2">
-//                 Quay lại đăng nhập
-//             </button>
-//         </form>
-//     );
-// };
-
-// export default OtpVerifyForm;
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Lock, ArrowRight, Mail, RefreshCcw } from 'lucide-react';
 import AuthInputField from './AuthInputField';
 import { AuthService } from '../../services/authService';
@@ -67,6 +13,36 @@ interface OtpVerifyFormProps {
 const OtpVerifyForm: React.FC<OtpVerifyFormProps> = ({ email, onVerifySuccess, onBackToLogin }) => {
     const [otpCode, setOtpCode] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [resendTimer, setResendTimer] = useState(300);
+    const [isResending, setIsResending] = useState(false);
+
+    useEffect(() => {
+        if (resendTimer > 0) {
+            const timerId = setTimeout(() => setResendTimer(resendTimer - 1), 1000);
+            return () => clearTimeout(timerId);
+        }
+    }, [resendTimer]);
+
+    const handleResendOtp = async () => {
+        if (resendTimer > 0 || isResending) return;
+
+        setIsResending(true);
+        try {
+            await AuthService.resendOtp(email);
+            setResendTimer(300);
+            alert("OTP has been sent to your email");
+        } catch (error) {
+            alert("Có lỗi xảy ra khi gửi lại mã OTP");
+        } finally {
+            setIsResending(false);
+        }
+    };
+
+    const formatTime = (seconds: number) => {
+        const m = Math.floor(seconds / 60).toString().padStart(2, '0');
+        const s = (seconds % 60).toString().padStart(2, '0');
+        return `${m}:${s}`;
+    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -90,9 +66,9 @@ const OtpVerifyForm: React.FC<OtpVerifyFormProps> = ({ email, onVerifySuccess, o
                 <div className="w-16 h-16 bg-green-500/10 rounded-full flex items-center justify-center mb-2">
                     <Mail className="text-green-500" size={32} />
                 </div>
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Xác thực Email</h2>
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Verify your email</h2>
                 <p className="text-sm text-gray-500 dark:text-gray-400 px-4">
-                    Vui lòng nhập mã OTP 6 chữ số vừa được gửi đến địa chỉ:
+                    Please enter the 6-digit OTP code sent to your email:
                 </p>
 
                 {/* Email Pill - Giải quyết vấn đề email quá dài */}
@@ -117,10 +93,16 @@ const OtpVerifyForm: React.FC<OtpVerifyFormProps> = ({ email, onVerifySuccess, o
                 <div className="flex justify-center">
                     <button
                         type="button"
-                        className="text-xs font-bold text-gray-500 hover:text-green-500 flex items-center gap-1.5 transition-colors group"
+                        onClick={handleResendOtp}
+                        disabled={resendTimer > 0 || isResending}
+                        className={`text-xs font-bold flex items-center gap-1.5 transition-colors group ${
+                            resendTimer > 0 || isResending
+                                ? 'text-gray-500 cursor-not-allowed opacity-70'
+                                : 'text-gray-500 hover:text-green-500'
+                        }`}
                     >
-                        <RefreshCcw size={14} className="group-hover:rotate-180 transition-transform duration-500" />
-                        Gửi lại mã (60s)
+                        <RefreshCcw size={14} className={`${resendTimer === 0 && !isResending ? 'group-hover:rotate-180' : ''} ${isResending ? 'animate-spin' : ''} transition-transform duration-500`} />
+                        {isResending ? "Đang gửi..." : resendTimer > 0 ? `Resend code (${formatTime(resendTimer)})` : "Resend code"}
                     </button>
                 </div>
             </div>
@@ -132,7 +114,7 @@ const OtpVerifyForm: React.FC<OtpVerifyFormProps> = ({ email, onVerifySuccess, o
                     disabled={otpCode.length < 6 || isLoading}
                     className="w-full bg-green-500 hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed text-black font-bold py-3.5 rounded-full transition-all flex items-center justify-center gap-2 shadow-lg shadow-green-500/20"
                 >
-                    {isLoading ? "Đang xác thực..." : "Xác nhận & Đăng nhập"}
+                    {isLoading ? "Đang xác thực..." : "Confirm & Login"}
                     {!isLoading && <ArrowRight size={18} />}
                 </button>
 
@@ -141,7 +123,7 @@ const OtpVerifyForm: React.FC<OtpVerifyFormProps> = ({ email, onVerifySuccess, o
                     onClick={onBackToLogin}
                     className="w-full text-sm font-medium text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors"
                 >
-                    Hủy bỏ và quay lại
+                    Cancel and return to login
                 </button>
             </div>
         </form>

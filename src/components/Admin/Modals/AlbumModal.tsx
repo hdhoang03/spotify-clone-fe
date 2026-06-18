@@ -44,7 +44,7 @@ const AlbumModal = ({ isOpen, onClose, albumData, onSubmit }: AlbumModalProps) =
                 setName(albumData.name);
                 setDescription(albumData.description || '');
                 setReleaseDate(albumData.releaseDate || ''); // Đổ ngày cũ vào
-                setPreviewUrl(albumData.avatarUrl || '');
+                setPreviewUrl(albumData.albumUrl || albumData.avatarUrl || '');
                 setAvatarFile(null);
                 // Mặc định chọn artistId (nếu Backend có trả về ID trong AlbumResponse)
                 // Lưu ý: Tùy vào cấu trúc artistName/artists của bạn để set artistId ban đầu

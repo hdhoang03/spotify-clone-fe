@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import ThemeToggle from './ThemeToggle';
 import type { UserResponse } from '../../types/backend';
+import { useTranslation } from 'react-i18next';
 
 interface ProfileDropdownProps {
     user: UserResponse;
@@ -17,6 +18,7 @@ interface ProfileDropdownProps {
 }
 
 const ProfileDropdown = ({ user, onLogout, onClose }: ProfileDropdownProps) => {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const handleNavigate = (path: string) => {
         navigate(path);
@@ -28,7 +30,8 @@ const ProfileDropdown = ({ user, onLogout, onClose }: ProfileDropdownProps) => {
     const itemClass = "flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-lg transition w-full text-left";
 
     return (
-        <div className="absolute right-0 top-full mt-2 w-64 bg-white dark:bg-zinc-900 border border-gray-200 dark:border-white/10 rounded-xl shadow-2xl p-2 animate-in fade-in zoom-in-95 duration-200 origin-top-right z-50">
+        // <div className="absolute right-0 top-full mt-2 w-64 bg-white dark:bg-zinc-900 border border-gray-200 dark:border-white/10 rounded-xl shadow-2xl p-2 animate-in fade-in zoom-in-95 duration-200 origin-top-right z-50">
+        <div className="absolute right-0 top-[calc(100%+12px)] w-64 bg-white/95 dark:bg-[#1a1a1a]/95 backdrop-blur-3xl ring-1 ring-black/5 dark:ring-white/10 rounded-2xl shadow-[0_16px_40px_rgb(0,0,0,0.1)] dark:shadow-[0_16px_40px_rgb(0,0,0,0.5)] p-2 animate-in fade-in zoom-in-95 duration-200 origin-top-right z-50">
             {/* Header thông tin user */}
             <div className="px-4 py-3 border-b border-gray-100 dark:border-white/5 mb-2">
                 <p className="text-sm font-bold text-gray-900 dark:text-white truncate">{user.name}</p>
@@ -44,7 +47,7 @@ const ProfileDropdown = ({ user, onLogout, onClose }: ProfileDropdownProps) => {
                             className="flex items-center gap-3 px-4 py-2 text-sm text-red-600 dark:text-red-400 font-bold bg-red-50 dark:bg-red-900/10 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-lg transition w-full text-left mb-1"
                         >
                             <ShieldCheck size={18} />
-                            Trang quản trị
+                            {t('header.admin_page')}
                         </button>
                         <div className="h-[1px] bg-gray-100 dark:bg-white/5 my-1" />
                     </>
@@ -56,7 +59,7 @@ const ProfileDropdown = ({ user, onLogout, onClose }: ProfileDropdownProps) => {
                     className={itemClass}
                 >
                     <User size={18} />
-                    Tài khoản
+                    {t('header.account')}
                 </button>
 
                 {/* Hồ sơ */}
@@ -65,7 +68,7 @@ const ProfileDropdown = ({ user, onLogout, onClose }: ProfileDropdownProps) => {
                     className={itemClass}
                 >
                     <ExternalLink size={18} />
-                    Hồ sơ
+                    {t('header.profile')}
                 </button>
 
                 {/* Hỗ trợ */}
@@ -74,7 +77,7 @@ const ProfileDropdown = ({ user, onLogout, onClose }: ProfileDropdownProps) => {
                     className={itemClass}
                 >
                     <HelpCircle size={18} />
-                    Hỗ trợ
+                    {t('header.support')}
                 </button>
 
                 {/* Cài đặt */}
@@ -83,7 +86,7 @@ const ProfileDropdown = ({ user, onLogout, onClose }: ProfileDropdownProps) => {
                     className={itemClass}
                 >
                     <Settings size={18} />
-                    Cài đặt
+                    {t('header.settings')}
                 </button>
 
                 {/* Theme Toggle (Mobile) */}
@@ -91,7 +94,7 @@ const ProfileDropdown = ({ user, onLogout, onClose }: ProfileDropdownProps) => {
                     className="md:hidden flex items-center justify-between px-4 py-2 hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-lg transition cursor-pointer"
                     onClick={(e) => e.stopPropagation()}
                 >
-                    <span className="text-sm text-gray-700 dark:text-gray-200">Giao diện</span>
+                    <span className="text-sm text-gray-700 dark:text-gray-200">{t('header.theme')}</span>
                     <ThemeToggle />
                 </div>
 
@@ -106,7 +109,7 @@ const ProfileDropdown = ({ user, onLogout, onClose }: ProfileDropdownProps) => {
                     className="flex items-center gap-3 px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition w-full text-left"
                 >
                     <LogOut size={18} />
-                    Đăng xuất
+                    {t('header.logout')}
                 </button>
             </div>
         </div>

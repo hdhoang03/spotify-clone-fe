@@ -1,5 +1,3 @@
-// components/Search/CategoryCard.tsx
-import React from 'react';
 import { motion } from 'framer-motion';
 
 interface CategoryCardProps {
@@ -11,12 +9,12 @@ interface CategoryCardProps {
 
 const CategoryCard = ({ title, color, onClick, index = 0 }: CategoryCardProps) => {
   return (
-    <motion.div 
+    <motion.div
       onClick={onClick}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ 
-        duration: 0.3, 
+      transition={{
+        duration: 0.3,
         ease: "easeOut",
         delay: index * 0.05 // Mẹo: Delay dựa theo index để các thẻ không hiện cùng lúc mà nối đuôi nhau
       }}

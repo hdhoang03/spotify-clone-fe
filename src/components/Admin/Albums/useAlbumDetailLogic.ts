@@ -3,6 +3,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../../../services/api';
 import type { AlbumResponse, SongResponse } from '../../../types/backend';
+import { normalizeSong } from '../../HomePage/useHomeData';
 
 export const useAlbumDetailLogic = () => {
     const { id } = useParams<{ id: string }>();
@@ -34,7 +35,7 @@ export const useAlbumDetailLogic = () => {
                 params: { page, size: ITEMS_PER_PAGE }
             });
             const { content, totalPages: tPages, totalElements: tElements } = res.data.result;
-            setAlbumSongs(content);
+            setAlbumSongs(content.map(normalizeSong) as any);
             setTotalPages(tPages);
             setTotalElements(tElements);
         } catch (error) {

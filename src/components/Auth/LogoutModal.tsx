@@ -1,6 +1,7 @@
 // src/components/Auth/LogoutModal.tsx
 import { motion, AnimatePresence } from 'framer-motion';
 import { LogOut } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 interface LogoutModalProps {
     isOpen: boolean;
@@ -9,6 +10,7 @@ interface LogoutModalProps {
 }
 
 const LogoutModal = ({ isOpen, onClose, onConfirm }: LogoutModalProps) => {
+    const { t } = useTranslation();
     if (!isOpen) return null;
 
     return (
@@ -37,10 +39,10 @@ const LogoutModal = ({ isOpen, onClose, onConfirm }: LogoutModalProps) => {
                             </div>
 
                             <h3 className="text-xl font-bold text-zinc-900 dark:text-white mb-2">
-                                Đăng xuất?
+                                {t('log_out.title')}
                             </h3>
                             <p className="text-zinc-500 dark:text-zinc-400 mb-6">
-                                Bạn có chắc chắn muốn đăng xuất khỏi SpringTunes không?
+                                {t('log_out.message')}
                             </p>
 
                             <div className="flex gap-3 w-full">
@@ -48,13 +50,13 @@ const LogoutModal = ({ isOpen, onClose, onConfirm }: LogoutModalProps) => {
                                     onClick={onClose}
                                     className="flex-1 px-4 py-2.5 rounded-full font-medium text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
                                 >
-                                    Hủy bỏ
+                                    {t('log_out.cancel')}
                                 </button>
                                 <button
                                     onClick={onConfirm}
                                     className="flex-1 px-4 py-2.5 rounded-full font-bold text-white bg-red-500 hover:bg-red-600 shadow-lg shadow-red-500/20 transition-transform active:scale-95"
                                 >
-                                    Đăng xuất
+                                    {t('log_out.confirm')}
                                 </button>
                             </div>
                         </div>

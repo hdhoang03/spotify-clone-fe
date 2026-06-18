@@ -3,6 +3,7 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Ban, Flag, Share2, Copy } from 'lucide-react';
 import { createPortal } from "react-dom";
+import { useTranslation } from 'react-i18next';
 
 interface ArtistActionSheetProps {
     isOpen: boolean;
@@ -12,6 +13,7 @@ interface ArtistActionSheetProps {
 }
 
 const ArtistActionSheet = ({ isOpen, onClose, artistName, artistImage }: ArtistActionSheetProps) => {
+    const { t } = useTranslation();
     return createPortal(
         <AnimatePresence>
             {isOpen && (
@@ -68,17 +70,17 @@ const ArtistActionSheet = ({ isOpen, onClose, artistName, artistImage }: ArtistA
                                 <h2 className="text-lg font-bold text-zinc-900 dark:text-white truncate">
                                     {artistName || "Phương Ly" }
                                 </h2>
-                                <span className="text-sm text-zinc-500">Artist</span>
+                                <span className="text-sm text-zinc-500">{t('artist.artist_label')}</span>
                             </div>
                         </div>
 
                         {/* Menu Items: Đảm bảo có khoảng trống cuối cùng */}
                         <div className="pt-2 pb-20 overflow-y-auto">
-                            <SheetItem icon={<Ban size={22}/>} label="Don't play this artist" />
-                            <SheetItem icon={<Flag size={22}/>} label="Report" />
+                            <SheetItem icon={<Ban size={22}/>} label={t('player.dont_play_artist', "Don't play this artist")} />
+                            <SheetItem icon={<Flag size={22}/>} label={t('player.report', "Report")} />
                             <div className="h-[1px] bg-zinc-100 dark:bg-white/5 my-2 mx-6"/>
-                            <SheetItem icon={<Share2 size={22}/>} label="Share" />
-                            <SheetItem icon={<Copy size={22}/>} label="Copy link to artist" />
+                            <SheetItem icon={<Share2 size={22}/>} label={t('player.share', "Share")} />
+                            <SheetItem icon={<Copy size={22}/>} label={t('player.copy_link', "Copy link to artist")} />
                         </div>
                     </motion.div>
                 </>

@@ -1,6 +1,7 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, memo } from 'react';
 import { motion } from 'framer-motion';
 import type { PanInfo } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import MainOptionsView from './MainOptionsView';
 import ArtistSelectionView from './ArtistSelectionView';
 import PlaylistSelectionView from './PlaylistSelectionView';
@@ -8,6 +9,7 @@ import PlaylistSelectionView from './PlaylistSelectionView';
 interface OptionsBottomSheetProps {
     isOpen: boolean;
     onClose: () => void;
+    onCollapse?: () => void;  // Thu gọn FullScreenPlayer khi navigate
     song: any;
     onShare: () => void;
     onNavigate?: (Screen: string) => void;
@@ -15,8 +17,9 @@ interface OptionsBottomSheetProps {
 
 type SheetView = 'OPTIONS' | 'ARTIST_SELECTION' | 'PLAYLIST_SELECTION';
 
-const OptionsBottomSheet = ({ isOpen, onClose, song, onShare, onNavigate }: OptionsBottomSheetProps) => {
+const OptionsBottomSheet = ({ isOpen, onClose, onCollapse, song, onShare, onNavigate }: OptionsBottomSheetProps) => {
     const [currentView, setCurrentView] = useState<SheetView>('OPTIONS');
+    const navigate = useNavigate();
 
     // const artistList = useMemo(() => {
     //     if (song.title === "Thằng Điên") {
@@ -30,14 +33,29 @@ const OptionsBottomSheet = ({ isOpen, onClose, song, onShare, onNavigate }: Opti
 
     const artistList = useMemo(() => {
         if (!song) return [];
-        const artistStr = song.artist || song.artistName;
-        if (!artistStr) return [];
+        
+        const list: any[] = [];
+        const mainArtistName = song.artist || song.artistName;
+        
+        if (mainArtistName) {
+            list.push({
+                id: song.artistId || `artist_main`,
+                name: mainArtistName.trim(),
+                avatar: song.artistAvatar || song.coverUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(mainArtistName.trim())}&background=random`
+            });
+        }
+        
+        if (song.featuredArtists && Array.isArray(song.featuredArtists)) {
+            song.featuredArtists.forEach((feat: any, index: number) => {
+                list.push({
+                    id: feat.id || `feat_${index}`,
+                    name: feat.name.trim(),
+                    avatar: feat.avatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(feat.name.trim())}&background=random`
+                });
+            });
+        }
 
-        return artistStr.split(',').map((name: string, index: number) => ({
-            id: `artist_${index}`,
-            name: name.trim(),
-            avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(name.trim())}&background=random`
-        }));
+        return list;
     }, [song]);
 
     // Reset view khi đóng mở
@@ -45,15 +63,36 @@ const OptionsBottomSheet = ({ isOpen, onClose, song, onShare, onNavigate }: Opti
         if (isOpen) setCurrentView('OPTIONS');
     }, [isOpen]);
 
-    // Hàm điều hướng chung
-    const handleNavigateToArtist = (artistId: string) => {
-        console.log(`Navigating to Artist ID: ${artistId}`);
-        if (onNavigate) {
-            // Bạn có thể log thêm artistId để kiểm tra xem đang chọn ai
-            console.log("Selected Artist ID:", artistId);
-            onNavigate('ARTIST');
-        }
+    // Điều hướng đến trang nghệ sĩ (thư muộn FullScreenPlayer ẩn trước)
+    const handleNavigateToArtist = (selectedArtistId: string) => {
         onClose();
+        
+        // Nếu chọn ID cụ thể (từ danh sách artistList)
+        if (selectedArtistId && selectedArtistId !== 'artist_main' && !selectedArtistId.startsWith('feat_')) {
+            onCollapse?.();
+            setTimeout(() => {
+                navigate(`/artist/${selectedArtistId}`);
+            }, 300);
+        } else if (song?.artistId) {
+            // Fallback về nghệ sĩ chính
+            onCollapse?.();
+            setTimeout(() => {
+                navigate(`/artist/${song.artistId}`);
+            }, 300);
+        } else {
+            if (onNavigate) onNavigate('ARTIST');
+        }
+    };
+
+    // Điều hướng đến trang album
+    const handleNavigateToAlbum = () => {
+        if (song?.albumId) {
+            onClose();
+            onCollapse?.();           // Thu FullScreenPlayer
+            setTimeout(() => {
+                navigate(`/albums/${song.albumId}`);
+            }, 300);                  // Đợi animation collapse xong rồi mới navigate
+        }
     };
 
     if (!isOpen) return null;
@@ -122,6 +161,7 @@ const OptionsBottomSheet = ({ isOpen, onClose, song, onShare, onNavigate }: Opti
                             onShare={() => { onShare(); onClose(); }}
                             onRequestArtistSelection={() => setCurrentView('ARTIST_SELECTION')}
                             onNavigateToArtist={handleNavigateToArtist}
+                            onNavigateToAlbum={handleNavigateToAlbum}
                             onRequestPlaylistSelection={() => setCurrentView('PLAYLIST_SELECTION')}
                         />
                     ) : currentView === 'ARTIST_SELECTION' ? (
@@ -143,4 +183,4 @@ const OptionsBottomSheet = ({ isOpen, onClose, song, onShare, onNavigate }: Opti
     );
 };
 
-export default OptionsBottomSheet;
+export default memo(OptionsBottomSheet);

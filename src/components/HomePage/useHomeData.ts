@@ -1,57 +1,68 @@
-// src/components/HomePage/hooks/useHomeData.ts
 import { useState, useEffect } from 'react';
 import api from '../../services/api';
 
-export const useHomeData = (activeTab: string) => {
+export const normalizeSong = (song: any): any => ({
+    id: song.id || song.songId,
+    title: song.title || song.songTitle,
+    artist: song.artistName || song.artist?.name || song.artist || 'Nghệ sĩ SpringTunes',
+    artistId: song.artistId || song.artist?.id || '',
+    artistAvatar: song.artistAvatar || song.artist?.avatarUrl || null,
+    featuredArtists: song.featuredArtists || [],
+    albumId: song.albumId || null,
+    albumName: song.albumName || null,
+    coverUrl: song.coverUrl || '',
+    duration: song.duration || 0,
+    audioUrl: song.audioUrl || '',
+    isLiked: song.isLiked ?? false,
+    addedAt: song.addedAt ?? null,
+    likeCount: song.likeCount ?? song.streamCount ?? null, // từ TopLikeSongResponse
+});
+
+export const useHomeData = (activeTab: string, isFollowingMode: boolean) => {
     const [data, setData] = useState({
-        recentlyPlayed: [] as any[],
-        topLikedSongs: [] as any[],    // Từ LikeSongController
-        topStreamedSongs: [] as any[], // Từ SongStreamService
-        newAlbums: [] as any[],        // Dành cho AlbumService
+        topLikedSongs: [] as any[],
+        topStreamedSongs: [] as any[],
+        newAlbums: [] as any[],
+        artists: [] as any[],
     });
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const fetchHomeData = async () => {
             setIsLoading(true);
+            const isLoggedIn = !!localStorage.getItem('token');
+
             try {
-                // Gọi API song song. Dùng allSettled để 1 API tạch thì các API khác vẫn sống
-                const [likedRes, streamRes, albumRes] = await Promise.allSettled([
-                    api.get('/like/top?size=10'),  // Đã có trong LikeSongController
-                    api.get('/stream/top'),        // Giả định API từ SongStreamService.getTopStreamSongs()
-                    api.get('/album?size=10')      // Giả định API lấy Album
+                const followingSuffix = isLoggedIn && isFollowingMode ? '?following=true' : '';
+                const artistEndpoint = (isLoggedIn && isFollowingMode) ? '/user/artist/me' : '/artist/all';
+
+                const [streamRes, albumRes, artistRes, likedRes] = await Promise.allSettled([
+                    api.get(`/stream/top${followingSuffix}`),
+                    api.get(`/albums/all${followingSuffix}`),
+                    api.get(`${artistEndpoint}${followingSuffix}`),
+                    api.get(`/like/top${followingSuffix}`)
                 ]);
 
-                // Bóc tách dữ liệu an toàn
-                const topLiked = likedRes.status === 'fulfilled' ? likedRes.value.data?.result?.content || [] : [];
-                const topStreamed = streamRes.status === 'fulfilled' ? streamRes.value.data?.result || [] : [];
+                const rawStreamed = streamRes.status === 'fulfilled' ? streamRes.value.data?.result || [] : [];
                 const albums = albumRes.status === 'fulfilled' ? albumRes.value.data?.result?.content || [] : [];
-
-                // MOCK DATA cho Phát gần đây (Chờ bạn code xong API)
-                const mockRecentlyPlayed = [
-                    {
-                        songId: 'mock1',
-                        songTitle: 'Tính năng sắp ra mắt',
-                        artistName: 'Đang code Backend...',
-                        coverUrl: 'https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?q=80&w=200&auto=format&fit=crop'
-                    }
-                ];
+                const artists = artistRes.status === 'fulfilled' ? artistRes.value.data?.result?.content || [] : [];
+                const rawLiked = likedRes.status === 'fulfilled' ? likedRes.value.data?.result?.content || [] : [];
 
                 setData({
-                    recentlyPlayed: mockRecentlyPlayed,
-                    topLikedSongs: topLiked,
-                    topStreamedSongs: topStreamed,
+                    topStreamedSongs: rawStreamed.map(normalizeSong),
+                    topLikedSongs: rawLiked.map(normalizeSong),
                     newAlbums: albums,
+                    artists: artists,
                 });
             } catch (error) {
-                console.error("Lỗi khi tải dữ liệu trang chủ:", error);
+                console.error('Lỗi tải dữ liệu trang chủ:', error);
             } finally {
                 setIsLoading(false);
             }
         };
 
         fetchHomeData();
-    }, [activeTab]);
+    }, [activeTab, isFollowingMode]);
 
     return { data, isLoading };
 };

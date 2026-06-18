@@ -1,260 +1,152 @@
-// pages/HomePage.tsx
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { Loader2 } from 'lucide-react';
 import Section from './Section';
+import TrendingSection from './TrendingSection';
 import CardItem from '../common/CardItem';
 import Footer from './Footer';
 import FilterBar, { type TabType } from './FilterBar';
+import { useHomeData } from './useHomeData';
 import { useNavigate } from 'react-router-dom';
+import { useMusic } from '../../contexts/MusicContent';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
 
-interface HomePageProps {
-    onNavigate?: (tab: string) => void;
-} //có thể bỏ sau khi dùng useNavigate
-
-const HomePage = ({ onNavigate }: HomePageProps) => {
+const HomePage = () => {
+    const { t } = useTranslation();
     const [activeTab, setActiveTab] = useState<TabType>('ALL');
     const [isFollowingMode, setIsFollowingMode] = useState(false);
-    const userString = localStorage.getItem('user');
 
-    // Chỉ parse khi chuỗi tồn tại và KHÔNG phải là chuỗi "undefined"
-    const user = userString && userString !== 'undefined' ? JSON.parse(userString) : null;
-    const isLoggedIn = !!user;
     const navigate = useNavigate();
+    const { playRadio } = useMusic();
 
-    // --- MOCK DATA (Dữ liệu giả) ---
-    const recentlyPlayed = [
-        { id: 1, title: 'Lo-fi Chill', desc: 'Nhạc chill học bài', img: '' },
-        { id: 2, title: 'Code Java', desc: 'Nhạc tập trung code', img: '' },
-        { id: 3, title: 'Sơn Tùng M-TP', desc: 'Artist', img: '', isArtist: true },
-        { id: 4, title: 'Gaming Music', desc: 'EDM cực mạnh', img: '' },
-    ];
+    const [isLoggedIn, setIsLoggedIn] = useState<boolean>(() => {
+        const userString = localStorage.getItem('user');
+        return !!(userString && userString !== 'undefined');
+    });
 
-    const suggestForYou = [
-        { id: 1, title: 'Daily Mix 1', desc: 'Dành riêng cho bạn', img: '' },
-        { id: 2, title: 'Discover Weekly', desc: 'Nhạc mới mỗi tuần', img: '' },
-        { id: 3, title: 'Pop Rising', desc: 'Top hit hiện nay', img: '' },
-    ];
-
-    const artists = [
-        { id: 1, title: 'Den Vau', desc: 'Rapper', img: '', isArtist: true },
-        { id: 2, title: 'Taylor Swift', desc: 'Artist', img: '', isArtist: true },
-        { id: 3, title: 'Justin Bieber', desc: 'Artist', img: '', isArtist: true },
-    ];
-
-    const postcards = [
-        { id: 1, title: 'Podcast Tech', desc: 'Bàn về công nghệ', img: '' },
-        { id: 2, title: 'Chuyện ma', desc: 'Kể chuyện đêm khuya', img: '' },
-    ];
-
-    const getFilteredData = (data: any[]) => {
-        if (isLoggedIn && isFollowingMode) {
-            return data.filter(item => item.isFollowed);
+    /**
+     * Phát nhạc từ trang chủ theo chế độ Radio.
+     * @param song Bài hát vừa click
+     * @param queue Toàn bộ danh sách bài để tạo queue (có thể là topStreamed, topLiked hoặc cả hai)
+     */
+    const handlePlaySong = (song: any, queue: any[]) => {
+        // 1. Nếu bài hát bị lỗi (không có audio)
+        if (!song?.audioUrl) {
+            navigate(`/song/${song.id}`);
+            return;
         }
-        return data;
+
+        // 2. Phát Radio! (Cho phép cả khách và thành viên phát)
+        const validQueue = queue.filter(s => !!s?.audioUrl);
+        const startIndex = validQueue.findIndex(s => s.id === song.id);
+        playRadio(validQueue, startIndex >= 0 ? startIndex : 0, t('home.playing_randomly'));
     };
 
+    React.useEffect(() => {
+        const checkLoginStatus = () => {
+            const userString = localStorage.getItem('user');
+            setIsLoggedIn(!!(userString && userString !== 'undefined'));
+        };
+
+        window.addEventListener('user-update', checkLoginStatus);
+        return () => window.removeEventListener('user-update', checkLoginStatus);
+    }, []);
+
+    const { data, isLoading } = useHomeData(activeTab, isFollowingMode);
+
     return (
-        <div className="bg-white dark:bg-[#121212] min-h-screen transition-colors duration-300">
+        <div className="w-full min-h-screen bg-transparent overflow-x-hidden">
+            <FilterBar
+                activeTab={activeTab}
+                onTabChange={(tab) => {
+                    setActiveTab(tab);
+                    if (tab === 'ARTIST') setIsFollowingMode(false);
+                }}
+                isFollowingMode={isFollowingMode}
+                onToggleFollowing={() => setIsFollowingMode(!isFollowingMode)}
+                isLoggedIn={isLoggedIn}
+            />
 
-            {/* 2. FilterBar: Khôi phục padding (pt-6 px-6) để nó không dính sát lề */}
-            <div className="sticky top-0 z-10 bg-white/95 dark:bg-[#121212]/95 backdrop-blur-md pt-6 px-6">
-                <FilterBar
-                    activeTab={activeTab}
-                    onTabChange={setActiveTab}
-                    isFollowingMode={isFollowingMode}
-                    onToggleFollowing={() => setIsFollowingMode(!isFollowingMode)}
-                    isLoggedIn={isLoggedIn}
-                />
-            </div>
-            <div className="min-h-screen mt-4 space-y-8 pb-32">
-                {activeTab === 'ALL' && (
+            <div className="px-4 md:px-8 mt-6 space-y-8 min-h-[50vh]">
+                {isLoading ? (
+                    <div className="w-full h-64 flex items-center justify-center gap-3">
+                        <Loader2 className="animate-spin text-green-500" size={28} />
+                        <span className="font-medium text-gray-400">{t('home.syncing')}</span>
+                    </div>
+                ) : (
                     <>
-                        <Section title="Phát gần đây">
-                            {recentlyPlayed.map(item => (
-                                <CardItem key={item.id} title={item.title} description={item.desc} isRound={item.isArtist} />
-                            ))}
-                        </Section>
+                        {/* --- TAB ALL HOẶC TAB MUSIC --- */}
+                        {activeTab !== 'ARTIST' && (
+                            <>
+                                {data.topStreamedSongs.length > 0 && (
+                                    <Section title={t('home.trending')}>
+                                        {data.topStreamedSongs.map((song) => (
+                                            <CardItem
+                                                key={song.id}
+                                                title={song.title}
+                                                description={song.artist}
+                                                imageUrl={song.coverUrl}
+                                                onClick={() => handlePlaySong(song, data.topStreamedSongs)}
+                                            />
+                                        ))}
+                                    </Section>
+                                )}
 
-                        <Section title="Dành cho bạn">
-                            {suggestForYou.map(item => (
-                                <CardItem key={item.id} title={item.title} description={item.desc} />
-                            ))}
-                        </Section>
+                                {data.topLikedSongs.length > 0 && (
+                                    <TrendingSection
+                                        songs={data.topLikedSongs}
+                                        onPlay={(song) => handlePlaySong(song, data.topLikedSongs)}
+                                    />
+                                )}
 
-                        <Section title="Nghệ sĩ yêu thích">
-                            {artists.map(item => (
-                                <CardItem
-                                    key={item.id}
-                                    title={item.title}
-                                    description={item.desc}
-                                    isRound={true}
-                                    // onClick={() => {if (onNavigate) onNavigate('ARTIST');}}
-                                    onClick={() => {
-                                        navigate(`/artist/${item.id}`)
-                                    }}
-                                />
-                            ))}
-                        </Section>
+                                {data.newAlbums.length > 0 && activeTab === 'ALL' && (
+                                    <Section title={t('home.new_albums')}>
+                                        {data.newAlbums.map((album) => (
+                                            <CardItem
+                                                key={album.id}
+                                                title={album.name}
+                                                description={album.artist?.name || album.artistName || 'Album tuyển chọn'}
+                                                imageUrl={album.albumUrl || album.avatarUrl || album.coverUrl}
+                                                onClick={() => navigate(`/albums/${album.id}`)}
+                                            />
+                                        ))}
+                                    </Section>
+                                )}
+                            </>
+                        )}
+
+                        {/* --- TAB ARTIST (hiện trong ALL + tab ARTIST riêng) --- */}
+                        {(activeTab === 'ALL' || activeTab === 'ARTIST') && data.artists.length > 0 && (
+                            <Section title={isFollowingMode ? t('home.following_artists') : t('home.featured_artists')}>
+                                {data.artists.map((artist) => (
+                                    <CardItem
+                                        key={artist.id}
+                                        title={artist.name}
+                                        description={t('home.artist_role')}
+                                        imageUrl={artist.avatarUrl}
+                                        isRound={true}
+                                        onClick={() => navigate(`/artist/${artist.id}`)}
+                                    />
+                                ))}
+                            </Section>
+                        )}
+
+                        {/* Trống khi bật following mode */}
+                        {isFollowingMode &&
+                            data.topStreamedSongs.length === 0 &&
+                            data.topLikedSongs.length === 0 &&
+                            data.artists.length === 0 && (
+                                <div className="text-center py-12 text-gray-500">
+                                    {t('home.no_following')}
+                                </div>
+                            )}
                     </>
                 )}
-
-                {/* --- TAB MUSIC --- */}
-                {activeTab === 'MUSIC' && (
-                    <>
-                        <Section title="Phát gần đây (Music Only)">
-                            {recentlyPlayed.filter(i => !i.isArtist).map(item => (
-                                <CardItem key={item.id} title={item.title} description={item.desc} />
-                            ))}
-                        </Section>
-
-                        <Section title="Gợi ý nhạc mới">
-                            {suggestForYou.map(item => (
-                                <CardItem key={item.id} title={item.title} description={item.desc} />
-                            ))}
-                        </Section>
-                    </>
-                )}
-
-                {/* --- TAB POSTCARD --- */}
-                {activeTab === 'POSTCARD' && (
-                    <Section title="Các tập PostCard mới nhất">
-                        {postcards.map(item => (
-                            <CardItem key={item.id} title={item.title} description={item.desc} />
-                        ))}
-                    </Section>
-                )}
             </div>
 
-            {/* 4. FOOTER */}
             <Footer />
         </div>
     );
 };
 
 export default HomePage;
-
-// import { useState } from 'react';
-// import Section from './Section';
-// import CardItem from '../common/CardItem';
-// import Footer from './Footer';
-// import FilterBar, { type TabType } from './FilterBar';
-// import { useNavigate } from 'react-router-dom';
-// import { useHomeData } from './useHomeData';
-// import { Loader2 } from 'lucide-react';
-
-// const HomePage = () => {
-//     const [activeTab, setActiveTab] = useState<TabType>('ALL');
-//     const [isFollowingMode, setIsFollowingMode] = useState(false);
-//     const navigate = useNavigate();
-
-//     // Gọi Hook lấy dữ liệu
-//     const { data, isLoading } = useHomeData(activeTab);
-
-//     // Xử lý kiểm tra đăng nhập (để FilterBar biết đường render)
-//     const userString = localStorage.getItem('user');
-//     const isLoggedIn = !!(userString && userString !== 'undefined');
-
-//     return (
-//         <div className="bg-[#121212] min-h-screen">
-//             <FilterBar
-//                 activeTab={activeTab}
-//                 onTabChange={setActiveTab}
-//                 isFollowingMode={isFollowingMode}
-//                 onToggleFollowing={() => setIsFollowingMode(!isFollowingMode)}
-//                 isLoggedIn={isLoggedIn}
-//             />
-
-//             {isLoading ? (
-//                 <div className="flex flex-col items-center justify-center pt-32 text-zinc-500 gap-4">
-//                     <Loader2 size={40} className="animate-spin text-green-500" />
-//                     <p className="font-medium">Đang tải không gian âm nhạc của bạn...</p>
-//                 </div>
-//             ) : (
-//                 <div className="space-y-8 pt-4 pb-10">
-
-//                     {/* --- TAB: TẤT CẢ --- */}
-//                     {activeTab === 'ALL' && (
-//                         <>
-//                             {/* PHÁT GẦN ĐÂY (Đang dùng Mock) */}
-//                             <Section title="Phát gần đây">
-//                                 {data.recentlyPlayed.map(item => (
-//                                     <CardItem
-//                                         key={item.songId}
-//                                         title={item.songTitle}
-//                                         description={item.artistName}
-//                                         imageUrl={item.coverUrl}
-//                                         onClick={() => console.log('Sẽ chuyển hướng sau')}
-//                                     />
-//                                 ))}
-//                             </Section>
-
-//                             {/* BÀI HÁT YÊU THÍCH NHẤT (Từ LikeSongController) */}
-//                             {data.topLikedSongs.length > 0 && (
-//                                 <Section title="Thịnh hành & Yêu thích">
-//                                     {data.topLikedSongs.map(song => (
-//                                         <CardItem
-//                                             key={song.songId}
-//                                             title={song.songTitle}
-//                                             description={song.artistName}
-//                                             imageUrl={song.coverUrl}
-//                                             // Tùy vào luồng của bạn, có thể phát nhạc luôn hoặc chuyển trang
-//                                             onClick={() => console.log('Play song:', song.songId)}
-//                                         />
-//                                     ))}
-//                                 </Section>
-//                             )}
-
-//                             {/* TOP STREAM (Từ SongStreamService) */}
-//                             {data.topStreamedSongs.length > 0 && (
-//                                 <Section title="Đang HOT hiện nay">
-//                                     {data.topStreamedSongs.map(song => (
-//                                         <CardItem
-//                                             key={song.songId}
-//                                             title={song.songTitle}
-//                                             description={song.artistName}
-//                                             imageUrl={song.coverUrl}
-//                                             onClick={() => console.log('Play song:', song.songId)}
-//                                         />
-//                                     ))}
-//                                 </Section>
-//                             )}
-
-//                             {/* ALBUM MỚI */}
-//                             {data.newAlbums.length > 0 && (
-//                                 <Section title="Album mới phát hành">
-//                                     {data.newAlbums.map(album => (
-//                                         <CardItem
-//                                             key={album.id}
-//                                             title={album.name}
-//                                             description={album.artistName || 'Various Artists'}
-//                                             imageUrl={album.avatarUrl}
-//                                             isRound={false}
-//                                             onClick={() => navigate(`/album/${album.id}`)}
-//                                         />
-//                                     ))}
-//                                 </Section>
-//                             )}
-//                         </>
-//                     )}
-
-//                     {/* --- TAB: MUSIC --- */}
-//                     {activeTab === 'MUSIC' && (
-//                         <div className="pt-10 flex flex-col items-center justify-center text-zinc-500">
-//                             <p>Tính năng lọc chuyên sâu Âm nhạc đang được phát triển...</p>
-//                         </div>
-//                     )}
-
-//                     {/* --- TAB: POSTCARD --- */}
-//                     {activeTab === 'POSTCARD' && (
-//                         <div className="pt-10 flex flex-col items-center justify-center text-zinc-500">
-//                             <p>Tính năng Postcard/Podcast đang được phát triển...</p>
-//                         </div>
-//                     )}
-//                 </div>
-//             )}
-
-//             <Footer />
-//         </div>
-//     );
-// };
-
-// export default HomePage;

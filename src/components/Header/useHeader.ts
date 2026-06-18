@@ -1,114 +1,8 @@
-// import { useState, useRef, useEffect } from 'react';
-
-// const DEFAULT_USER_TEMPLATE = {
-//     id: 'user_temp',
-//     name: 'User',
-//     email: 'user@springtunes.com',
-//     avatarUrl: '',
-//     birthdate: '2000-01-01',
-//     publicPlaylistsCount: 7,
-//     followingCount: 12,
-//     followersCount: 6
-// };
-
-// export const useHeader = (onLoginSuccessAction?: (data: any) => void, onNavigate?: (tab: string) => void) => {
-//     const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-//     const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
-//     const menuRef = useRef<HTMLDivElement>(null);
-//     const [isNotificationOpen, setIsNotificationOpen] = useState(false);
-//     const notificationRef = useRef<HTMLDivElement>(null);
-//     const [user, setUser] = useState<any | null>(null); // Dùng any để tránh lỗi type ban đầu
-
-//     // Xử lý click ra ngoài để đóng menu
-//     useEffect(() => {
-//         const handleClickOutside = (event: MouseEvent) => {
-//             if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-//                 setIsProfileMenuOpen(false);
-//             }
-//             if (notificationRef.current && !notificationRef.current.contains(event.target as Node)) {
-//                 setIsNotificationOpen(false);
-//             }
-//         };
-//         document.addEventListener('mousedown', handleClickOutside);
-//         return () => document.removeEventListener('mousedown', handleClickOutside);
-//     }, []);
-
-//     // --- LOGIC ĐĂNG XUẤT ---
-//     const handleLogout = () => {
-//         setUser(null);
-//         setIsProfileMenuOpen(false);
-        
-//         // 1. Xóa sạch storage
-//         localStorage.removeItem('user');
-//         localStorage.removeItem('user_profile'); 
-        
-//         // 2. QUAN TRỌNG: Bắn sự kiện 'user-update' để MainLayout biết mà ẩn Sidebar
-//         window.dispatchEvent(new Event('user-update')); 
-        
-//         if (onNavigate) onNavigate('HOME');
-//     };
-
-//     // --- LOGIC ĐĂNG NHẬP THÀNH CÔNG ---
-//     // Dùng any cho partialUserData để nhận dữ liệu từ AuthModal mà không bị lỗi Type
-//     const handleLoginSuccess = (partialUserData: any) => {
-//         // 1. GỘP DỮ LIỆU: Đảm bảo user có đủ trường thông tin của UserProfile
-//         const fullUserData = {
-//             ...DEFAULT_USER_TEMPLATE, // Lấy khung mặc định
-//             ...partialUserData,       // Ghi đè dữ liệu thật (id, email, name)
-//             id: partialUserData.id || `user_${Date.now()}` // Đảm bảo luôn có ID
-//         };
-
-//         // 2. Lưu và Cập nhật State
-//         setUser(fullUserData);
-//         setIsAuthModalOpen(false);
-//         localStorage.setItem('user', JSON.stringify(fullUserData));
-//         localStorage.setItem('user_profile', JSON.stringify(fullUserData));
-
-//         // 3. QUAN TRỌNG: Bắn sự kiện để MainLayout nhận được tin báo "Có user rồi, hiện Sidebar đi!"
-//         window.dispatchEvent(new Event('user-update'));
-
-//         onLoginSuccessAction?.(fullUserData);
-//     };
-
-//     // --- LOGIC KHỞI TẠO ---
-//     useEffect(() => {
-//         const loadUserFromStorage = () => {
-//             try {
-//                 const storedUser = localStorage.getItem('user');
-//                 setUser(storedUser ? JSON.parse(storedUser) : null);
-//             } catch (error) {
-//                 console.error("Lỗi parse user:", error);
-//                 setUser(null);
-//             }
-//         };
-
-//         loadUserFromStorage();
-
-//         // Lắng nghe sự kiện chính mình bắn ra (để đồng bộ các tab hoặc component khác)
-//         const handleUserUpdate = () => loadUserFromStorage();
-//         window.addEventListener('user-update', handleUserUpdate);
-
-//         return () => window.removeEventListener('user-update', handleUserUpdate);
-//     }, []);
-
-//     return {
-//         user,
-//         isAuthModalOpen,
-//         isProfileMenuOpen,
-//         menuRef,
-//         isNotificationOpen,
-//         notificationRef,
-//         setIsNotificationOpen,
-//         setIsAuthModalOpen,
-//         setIsProfileMenuOpen,
-//         handleLogout,
-//         handleLoginSuccess,
-//     };
-// };
-
 import { useState, useRef, useEffect } from 'react';
-import type { UserResponse } from '../../types/backend'; // Import Type chuẩn
-import { CURRENT_USER } from '../../constants/mockData'; // Import Mock Data chuẩn
+import type { UserResponse } from '../../types/backend';
+import { NotificationService } from '../../services/notificationServiceApi';
+import { AuthService } from '../../services/authService';
+
 
 export const useHeader = (onLoginSuccessAction?: (data: UserResponse) => void, onNavigate?: (tab: string) => void) => {
     const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
@@ -116,9 +10,10 @@ export const useHeader = (onLoginSuccessAction?: (data: UserResponse) => void, o
     const menuRef = useRef<HTMLDivElement>(null);
     const [isNotificationOpen, setIsNotificationOpen] = useState(false);
     const notificationRef = useRef<HTMLDivElement>(null);
-    
+    const [unreadCount, setUnreadCount] = useState<number>(0);
+
     // Sử dụng UserResponse thay vì any
-    const [user, setUser] = useState<UserResponse | null>(null); 
+    const [user, setUser] = useState<UserResponse | null>(null);
 
     // Xử lý click ra ngoài để đóng menu
     useEffect(() => {
@@ -135,45 +30,69 @@ export const useHeader = (onLoginSuccessAction?: (data: UserResponse) => void, o
     }, []);
 
     // --- LOGIC ĐĂNG XUẤT ---
-    const handleLogout = () => {
+    const handleLogout = async () => {
         setUser(null);
         setIsProfileMenuOpen(false);
-        
-        // 1. Xóa sạch storage
-        localStorage.removeItem('user');
-        localStorage.removeItem('user_profile'); 
-        
-        // 2. Bắn sự kiện 'user-update' để MainLayout biết mà ẩn Sidebar
-        window.dispatchEvent(new Event('user-update')); 
-        
+
+        // Bắn sự kiện để UI ẩn sidebar ngay lập tức
+        window.dispatchEvent(new Event('user-update'));
         if (onNavigate) onNavigate('HOME');
+
+        // Gọi AuthService.logout() để invalidate token trên server và xóa sạch localStorage
+        try {
+            await AuthService.logout();
+        } catch (e) {
+            // Dù server lỗi vẫn đảm bảo storage được xóa
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            localStorage.removeItem('user_profile');
+            window.location.reload();
+        }
     };
 
     // --- LOGIC ĐĂNG NHẬP THÀNH CÔNG ---
     const handleLoginSuccess = (partialUserData: any) => {
-        // 1. GỘP DỮ LIỆU: 
-        // Lấy khung Mock chuẩn (có Role ADMIN) ghi đè lên dữ liệu nhập từ form (tên, email)
+        // Dùng trực tiếp dữ liệu từ API (/user/my) - KHÔNG merge với CURRENT_USER mock
+        // vì CURRENT_USER có role ADMIN sẽ làm mọi tài khoản thành admin
         const fullUserData: UserResponse = {
-            ...CURRENT_USER,      // Có sẵn Role ADMIN, permissions, avatar...
-            ...partialUserData,   // Ghi đè email/tên người dùng nhập
-            id: partialUserData.id || CURRENT_USER.id // Giữ ID ổn định
+            ...partialUserData,
+            id: partialUserData.id
         };
 
-        // 2. Lưu và Cập nhật State
+        // Lưu và Cập nhật State
         setUser(fullUserData);
         setIsAuthModalOpen(false);
-        
-        // Lưu vào localStorage (Lưu cả 2 key để tương thích code cũ nếu còn sót)
+
         localStorage.setItem('user', JSON.stringify(fullUserData));
         localStorage.setItem('user_profile', JSON.stringify(fullUserData));
 
-        // 3. QUAN TRỌNG: Bắn sự kiện để MainLayout cập nhật Sidebar/Menu
+        // Bắn sự kiện để MainLayout cập nhật Sidebar/Menu
         window.dispatchEvent(new Event('user-update'));
 
         onLoginSuccessAction?.(fullUserData);
+
+        // Kiểm tra xem có yêu cầu chuyển hướng phát nhạc sau khi đăng nhập hay không
+        const redirectUrl = sessionStorage.getItem('post_login_redirect');
+        if (redirectUrl) {
+            sessionStorage.removeItem('post_login_redirect');
+            window.location.href = redirectUrl;
+        }
     };
 
     // --- LOGIC KHỞI TẠO ---
+
+    useEffect(() => {
+        const loadUserFromStorage = () => { /* code cũ của bạn */ };
+        loadUserFromStorage();
+
+        // Lắng nghe lệnh mở cửa sổ Đăng nhập từ mọi nơi trong App
+        const handleOpenAuth = () => setIsAuthModalOpen(true);
+        window.addEventListener('open-auth-modal', handleOpenAuth);
+
+        // Cleanup
+        return () => window.removeEventListener('open-auth-modal', handleOpenAuth);
+    }, []);
+
     useEffect(() => {
         const loadUserFromStorage = () => {
             try {
@@ -199,6 +118,31 @@ export const useHeader = (onLoginSuccessAction?: (data: UserResponse) => void, o
         return () => window.removeEventListener('user-update', handleUserUpdate);
     }, []);
 
+    // Nhận currentUser là tham số để tránh stale closure
+    const fetchUnreadCount = async (currentUser = user) => {
+        try {
+            if (currentUser) {
+                const count = await NotificationService.getUnreadCount();
+                setUnreadCount(count);
+            }
+        } catch (error) {
+            console.error("Lỗi lấy số thông báo", error);
+        }
+    };
+
+    // Gọi API ngay khi user thay đổi + polling mỗi 30 giây
+    useEffect(() => {
+        if (!user) {
+            setUnreadCount(0);
+            return;
+        }
+
+        fetchUnreadCount(user); // Truyền user trực tiếp để tránh stale closure
+
+        const interval = setInterval(() => fetchUnreadCount(user), 30000);
+        return () => clearInterval(interval);
+    }, [user]);
+
     return {
         user,
         isAuthModalOpen,
@@ -206,10 +150,12 @@ export const useHeader = (onLoginSuccessAction?: (data: UserResponse) => void, o
         menuRef,
         isNotificationOpen,
         notificationRef,
+        unreadCount,
         setIsNotificationOpen,
         setIsAuthModalOpen,
         setIsProfileMenuOpen,
         handleLogout,
         handleLoginSuccess,
+        fetchUnreadCount,
     };
 };

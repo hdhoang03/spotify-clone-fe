@@ -1,14 +1,16 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Menu, Bell } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import ThemeToggle from './ThemeToggle';
 import UserAvatar from './UserAvatar';
 import AuthModal from '../Auth';
+import LoginPreviewModal from '../Auth/LoginPreviewModal';
 import ProfileDropdown from './ProfileDropdown';
 import { useHeader } from './useHeader';
 import NotificationDropdown from './NotificationDropdown';
 import DesktopNavigation from './DesktopNavigation';
 import LogoutModal from '../Auth/LogoutModal';
+import UnreadBadge from '../common/UnreadBadge';
 
 interface HeaderProps {
     onNaviagate: (tab: string) => void;
@@ -31,10 +33,18 @@ const Header = ({ onMenuClick, onNaviagate, activeTab }: HeaderProps) => {
         setIsAuthModalOpen,
         setIsProfileMenuOpen,
         handleLoginSuccess,
-        // handleLogout // Chúng ta dùng logic logout riêng bên dưới cho Modal
+        unreadCount,
+        fetchUnreadCount
     } = useHeader(undefined, onNaviagate);
 
     const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+    const [showPreviewModal, setShowPreviewModal] = useState(false);
+
+    useEffect(() => {
+        const handleShowPreview = () => setShowPreviewModal(true);
+        window.addEventListener('show-login-preview-modal', handleShowPreview);
+        return () => window.removeEventListener('show-login-preview-modal', handleShowPreview);
+    }, []);
 
     const handleGoHome = () => {
         navigate('/');
@@ -53,9 +63,9 @@ const Header = ({ onMenuClick, onNaviagate, activeTab }: HeaderProps) => {
 
     return (
         <>
-            <header className="h-16 w-full bg-white dark:bg-black/90 text-black dark:text-white
-                        backdrop-blur-md flex items-center justify-between px-4 border-b border-gray-200
-                        dark:border-white/10 sticky top-0 z-50 transition-colors duration-300">
+            <header className="h-16 shrink-0 w-full bg-white dark:bg-[#121212] text-black dark:text-white
+                        flex items-center justify-between px-4 border border-black/5
+                        dark:border-white/5 rounded-2xl z-50 transition-colors duration-300 shadow-sm">
 
                 {/* Left Section */}
                 <div className="flex items-center gap-4 shrink-0">
@@ -65,11 +75,11 @@ const Header = ({ onMenuClick, onNaviagate, activeTab }: HeaderProps) => {
                         </span>
                     </div>
 
-                    {/* SỬA: hidden md:block -> hidden sm:block (Hiện từ Tablet trở lên) */}
+                    {/* Nút hamburger chỉ hiện trên desktop (≥768px), khi mobile dùng bottom navigation */}
                     {user && (
                         <button
                             onClick={onMenuClick}
-                            className="hidden sm:block p-2 rounded-md hover:bg-gray-100 dark:hover:bg-zinc-800 transition"
+                            className="hidden md:block p-2 rounded-md hover:bg-gray-100 dark:hover:bg-zinc-800 transition"
                         >
                             <Menu size={24} />
                         </button>
@@ -88,11 +98,20 @@ const Header = ({ onMenuClick, onNaviagate, activeTab }: HeaderProps) => {
                 <div className="flex items-center gap-4">
                     {user && (
                         <div className="relative" ref={notificationRef}>
-                            <button onClick={() => setIsNotificationOpen(!isNotificationOpen)} className="relative p-2 transition rounded-full hover:bg-gray-100 dark:hover:bg-zinc-800 text-gray-500 dark:text-gray-400">
+                            <button
+                                onClick={() => setIsNotificationOpen(!isNotificationOpen)}
+                                className="relative p-2 transition rounded-full hover:bg-gray-100 dark:hover:bg-zinc-800 text-gray-500 dark:text-gray-400"
+                            >
                                 <Bell size={24} />
-                                {isNotificationOpen && <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full"></span>}
+                                <UnreadBadge count={unreadCount} className="absolute top-1 right-1" />
                             </button>
-                            {isNotificationOpen && <NotificationDropdown onClose={() => setIsNotificationOpen(false)} />}
+
+                            {isNotificationOpen && (
+                                <NotificationDropdown
+                                    onClose={() => setIsNotificationOpen(false)}
+                                    onUpdateUnreadCount={fetchUnreadCount} // Truyền callback để update lại số
+                                />
+                            )}
                         </div>
                     )}
 
@@ -113,7 +132,7 @@ const Header = ({ onMenuClick, onNaviagate, activeTab }: HeaderProps) => {
                         <div className="flex items-center gap-4">
                             <div className="md:hidden"><ThemeToggle /></div>
                             <button onClick={() => setIsAuthModalOpen(true)} className="bg-green-500 text-white font-bold px-6 py-2 rounded-full text-sm hover:scale-105 transition shadow-lg">
-                                Đăng nhập
+                                Log in
                             </button>
                         </div>
                     )}
@@ -122,6 +141,7 @@ const Header = ({ onMenuClick, onNaviagate, activeTab }: HeaderProps) => {
 
             <AuthModal isOpen={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)} onLoginSuccess={handleLoginSuccess} />
             <LogoutModal isOpen={isLogoutModalOpen} onClose={() => setIsLogoutModalOpen(false)} onConfirm={handleConfirmLogout} />
+            <LoginPreviewModal isOpen={showPreviewModal} onClose={() => setShowPreviewModal(false)} onLoginClick={() => { setShowPreviewModal(false); setIsAuthModalOpen(true); }} />
         </>
     );
 };

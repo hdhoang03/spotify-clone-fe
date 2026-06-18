@@ -9,7 +9,7 @@ const AdminLayout = () => {
     const [isCollapsed, setIsCollapsed] = useState(false);
 
     return (
-        <div className="flex h-screen bg-gray-50 dark:bg-black text-gray-900 dark:text-white font-sans overflow-hidden">
+        <div className="flex h-screen bg-zinc-50 dark:bg-[#09090b] text-zinc-900 dark:text-zinc-100 font-sans overflow-hidden">
 
             {/* --- ADMIN SIDEBAR (Tách biệt) --- */}
             <AdminSidebar
@@ -20,30 +20,26 @@ const AdminLayout = () => {
             {/* --- MAIN CONTENT --- */}
             <main className="flex-1 flex flex-col h-screen overflow-hidden relative transition-all duration-300">
                 {/* Admin Header */}
-                <header className="h-16 bg-white dark:bg-zinc-900/80 backdrop-blur-md border-b border-gray-200 dark:border-white/10 flex items-center justify-between px-6 shrink-0 z-10">
+                <header className="h-16 bg-white/70 dark:bg-[#09090b]/70 backdrop-blur-xl border-b border-zinc-200/60 dark:border-zinc-800/60 flex items-center justify-between px-8 shrink-0 z-10">
                     <div>
-                        <h2 className="text-lg font-bold text-gray-800 dark:text-white">
-                            Dashboard
+                        <h2 className="text-[17px] font-extrabold text-zinc-800 dark:text-zinc-100 tracking-tight">
+                            Admin Portal
                         </h2>
                     </div>
 
                     <div className="flex items-center gap-4">
-                        <button className="p-2 text-gray-500 hover:bg-gray-100 rounded-full dark:hover:bg-zinc-800 relative">
-                            <Bell size={20} />
-                            <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border border-white dark:border-black"></span>
-                        </button>
-                        <div className="h-6 w-[1px] bg-gray-200 dark:bg-zinc-700"></div>
+                        <div className="h-4 w-[1px] bg-zinc-200 dark:bg-zinc-800"></div>
                         <button
                             onClick={() => navigate('/')}
-                            className="text-sm font-bold text-green-600 hover:text-green-700 dark:text-green-500 hover:underline"
+                            className="text-xs font-bold text-emerald-600 hover:text-emerald-700 dark:text-emerald-400 dark:hover:text-emerald-350 transition-colors uppercase tracking-wider"
                         >
-                            Về trang Client
+                            Go to client page
                         </button>
                     </div>
                 </header>
 
                 {/* Page Content Scrollable Area */}
-                <div className="flex-1 overflow-y-auto p-6 md:p-8 scroll-smooth">
+                <div className="flex-1 overflow-y-auto p-6 md:p-8 custom-scrollbar">
                     <div className="mx-auto max-w-7xl animate-in fade-in slide-in-from-bottom-4 duration-500">
                         <Outlet />
                     </div>

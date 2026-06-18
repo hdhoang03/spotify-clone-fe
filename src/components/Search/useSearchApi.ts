@@ -10,6 +10,9 @@ export interface SearchSongResponse {
     audioUrl: string;
     artistName: string;
     artistId: string;
+    duration?: number;
+    isLiked?: boolean;
+    featuredArtists?: { id: string; name: string; avatarUrl?: string }[];
 }
 
 export interface ArtistResponse {
@@ -26,7 +29,9 @@ export interface AlbumResponse {
     id: string;
     name: string;
     description: string;
-    avatarUrl: string;
+    avatarUrl?: string;
+    albumUrl?: string;
+    coverUrl?: string;
     songCount: number;
     artistName: string;
     releaseDate: string;
@@ -59,7 +64,7 @@ export const useSearchApi = (keyword: string) => {
             return;
         }
 
-        // Kỹ thuật Debounce: Đợi 500ms sau khi người dùng ngừng gõ mới gọi API
+        // Kỹ thuật Debounce: Đợi 800ms sau khi người dùng ngừng gõ mới gọi API
         const delayDebounceFn = setTimeout(async () => {
             setIsLoading(true);
             setError(null);
@@ -76,7 +81,7 @@ export const useSearchApi = (keyword: string) => {
             } finally {
                 setIsLoading(false);
             }
-        }, 500);
+        }, 800);
 
         // Cleanup function: Xóa timeout cũ nếu người dùng tiếp tục gõ
         return () => clearTimeout(delayDebounceFn);

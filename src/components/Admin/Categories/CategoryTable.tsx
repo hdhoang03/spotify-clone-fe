@@ -56,7 +56,7 @@ const CategoryTable = ({
                                 <td className="p-4 relative md:sticky md:left-[60px] z-10 bg-white dark:bg-zinc-900 group-hover:bg-gray-50 dark:group-hover:bg-zinc-800 md:shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]">
                                     <div className="flex items-center gap-3">
                                         <div className="w-12 h-12 rounded-lg overflow-hidden shadow-sm flex-shrink-0 border border-gray-200 dark:border-zinc-700 flex items-center justify-center">
-                                            <img src={cat.coverUrl} alt={cat.name} className="w-full h-full object-cover mix-blend-multiply" />
+                                            <img src={cat.coverUrl} alt={cat.name} className="w-full h-full object-cover" />
                                         </div>
                                         <div className="min-w-0">
                                             <p className="font-bold text-gray-900 dark:text-white text-sm truncate">{cat.name}</p>

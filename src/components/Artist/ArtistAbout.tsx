@@ -1,5 +1,4 @@
-// components/Artist/ArtistAbout.tsx
-import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface ArtistAboutProps {
     artistName: string;
@@ -9,22 +8,23 @@ interface ArtistAboutProps {
 }
 
 const ArtistAbout = ({ artistName, imageUrl, bio, globalRank }: ArtistAboutProps) => {
+    const { t } = useTranslation();
     return (
         <section className="mb-8 animate-in fade-in slide-in-from-bottom-4 duration-500 delay-300">
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white tracking-tight pb-6">About</h2>
-            
-                <div className="relative w-full h-[300px] md:h-[450px] lg:h-[500px] rounded-xl overflow-hidden group">
-                    <img 
-                        src={imageUrl} 
-                        alt={artistName}
-                        className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
-                    />
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white tracking-tight pb-6">{t('artist.about')}</h2>
+
+            <div className="relative w-full h-[300px] md:h-[450px] lg:h-[500px] rounded-xl overflow-hidden group">
+                <img
+                    src={imageUrl}
+                    alt={artistName}
+                    className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                />
                 {/* Overlay tối dần xuống dưới */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
 
                 {/* Nội dung nổi lên trên */}
                 <div className="absolute bottom-8 left-8 right-8 z-10">
-                    
+
                     {/* Global Rank Badge */}
                     {globalRank && (
                         <div className="inline-flex items-center gap-2 mb-4">
@@ -32,8 +32,8 @@ const ArtistAbout = ({ artistName, imageUrl, bio, globalRank }: ArtistAboutProps
                                 #{globalRank}
                             </div>
                             <div className="flex flex-col">
-                                <span className="text-xs font-bold uppercase tracking-wider text-white/80">in the world</span>
-                                <span className="text-sm font-bold text-white">Global Top Artist</span>
+                                <span className="text-xs font-bold uppercase tracking-wider text-white/80">{t('artist.in_the_world')}</span>
+                                <span className="text-sm font-bold text-white">{t('artist.global_top_artist')}</span>
                             </div>
                         </div>
                     )}

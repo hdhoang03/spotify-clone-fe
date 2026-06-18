@@ -9,12 +9,14 @@ import AdminGuard from './components/Auth/AdminGuard';
 // --- 2. CLIENT COMPONENTS ---
 import HomePage from './components/HomePage/HomePage';
 import SearchPage from './components/Search/Search';
+import CategoryDetailPage from './components/Search/CategoryDetailPage';
 import LibraryPage from './components/Sidebar/LibraryPage';
 import ProfilePage from './components/Profile/Profile';
 import SettingsPage from './components/Settings/Settings';
 import HelpPage from './components/Help/Help';
-import AccountPage from './components/Account/Account';
+import AccountPage from './components/Account';
 import ArtistPage from './components/Artist/Artist';
+import AlbumPage from './components/Album/AlbumPage';
 
 // --- 3. ADMIN COMPONENTS ---
 // Đảm bảo bạn đã di chuyển file vào src/components/Admin/
@@ -28,7 +30,10 @@ import CategoryDetail from './components/Admin/Categories/CategoryDetail';
 import AlbumDetail from './components/Admin/Albums/AlbumDetail';
 
 import PlaylistDetailPage from './components/Sidebar/PlaylistDetailPage';
+import LikedSongsPage from './components/Sidebar/LikedSongsPage';
+import SongDetailPage from './components/SongDetail/SongDetailPage';
 
+import OAuth2Callback from './OAuth2Callback';
 // Component con: Chứa logic định tuyến (Nơi được phép dùng useLocation)
 const AppRoutes = () => {
     const location = useLocation();
@@ -69,7 +74,9 @@ const AppRoutes = () => {
                         <Routes>
                             <Route path="/" element={<HomePage />} />
                             <Route path="/search" element={<SearchPage />} />
+                            <Route path="/category/:id" element={<CategoryDetailPage />} />
                             <Route path="/library" element={<LibraryPage />} />
+                            <Route path="/collection/tracks" element={<LikedSongsPage />} />
                             <Route path="/playlist/:id" element={<PlaylistDetailPage />} />
                             <Route path="/profile" element={<ProfilePage />} />
                             <Route path="/user/:id/profile" element={<ProfilePage />} />
@@ -77,6 +84,10 @@ const AppRoutes = () => {
                             <Route path="/support" element={<HelpPage />} />
                             <Route path="/account" element={<AccountPage />} />
                             <Route path="/artist/:id" element={<ArtistPage />} />
+                            <Route path="/albums/:id" element={<AlbumPage />} />
+                            <Route path="/song/:id" element={<SongDetailPage />} />
+
+                            <Route path="/oauth2/callback" element={<OAuth2Callback />} />
 
                             {/* 404 Page */}
                             <Route path="*" element={

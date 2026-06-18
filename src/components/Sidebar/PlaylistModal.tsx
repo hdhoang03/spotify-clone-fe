@@ -3,6 +3,7 @@ import React, { useState, useRef } from 'react';
 import { X, Camera, Loader2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { createPortal } from 'react-dom';
+import { useTranslation } from 'react-i18next';
 
 interface PlaylistModalProps {
     isOpen: boolean;
@@ -13,6 +14,7 @@ interface PlaylistModalProps {
 }
 
 const PlaylistModal = ({ isOpen, onClose, onSubmit, initialData, isLoading }: PlaylistModalProps) => {
+    const { t } = useTranslation();
     const [name, setName] = useState(initialData?.name || '');
     const [description, setDescription] = useState(initialData?.description || '');
     const [isPublic, setIsPublic] = useState(initialData?.isPublic ?? true);
@@ -56,7 +58,7 @@ const PlaylistModal = ({ isOpen, onClose, onSubmit, initialData, isLoading }: Pl
             <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="relative w-full max-w-md bg-white dark:bg-[#282828] rounded-xl shadow-2xl p-6">
                 <div className="flex justify-between items-center mb-6">
                     <h2 className="text-xl font-bold text-zinc-900 dark:text-white">
-                        {initialData ? 'Sửa thông tin' : 'Tạo Playlist'}
+                        {initialData ? t('playlist.edit_info') : t('playlist.create_playlist')}
                     </h2>
                     <button onClick={onClose} className="p-2 text-zinc-400 hover:text-zinc-900 dark:hover:text-white rounded-full"><X size={20} /></button>
                 </div>
@@ -74,7 +76,7 @@ const PlaylistModal = ({ isOpen, onClose, onSubmit, initialData, isLoading }: Pl
                                 <Camera size={32} className="mb-2" />
                             )}
                             <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                <span className="text-white text-xs font-bold">Chọn ảnh</span>
+                                <span className="text-white text-xs font-bold">{t('playlist.choose_image')}</span>
                             </div>
                             <input type="file" ref={fileInputRef} onChange={handleFileChange} accept="image/*" className="hidden" />
                         </div>
@@ -82,11 +84,11 @@ const PlaylistModal = ({ isOpen, onClose, onSubmit, initialData, isLoading }: Pl
                         {/* Input Tên & Mô tả */}
                         <div className="flex-1 space-y-3">
                             <input
-                                required placeholder="Tên danh sách phát" value={name} onChange={e => setName(e.target.value)}
+                                required placeholder={t('playlist.playlist_name')} value={name} onChange={e => setName(e.target.value)}
                                 className="w-full bg-zinc-100 dark:bg-[#3E3E3E] text-zinc-900 dark:text-white px-3 py-2 rounded-md outline-none focus:ring-2 focus:ring-green-500 font-bold text-sm"
                             />
                             <textarea
-                                placeholder="Thêm mô tả tùy chọn" value={description} onChange={e => setDescription(e.target.value)} rows={3}
+                                placeholder={t('playlist.add_description')} value={description} onChange={e => setDescription(e.target.value)} rows={3}
                                 className="w-full bg-zinc-100 dark:bg-[#3E3E3E] text-zinc-900 dark:text-white px-3 py-2 rounded-md outline-none focus:ring-2 focus:ring-green-500 text-xs resize-none"
                             />
                         </div>
@@ -94,7 +96,7 @@ const PlaylistModal = ({ isOpen, onClose, onSubmit, initialData, isLoading }: Pl
 
                     {/* Toggle Công khai */}
                     <div className="flex items-center justify-between py-2 border-t border-zinc-200 dark:border-zinc-700/50 mt-4">
-                        <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">Công khai trên hồ sơ</span>
+                        <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">{t('playlist.public_on_profile')}</span>
                         <button
                             type="button" onClick={() => setIsPublic(!isPublic)}
                             className={`w-10 h-5 rounded-full transition-colors relative ${isPublic ? 'bg-green-500' : 'bg-zinc-400 dark:bg-zinc-600'}`}
@@ -106,7 +108,7 @@ const PlaylistModal = ({ isOpen, onClose, onSubmit, initialData, isLoading }: Pl
                     <div className="flex justify-end pt-4">
                         <button type="submit" disabled={isLoading} className="px-6 py-2 bg-white text-black font-bold rounded-full hover:scale-105 transition-transform disabled:opacity-50 flex items-center gap-2">
                             {isLoading && <Loader2 size={16} className="animate-spin" />}
-                            {initialData ? 'Lưu' : 'Tạo mới'}
+                            {initialData ? t('playlist.save') : t('playlist.create_new')}
                         </button>
                     </div>
                 </form>

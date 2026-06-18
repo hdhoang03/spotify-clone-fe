@@ -16,15 +16,13 @@ const containerVariants = {
 
 const Section = ({ title, children }: SectionProps) => {
     return (
-        <section className="mb-10 px-6"> {/* Thêm padding-x ở đây thay vì ở children */}
-            <div className="flex justify-between items-end mb-5">
-                <h2 className="text-2xl font-bold text-zinc-900 dark:text-white hover:underline cursor-pointer">
+        <section className="mb-14 px-2 pt-6">
+            <div className="flex justify-between items-end mb-6">
+                <h2 className="text-xl md:text-2xl font-extrabold text-zinc-900 dark:text-white cursor-pointer tracking-tight drop-shadow-sm">
                     {title}
                 </h2>
-                {/* Có thể thêm nút "Xem tất cả" ở đây sau này */}
-                {/* <button className="text-sm font-bold text-zinc-500 hover:text-zinc-900 uppercase">Hiện tất cả</button> */}
             </div>
-            
+
             <motion.div
                 // Tối ưu Grid Responsive:
                 // min-w-[180px] giúp các thẻ không bị co quá nhỏ trên màn hình bé

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { ChevronLeft, Plus, Loader2 } from 'lucide-react';
 import api from '../../services/api';
+import { useTranslation } from 'react-i18next';
 
 interface PlaylistSelectionViewProps {
     songId: string;
@@ -9,6 +10,7 @@ interface PlaylistSelectionViewProps {
 }
 
 const PlaylistSelectionView = ({ songId, onBack, onClose }: PlaylistSelectionViewProps) => {
+    const { t } = useTranslation();
     const [playlists, setPlaylists] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isAdding, setIsAdding] = useState(false);
@@ -34,12 +36,12 @@ const PlaylistSelectionView = ({ songId, onBack, onClose }: PlaylistSelectionVie
         try {
             const res = await api.post(`/playlist/${playlistId}/add/${songId}`);
             if (res.data.code === 1000) {
-                alert("Đã thêm bài hát vào playlist thành công!");
+                alert(t('player.add_success'));
                 onClose();
             }
         } catch (error) {
             console.error("Lỗi thêm bài hát:", error);
-            alert("Không thể thêm vào playlist lúc này.");
+            alert(t('player.add_fail'));
         } finally {
             setIsAdding(false);
         }
@@ -51,7 +53,7 @@ const PlaylistSelectionView = ({ songId, onBack, onClose }: PlaylistSelectionVie
                 <button onClick={onBack} className="p-2 -ml-2 rounded-full hover:bg-white/10 text-white transition">
                     <ChevronLeft size={24} />
                 </button>
-                <span className="text-lg font-bold text-white">Thêm vào Playlist</span>
+                <span className="text-lg font-bold text-white">{t('player.add_to_playlist')}</span>
             </div>
 
             <div className="flex-1 overflow-y-auto scrollbar-hide pb-4">
@@ -63,7 +65,7 @@ const PlaylistSelectionView = ({ songId, onBack, onClose }: PlaylistSelectionVie
                             <div className="w-12 h-12 rounded-md bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition">
                                 <Plus size={24} className="text-white" />
                             </div>
-                            <span className="text-base font-bold text-white">Tạo Playlist mới</span>
+                            <span className="text-base font-bold text-white">{t('player.create_new_playlist')}</span>
                         </button>
 
                         {playlists.map((pl) => (

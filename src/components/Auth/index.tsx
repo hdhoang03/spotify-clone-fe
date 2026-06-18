@@ -4,14 +4,15 @@ import LoginForm from './LoginForm';
 import RegisterForm from './RegisterForm';
 import OtpVerifyForm from './OtpVerifyForm';
 import ForgotPasswordForm from './ForgotPasswordForm';
-import type { UserResponse } from '../../types/backend'; // Import Type chuẩn
+import type { UserResponse } from '../../types/backend';
+import ResetPasswordForm from './ResetPasswordForm';
 
-type AuthMode = 'LOGIN' | 'REGISTER' | 'FORGOT_PASSWORD' | 'VERIFY_OTP';
+type AuthMode = 'LOGIN' | 'REGISTER' | 'FORGOT_PASSWORD' | 'VERIFY_OTP' | 'RESET_PASSWORD';
 
 interface AuthModalProps {
     isOpen: boolean;
     onClose: () => void;
-    onLoginSuccess: (userData: UserResponse) => void; // Chuẩn hóa type input
+    onLoginSuccess: (userData: UserResponse) => void;
 }
 
 const AuthModal = ({ isOpen, onClose, onLoginSuccess }: AuthModalProps) => {
@@ -29,24 +30,19 @@ const AuthModal = ({ isOpen, onClose, onLoginSuccess }: AuthModalProps) => {
 
     // --- LOGIC CHUYỂN ĐỔI ---
 
-    const handleSwitchToOtp = (email: string) => {
+    const handleSwitchToOtpRegister = (email: string) => {
         setPendingEmail(email);
         setMode('VERIFY_OTP');
     };
 
-    // Xử lý xác thực OTP thành công
-    // const handleVerifySuccess = async () => {
-    //     try {
-    //         const newUser = await AuthService.verifyOtp(pendingEmail, "123456");
-    //         onLoginSuccess(newUser);
-    //         onClose();
-    //     } catch (error) {
-    //         console.error("Lỗi verify OTP", error);
-    //     }
-    // };
+    const handleSwitchToResetPassword = (email: string) => {
+        setPendingEmail(email);
+        setMode('RESET_PASSWORD'); // Từ form quên pass đẩy qua form đổi pass
+    };
+
     const handleVerifySuccess = (userData: UserResponse) => {
-        onLoginSuccess(userData); // Gọi callback để Header/App cập nhật UI
-        onClose(); // Đóng modal
+        onLoginSuccess(userData);
+        onClose();
     };
 
 
@@ -61,16 +57,15 @@ const AuthModal = ({ isOpen, onClose, onLoginSuccess }: AuthModalProps) => {
                 <div className="p-8">
                     <div className="text-center mb-6">
                         <h2 className="text-2xl font-bold">
-                            {mode === 'LOGIN' && 'Đăng nhập'}
-                            {mode === 'REGISTER' && 'Đăng ký tài khoản'}
-                            {mode === 'FORGOT_PASSWORD' && 'Quên mật khẩu?'}
-                            {mode === 'VERIFY_OTP' && 'Xác thực OTP'}
+                            {mode === 'LOGIN' && 'Log in'}
+                            {mode === 'REGISTER' && 'Sign up'}
+                            {mode === 'FORGOT_PASSWORD' && 'Forgot password?'}
+                            {mode === 'VERIFY_OTP' && 'Verify Email'}
+                            {mode === 'RESET_PASSWORD' && 'Reset password'}
                         </h2>
-                        {mode === 'LOGIN' && <p className="text-sm text-gray-500 mt-2">Tiếp tục để trải nghiệm SpringTunes</p>}
-                        {mode === 'VERIFY_OTP' && <p className="text-sm text-gray-500 mt-2">Mã xác thực đã gửi tới {pendingEmail}</p>}
+                        {mode === 'LOGIN' && <p className="text-sm text-gray-500 mt-2">Continue to experience SpringTunes</p>}
                     </div>
 
-                    {/* Truyền callback onLoginSuccess chuẩn UserResponse xuống dưới */}
                     {mode === 'LOGIN' && (
                         <LoginForm
                             onLoginSuccess={(data) => { onLoginSuccess(data); onClose(); }}
@@ -81,7 +76,7 @@ const AuthModal = ({ isOpen, onClose, onLoginSuccess }: AuthModalProps) => {
 
                     {mode === 'REGISTER' && (
                         <RegisterForm
-                            onRegisterSuccess={handleSwitchToOtp}
+                            onRegisterSuccess={handleSwitchToOtpRegister}
                             onSwitchToLogin={() => setMode('LOGIN')}
                         />
                     )}
@@ -96,7 +91,15 @@ const AuthModal = ({ isOpen, onClose, onLoginSuccess }: AuthModalProps) => {
 
                     {mode === 'FORGOT_PASSWORD' && (
                         <ForgotPasswordForm
-                            onSubmitSuccess={handleSwitchToOtp}
+                            onSubmitSuccess={handleSwitchToResetPassword}
+                            onBackToLogin={() => setMode('LOGIN')}
+                        />
+                    )}
+
+                    {mode === 'RESET_PASSWORD' && (
+                        <ResetPasswordForm
+                            email={pendingEmail}
+                            onResetSuccess={() => setMode('LOGIN')}
                             onBackToLogin={() => setMode('LOGIN')}
                         />
                     )}

@@ -1,38 +1,51 @@
-import React from 'react';
-import { Send, AlertCircle, Loader2 } from 'lucide-react';
-import CustomSelect from '../Settings/CustomSelect';
-import { useUserProfile } from '../../hooks/useUserProfile'; // Hook lấy thông tin user của bạn
-import { useSupportLogic } from './useSupportLogic'; // Hook xử lý logic mới tạo
+import React, { useState } from 'react';
+import { Send, CheckCircle2, Loader2, Info } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import CustomSelect from '../Settings/components/CustomSelect';
+import { useUserProfile } from '../../hooks/useUserProfile';
+import { useSupportLogic } from './useSupportLogic';
+import { useTranslation } from 'react-i18next';
 
 const REQUEST_TYPES = [
     { value: 'bug', label: 'Báo lỗi kỹ thuật' },
     { value: 'feature', label: 'Đề xuất tính năng mới' },
     { value: 'account', label: 'Vấn đề tài khoản' },
-    { value: 'other', label: 'Khác' }
+    { value: 'other', label: 'Khác' },
 ];
 
 const ContactForm = () => {
-    const { user } = useUserProfile();
+    const { t } = useTranslation();
 
-    // 2. Lấy logic xử lý Form
+    const REQUEST_TYPES = [
+        { value: 'bug', label: t('help.bug') },
+        { value: 'feature', label: t('help.feature') },
+        { value: 'account', label: t('help.account') },
+        { value: 'other', label: t('help.other') },
+    ];
+
+    const { user } = useUserProfile();
     const { formData, setFormData, isLoading, submitSupportRequest } = useSupportLogic();
+    const [sent, setSent] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
         const isSuccess = await submitSupportRequest();
         if (isSuccess) {
-            alert("Cảm ơn bạn! Chúng tôi đã nhận được phản hồi. Vui lòng kiểm tra email của bạn.");
+            setSent(true);
+            setTimeout(() => setSent(false), 4000);
         } else {
-            alert("Có lỗi xảy ra khi gửi yêu cầu. Vui lòng thử lại sau.");
+            alert(t('help.error'));
         }
     };
 
     return (
         <form onSubmit={handleSubmit} className="space-y-4">
+
             {/* Loại yêu cầu */}
             <div>
-                <label className="block text-sm font-medium text-zinc-900 dark:text-white mb-1.5">Bạn cần hỗ trợ về?</label>
+                <label className="block text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-2">
+                    {t('help.form_type')}
+                </label>
                 <CustomSelect
                     value={formData.type}
                     onChange={(val) => setFormData({ ...formData, type: val })}
@@ -40,45 +53,80 @@ const ContactForm = () => {
                 />
             </div>
 
-            {/* Email (Disabled - Chỉ hiển thị cho người dùng biết hệ thống dùng email nào) */}
+            {/* Email (disabled) */}
             <div>
-                <label className="block text-sm font-medium text-zinc-900 dark:text-white mb-1.5">Email liên hệ</label>
+                <label className="block text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-2">
+                    {t('help.form_email')}
+                </label>
                 <input
                     type="email"
                     disabled
-                    value={user?.email || 'Đang tải dữ liệu...'}
-                    className="w-full px-4 py-3 bg-zinc-100 dark:bg-zinc-800 text-zinc-500 rounded-lg outline-none cursor-not-allowed text-sm border border-transparent"
-                    title="Hệ thống sẽ tự động dùng email đăng ký của bạn"
+                    value={user?.email || 'Đang tải...'}
+                    className="w-full px-4 py-3 bg-zinc-100/80 dark:bg-zinc-800/80 text-zinc-500 rounded-xl
+                               outline-none cursor-not-allowed text-sm border border-zinc-200 dark:border-zinc-700"
+                    title={t('help.form_email_title')}
                 />
             </div>
 
             {/* Nội dung */}
             <div>
-                <label className="block text-sm font-medium text-zinc-900 dark:text-white mb-1.5">Nội dung chi tiết</label>
+                <label className="block text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-2">
+                    {t('help.form_content')}
+                </label>
                 <textarea
                     required
                     rows={5}
-                    placeholder="Mô tả chi tiết vấn đề bạn gặp phải hoặc tính năng bạn mong muốn..."
+                    placeholder={t('help.form_content_placeholder')}
                     value={formData.content}
                     onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                    className="w-full px-4 py-3 bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-white rounded-lg outline-none focus:ring-2 focus:ring-green-500 text-sm placeholder-zinc-400 resize-none border border-zinc-200 dark:border-zinc-700 transition-all"
+                    className="w-full px-4 py-3 bg-zinc-100/80 dark:bg-zinc-800/80 text-zinc-900 dark:text-white
+                               rounded-xl outline-none focus:ring-2 focus:ring-green-500/60 text-sm
+                               placeholder-zinc-400 resize-none border border-zinc-200 dark:border-zinc-700
+                               focus:border-green-500/40 transition-all duration-200"
                 />
             </div>
 
-            {/* Submit Button */}
+            {/* Submit */}
             <button
                 type="submit"
-                disabled={isLoading || !user} // Disable nếu đang gửi hoặc chưa có user
-                className="w-full py-3 mt-2 bg-green-500 hover:bg-green-600 text-white font-bold rounded-full transition-transform active:scale-95 flex items-center justify-center gap-2 disabled:opacity-50"
+                disabled={isLoading || !user}
+                className="w-full py-3 mt-1 bg-green-500 hover:bg-green-600 active:scale-95
+                           text-white font-bold rounded-xl transition-all duration-200
+                           flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed
+                           shadow-lg shadow-green-500/25 hover:shadow-green-500/40"
             >
-                {isLoading ? <Loader2 size={18} className="animate-spin" /> : <Send size={18} />}
-                {isLoading ? 'Đang xử lý...' : 'Gửi yêu cầu'}
+                {isLoading ? (
+                    <><Loader2 size={17} className="animate-spin" /> {t('help.processing')}</>
+                ) : (
+                    <><Send size={17} /> {t('help.submit')}</>
+                )}
             </button>
 
-            <div className="flex items-start gap-2 text-xs text-zinc-500 mt-4 bg-zinc-50 dark:bg-zinc-800/50 p-3 rounded-lg border border-zinc-100 dark:border-zinc-700">
-                <AlertCircle size={16} className="shrink-0 mt-0.5 text-blue-500" />
-                <p>Mọi thông báo cập nhật tình trạng xử lý sẽ được gửi trực tiếp vào email <strong>{user?.email}</strong> của bạn.</p>
-            </div>
+            {/* Success toast */}
+            <AnimatePresence>
+                {sent && (
+                    <motion.div
+                        initial={{ opacity: 0, y: 8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 8 }}
+                        className="flex items-center gap-2.5 p-3.5 rounded-xl bg-green-500/10 border border-green-500/25 text-green-600 dark:text-green-400"
+                    >
+                        <CheckCircle2 size={17} className="flex-shrink-0" />
+                        <p className="text-sm font-medium">{t('help.success')}</p>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            {/* Info note */}
+            {!sent && (
+                <div className="flex items-start gap-2.5 text-xs text-zinc-500 p-3.5 rounded-xl
+                                bg-zinc-100/60 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700/60">
+                    <Info size={14} className="shrink-0 mt-0.5 text-blue-500" />
+                    <p>{t('help.note_1')}&nbsp;
+                        <span className="font-semibold text-zinc-700 dark:text-zinc-300">{user?.email || '...'}</span> {t('help.note_2')}
+                    </p>
+                </div>
+            )}
         </form>
     );
 };

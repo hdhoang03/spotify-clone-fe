@@ -1,73 +1,110 @@
-import { Copyright } from 'lucide-react';
+import { Copyright, ExternalLink } from 'lucide-react';
 import { ICONS } from '../../constants/icons';
+import { useTranslation } from 'react-i18next';
 
-// Style chung cho Link để dễ sửa sau này
-const LINK_STYLE = "text-zinc-500 dark:text-zinc-400 hover:text-green-600 dark:hover:text-white hover:underline text-sm transition-colors cursor-pointer";
-
-const FooterColumn = ({ title, links }: { title: string, links: string[] }) => (
-    <div className="flex flex-col gap-3">
-        <h4 className="font-bold text-zinc-900 dark:text-white text-base">
-            {title}
-        </h4>
-        <div className="flex flex-col gap-2">
-            {links.map((link, index) => (
-                <a key={index} href="#" className={LINK_STYLE}>
-                    {link}
-                </a>
-            ))}
-        </div>
-    </div>
-);
-
-const SocialIcon = ({ path }: { path: string }) => (
-    <div className="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300
-                    bg-zinc-200 dark:bg-zinc-800 
-                    hover:bg-zinc-300 dark:hover:bg-zinc-700 group cursor-pointer">
-        <svg viewBox="0 0 24 24" fill="currentColor"
-            className="w-5 h-5 text-zinc-900 dark:text-white transition-transform group-hover:scale-110">
+// ─── Social Icon Button ───────────────────────────────────────────────────────
+const SocialIcon = ({ href, label, path, }: { href: string; label: string; path: string; }) => (
+    <a
+        href={href}
+        target="_blank"
+        rel="noreferrer"
+        aria-label={label}
+        className="group relative w-10 h-10 flex items-center justify-center rounded-full
+                   bg-white/5 border border-white/10
+                   hover:bg-white/10 hover:border-green-500/40
+                   hover:shadow-[0_0_16px_rgba(34,197,94,0.25)]
+                   transition-all duration-300"
+    >
+        <svg
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            className="w-[18px] h-[18px] text-zinc-400 transition-colors duration-300"
+        >
             <path d={path} />
         </svg>
-    </div>
+    </a>
 );
 
+// ─── Bottom Legal Link ────────────────────────────────────────────────────────
+const LegalLink = ({ label }: { label: string }) => (
+    <span className="text-zinc-600 dark:text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200
+                     text-xs transition-colors duration-200 cursor-pointer select-none">
+        {label}
+    </span>
+);
+
+// ─── Footer ──────────────────────────────────────────────────────────────────
 const Footer = () => {
+    const year = new Date().getFullYear();
+    const { t } = useTranslation();
+
     return (
-        <footer className="mt-20 pt-10 pb-20 border-t transition-colors duration-300
-                        bg-zinc-50 dark:bg-black border-zinc-200 dark:border-zinc-800 p-6">
+        <footer className="relative overflow-hidden mt-20
+                           bg-zinc-50 dark:bg-zinc-950/80
+                           border-t border-zinc-200/60 dark:border-white/[0.06]">
 
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-y-10 gap-x-6 mb-12 px-6">
-                <FooterColumn title="Công ty" links={['Giới thiệu', 'Việc làm', 'For the Record']} />
-                <FooterColumn title="Cộng đồng" links={['Dành cho Nghệ sĩ', 'Nhà phát triển', 'Quảng cáo', 'Nhà đầu tư', 'Nhà cung cấp']} />
-                <FooterColumn title="Liên kết hữu ích" links={['Hỗ trợ', 'Trình phát Web miễn phí', 'Sách nói']} />
+            {/* Ambient glow — chỉ hiện trong dark mode */}
+            <div className="pointer-events-none absolute -top-32 left-1/2 -translate-x-1/2
+                            w-[600px] h-40 rounded-full
+                            bg-green-500/5 blur-3xl dark:bg-green-500/8" />
 
-                {/* Social Icons - Move to separate column or span */}
-                <div className="col-span-2 md:col-span-1 lg:col-span-2 flex justify-start md:justify-end gap-4">
-                    <a href="http://www.instagram.com/hoang.ho3/" target="_blank" rel="noreferrer">
-                        <SocialIcon path={ICONS.facebook} />
-                    </a>
+            <div className="relative max-w-screen-xl mx-auto px-6 pt-12 pb-6 space-y-10">
 
-                    <a href="http://www.facebook.com/thotslayer213" target="_blank" rel="noreferrer">
-                        <SocialIcon path={ICONS.instagram} />
-                    </a>
+                {/* ── Brand + Tagline + Socials ── */}
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
 
-                    <a href="https://www.reddit.com/user/Hide_on_bush003/" target="_blank" rel="noreferrer">
-                        <SocialIcon path={ICONS.reddit} />
-                    </a>
+                    {/* Brand */}
+                    <div className="flex items-center gap-3">
+                        <div>
+                            <p className="text-base font-bold text-zinc-900 dark:text-white tracking-tight">
+                                SpringTunes
+                            </p>
+                            <p className="text-xs text-zinc-500 dark:text-zinc-500 leading-none mt-0.5">
+                                {t('home.limit')}
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* Social Icons */}
+                    <div className="flex items-center gap-3">
+                        <SocialIcon
+                            href="https://www.facebook.com/thotslayer213"
+                            label="Facebook"
+                            path={ICONS.facebook}
+                        />
+                        <SocialIcon
+                            href="https://www.instagram.com/hoang.ho3/"
+                            label="Instagram"
+                            path={ICONS.instagram}
+                        />
+                        <SocialIcon
+                            href="https://www.reddit.com/user/Hide_on_bush003/"
+                            label="Reddit"
+                            path={ICONS.reddit}
+                        />
+                    </div>
                 </div>
-            </div>
 
-            <div className="px-6"><hr className="mb-8 border-zinc-200 dark:border-zinc-800" /></div>
+                {/* ── Divider ── */}
+                <div className="h-px bg-gradient-to-r from-transparent via-zinc-300 dark:via-white/10 to-transparent" />
 
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 text-xs px-6 pb-8
-                            text-zinc-500 dark:text-zinc-400">
-                <div className="flex flex-wrap gap-x-6 gap-y-2">
-                    {['Pháp lý', 'Trung tâm bảo mật', 'Quyền riêng tư', 'Cookie', 'Quảng cáo'].map(item => (
-                        <a key={item} href="#" className="hover:text-zinc-900 dark:hover:text-white transition-colors">{item}</a>
-                    ))}
-                </div>
-                <div className="flex items-center gap-1 opacity-80">
-                    <Copyright size={14} />
-                    <span>2025 SpringTunes with ❤️</span>
+                {/* ── Bottom Bar ── */}
+                <div className="flex flex-col sm:flex-row items-start sm:items-center
+                                justify-between gap-3 pb-4">
+
+                    {/* Legal links */}
+                    {/* <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+                        {['Pháp lý', 'Quyền riêng tư', 'Cookie', 'Quảng cáo'].map(item => (
+                            <LegalLink key={item} label={item} />
+                        ))}
+                    </div> */}
+
+                    {/* Copyright */}
+                    <div className="flex items-center gap-1.5 text-zinc-500 dark:text-zinc-600 text-xs shrink-0">
+                        <Copyright size={12} />
+                        <span>{year} SpringTunes · Made with ❤️</span>
+                        <ExternalLink size={10} className="opacity-40" />
+                    </div>
                 </div>
             </div>
         </footer>

@@ -1,8 +1,9 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, X } from 'lucide-react';
 import { useSearchStore } from '../../hooks/useSearch';
-import { useLocation, useNavigate } from 'react-router-dom'; // Thêm hook
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 interface SearchInputProps {
     activeTab: string;
@@ -10,6 +11,7 @@ interface SearchInputProps {
 }
 
 const SearchInput = ({ onTabChange, activeTab }: SearchInputProps) => {
+    const { t } = useTranslation();
     const [isOpen, setIsOpen] = useState(false);
     const { query, setQuery, clearQuery } = useSearchStore();
     const inputRef = useRef<HTMLInputElement>(null);
@@ -17,9 +19,26 @@ const SearchInput = ({ onTabChange, activeTab }: SearchInputProps) => {
     const navigate = useNavigate();
     const previousState = useRef({ path: "/", tab: "HOME" });
 
+    // Tự động đóng và xóa chữ khi rời khỏi tab SEARCH
+    useEffect(() => {
+        if (activeTab !== 'SEARCH' && isOpen) {
+            setIsOpen(false);
+            clearQuery();
+        }
+    }, [activeTab, isOpen, clearQuery]);
+
+    // Focus cực nhanh (50ms) để không bị giật layout nhưng vẫn đem lại cảm giác tức thì
+    useEffect(() => {
+        if (isOpen) {
+            const timeoutId = setTimeout(() => {
+                inputRef.current?.focus();
+            }, 50);
+            return () => clearTimeout(timeoutId);
+        }
+    }, [isOpen]);
+
     const handleToggleSearch = () => {
         if (!isOpen) {
-            // Chỉ lưu trạng thái cũ nếu hiện tại KHÔNG PHẢI là tab SEARCH
             if (activeTab !== 'SEARCH') {
                 previousState.current = {
                     path: location.pathname,
@@ -35,24 +54,24 @@ const SearchInput = ({ onTabChange, activeTab }: SearchInputProps) => {
 
     const closeSearch = () => {
         setIsOpen(false);
-        // 1. Quay lại Path cũ (Ví dụ: /artist/1)
         navigate(previousState.current.path);
-        // 2. Cập nhật lại State ở App/MainLayout để hiển thị đúng component
         onTabChange(previousState.current.tab);
     };
 
     const handleClearOrClose = () => {
-        if (query !== "") {
+        if (query === "") {
+            closeSearch();
+        } else {
             clearQuery();
             inputRef.current?.focus();
-        } else {
-            closeSearch();
         }
-    }
+    };
 
     return (
-        <div className="relative flex items-center h-12">
+        <div className="flex items-center justify-end">
             <motion.div
+                initial={false}
+                transition={{ type: "spring", stiffness: 400, damping: 30 }}
                 animate={{ width: isOpen ? 360 : 48 }}
                 className={`flex items-center rounded-full overflow-hidden transition-colors ${isOpen ? 'bg-zinc-100 dark:bg-zinc-800 shadow-inner' : 'hover:bg-zinc-100 dark:hover:bg-zinc-800/50'
                     }`}
@@ -64,18 +83,19 @@ const SearchInput = ({ onTabChange, activeTab }: SearchInputProps) => {
                 <AnimatePresence>
                     {isOpen && (
                         <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
+                            // Thêm nhẹ scale để input có cảm giác bung ra tự nhiên
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.95 }}
+                            transition={{ duration: 0.15 }}
                             className="flex-1 flex items-center pr-2"
                         >
                             <input
                                 ref={inputRef}
                                 value={query}
                                 onChange={(e) => setQuery(e.target.value)}
-                                className="bg-transparent border-none outline-none w-full text-sm font-medium dark:text-white"
-                                placeholder="Bạn muốn nghe gì?"
-                                autoFocus
+                                className="bg-transparent border-none outline-none focus:outline-none focus-visible:outline-none w-full text-sm font-medium dark:text-white"
+                                placeholder={t("search.placeholder")}
                             />
                             <button onClick={handleClearOrClose} className="p-1 text-zinc-400 hover:text-zinc-600">
                                 <X size={18} />
