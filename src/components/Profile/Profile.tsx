@@ -23,7 +23,7 @@ const ProfilePage = () => {
     const { profile, topTracks, playlists, following,
         playlistsWithNavigation, followingWithNavigation, publicPlaylistCount,
         isLoading, isOwnProfile, isPrivateError,
-        privateFollowing, handleToggleFollowPrivate,
+        // privateFollowing, handleToggleFollowPrivate,
         handleUpdateProfile,
         handleToggleFollowUser, openBlockConfirm, closeBlockConfirm, confirmBlockModal, handleToggleBlockUser
     } = useProfileLogic(id);
