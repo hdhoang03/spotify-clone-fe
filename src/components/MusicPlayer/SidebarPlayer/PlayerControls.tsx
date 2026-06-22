@@ -1,5 +1,5 @@
 import { Play, Pause, SkipBack, SkipForward, Shuffle, Repeat, Repeat1 } from 'lucide-react';
-import type { RepeatMode } from '../FullScreenPlayer';
+import type { RepeatMode } from '../FullScreenPlayer/FullScreenPlayer';
 
 interface PlayerControlsProps {
     isPlaying: boolean;
