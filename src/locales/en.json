@@ -67,7 +67,8 @@
 		"edit_profile": "Edit profile",
 		"share_profile": "Share profile",
 		"block_user": "Block user",
-		"your_profile": "Your profile"
+		"your_profile": "Your profile",
+		"plays": "plays"
 	},
 	"settings": {
 		"title": "Settings",
@@ -170,7 +171,8 @@
 		"save": "Save",
 		"create_new": "Create new",
 		"not_exist": "This playlist does not exist or has been deleted.",
-		"fetch_error": "Cannot load Playlist info."
+		"fetch_error": "Cannot load Playlist info.",
+		"content_unavailable": "This content is not available."
 	},
 	"library": {
 		"title": "Library",

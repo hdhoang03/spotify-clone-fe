@@ -60,6 +60,7 @@ const PopularTracks = ({ tracks, onPlayTrack, currentSongId, onTogglePlay, globa
                             isArtistView={true}
                             isActive={isCurrentSong}
                             isPlaying={isCurrentSong && (globalIsPlaying ?? false)}
+                            isDeleted={track.deleted || track.isDeleted || track.is_deleted}
                         />
                     )
                 })}

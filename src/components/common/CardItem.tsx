@@ -1,67 +1,93 @@
 import { Play } from 'lucide-react';
 import { motion } from 'framer-motion';
+import type { Variants } from 'framer-motion';
 import TiltCover from './TiltCover';
+import EqualizerBars from './EqualizerBars';
 
 interface CardItemProps {
     title: string;
     description: string;
     imageUrl?: string;
     isRound?: boolean;
+    isPlaying?: boolean;
+    isCurrent?: boolean;
     onClick?: () => void;
 }
 
-const itemVariants = {
+const itemVariants: Variants = {
     hidden: { y: 20, opacity: 0 },
-    visible: { y: 0, opacity: 1, transition: { duration: 0.4 } }
+    visible: { y: 0, opacity: 1, transition: { duration: 0.35, ease: [0.22, 1, 0.36, 1] } }
 };
 
-const CardItem = ({ title, description, imageUrl, isRound = false, onClick }: CardItemProps) => {
+const CardItem = ({
+    title, description, imageUrl,
+    isRound = false,
+    isPlaying = false,
+    isCurrent = false,
+    onClick
+}: CardItemProps) => {
     return (
         <motion.div
             variants={itemVariants}
             onClick={onClick}
-            className="group p-3 rounded-2xl cursor-pointer transition-all duration-500
-                       hover:bg-black/5 dark:hover:bg-white/5 active:scale-95"
+            className={`
+                group p-3 rounded-2xl cursor-pointer transition-all duration-300 relative
+                ${isCurrent
+                    ? 'bg-green-500/[0.07] dark:bg-green-500/[0.05] ring-1 ring-green-500/20'
+                    : 'hover:bg-zinc-100 dark:hover:bg-white/[0.06]'
+                }
+                active:scale-[0.97]
+            `}
         >
-            {/* Cover — TiltCover 3D effect */}
-            <div className="mb-4 relative">
+            {/* Cover */}
+            <div className="mb-3 relative">
                 <TiltCover
                     src={imageUrl}
                     alt={title}
-                    sizeClass="w-full aspect-square shadow-md"
+                    sizeClass="w-full aspect-square"
                     radiusClass={isRound ? 'rounded-full' : 'rounded-xl'}
-                    maxTilt={7}
+                    maxTilt={6}
                     onClick={onClick}
                     hoverOverlay={
-                        /* Nút Play chỉ hiện với card vuông (playlist), không hiện với artist (tròn) */
                         !isRound ? (
-                            <div className="absolute inset-0 flex items-end justify-end p-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <div className="absolute inset-0 flex items-end justify-end p-2.5
+                                            opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                                 <motion.button
-                                    initial={{ opacity: 0, y: 8 }}
-                                    animate={{ opacity: 1, y: 0 }}
                                     whileHover={{ scale: 1.1 }}
-                                    whileTap={{ scale: 0.95 }}
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        onClick?.();
-                                    }}
-                                    className="w-10 h-10 md:w-12 md:h-12 bg-green-500 dark:bg-[#1ed760] rounded-full
-                                               flex items-center justify-center shadow-[0_4px_15px_rgba(34,197,94,0.3)] dark:shadow-[0_4px_15px_rgba(30,215,96,0.3)] text-black hover:scale-105"
+                                    whileTap={{ scale: 0.92 }}
+                                    onClick={(e) => { e.stopPropagation(); onClick?.(); }}
+                                    className="w-10 h-10 md:w-11 md:h-11 bg-green-500 rounded-full
+                                               flex items-center justify-center
+                                               shadow-[0_8px_24px_rgba(30,215,96,0.45)]
+                                               text-black"
                                 >
-                                    <Play fill="black" size={18} className="ml-0.5" />
+                                    <Play fill="black" size={16} className="ml-0.5" />
                                 </motion.button>
                             </div>
                         ) : undefined
                     }
                 />
+
+                {/* Playing equalizer badge — bottom-left corner of cover */}
+                {isCurrent && isPlaying && !isRound && (
+                    <div className="absolute bottom-2 left-2 p-1 bg-black/50 backdrop-blur-md rounded-md pointer-events-none">
+                        <EqualizerBars />
+                    </div>
+                )}
+
+                {/* Shadow under card */}
+                {!isRound && (
+                    <div className="absolute -bottom-1 left-2 right-2 h-4 bg-black/[0.08] dark:bg-black/20 blur-md rounded-xl -z-10" />
+                )}
             </div>
 
-            {/* Content */}
-            <div className="flex flex-col gap-1">
-                <h3 className="font-bold text-base truncate text-zinc-900 dark:text-white">
+            {/* Info */}
+            <div className="flex flex-col gap-0.5 px-0.5">
+                <h3 className={`font-bold text-sm truncate transition-colors duration-150
+                    ${isCurrent ? 'text-green-500 dark:text-green-400' : 'text-zinc-900 dark:text-white'}`}>
                     {title}
                 </h3>
-                <p className="text-sm text-zinc-500 dark:text-zinc-400 line-clamp-2">
+                <p className="text-xs text-zinc-500 dark:text-zinc-400 line-clamp-2 leading-snug">
                     {description}
                 </p>
             </div>

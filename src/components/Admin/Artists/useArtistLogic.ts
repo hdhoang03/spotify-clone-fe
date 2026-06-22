@@ -93,13 +93,11 @@ export const useArtistLogic = () => {
     // THỰC THI GỌI API
     const handleFormSubmit = async (formData: FormData) => {
         try {
-            const config = { headers: { 'Content-Type': 'multipart/form-data' } };
-
             if (selectedArtist) {
-                await api.put(`/artist/${selectedArtist.id}/update`, formData, config);
+                await api.put(`/artist/${selectedArtist.id}/update`, formData);
                 alert("Cập nhật nghệ sĩ thành công!");
             } else {
-                await api.post('/artist/create', formData, config);
+                await api.post('/artist/create', formData);
                 alert("Thêm nghệ sĩ mới thành công!");
             }
             closeModal();

@@ -1,7 +1,9 @@
 import { useEffect, useRef } from 'react';
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8080';
-const SSE_ENDPOINT = `${BASE_URL}/notification/stream`;
+import api from '../services/api';
+
+// Hàm lấy endpoint dựa vào baseURL hiện tại của api (để hỗ trợ fallback URL)
+const getSseEndpoint = () => `${api.defaults.baseURL}/sse/subscribe`;
 
 // Thời gian chờ tối đa để xác nhận SSE kết nối được
 const SSE_CONNECT_TIMEOUT_MS = 5000;
@@ -13,8 +15,8 @@ const FALLBACK_POLL_MS = 30000;
 interface UseNotificationSSEOptions {
     /** Có user đang đăng nhập không (SSE chỉ kết nối khi có user) */
     enabled: boolean;
-    /** Callback được gọi mỗi khi server push số thông báo chưa đọc mới */
-    onUnreadCount: (count: number) => void;
+    /** Callback được gọi mỗi khi server push 1 notification mới đến */
+    onNewNotification: () => void;
     /** Fallback: hàm fetch count thủ công (dùng khi SSE không khả dụng) */
     fetchCount: () => Promise<void>;
 }
@@ -22,20 +24,21 @@ interface UseNotificationSSEOptions {
 /**
  * Hook quản lý kết nối SSE để nhận thông báo real-time từ server.
  *
- * Chiến lược:
- *  1. Mở EventSource tới /notification/stream (yêu cầu token qua query param vì
- *     EventSource không hỗ trợ custom header).
- *  2. Nếu server không hỗ trợ SSE hoặc kết nối thất bại sau SSE_CONNECT_TIMEOUT_MS,
- *     tự động fallback sang polling mỗi FALLBACK_POLL_MS giây.
- *  3. Tạm dừng hoàn toàn khi tab bị ẩn (Page Visibility API).
- *  4. Tự reconnect sau SSE_RECONNECT_DELAY_MS nếu SSE bị ngắt đột ngột.
+ * Backend (RabbitMQ → SseService) gửi event tên "NOTIFICATION" với data là JSON object.
+ * Hook này lắng nghe event đó và gọi onNewNotification() để trigger re-fetch count.
+ *
+ * Endpoint: GET /sse/subscribe  (JWT được gắn qua Authorization header thông qua
+ *           fetch + ReadableStream polyfill — hoặc dùng token qua query param nếu
+ *           backend cho phép).
+ *
+ * Vì EventSource không hỗ trợ custom header, ta truyền JWT qua ?token=...
+ * và backend cần đọc token từ query param trong SecurityConfig.
  */
 export const useNotificationSSE = ({
     enabled,
-    onUnreadCount,
+    onNewNotification,
     fetchCount,
 }: UseNotificationSSEOptions) => {
-    // Ref để track xem SSE có đang hoạt động không (tránh bật fallback poll song song)
     const sseActiveRef = useRef(false);
     const eventSourceRef = useRef<EventSource | null>(null);
     const fallbackIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -50,52 +53,43 @@ export const useNotificationSSE = ({
 
         // Fetch ngay khi mount
         fetchCount();
-
         connectSSE();
 
-        // Xử lý tab visibility
+        // Tạm dừng/tiếp tục khi tab bị ẩn
         const handleVisibilityChange = () => {
             if (document.visibilityState === 'visible') {
-                fetchCount(); // Fetch ngay khi quay lại tab
+                fetchCount();
                 if (!sseActiveRef.current) {
-                    // SSE đang dùng fallback → restart interval
                     startFallbackPolling();
                 }
-                // Nếu SSE đã active thì không cần làm gì, server sẽ push
             } else {
                 stopFallbackPolling();
-                // Không đóng SSE khi ẩn tab — giữ kết nối để nhận event khi quay lại
             }
         };
 
         document.addEventListener('visibilitychange', handleVisibilityChange);
-
         return () => {
             document.removeEventListener('visibilitychange', handleVisibilityChange);
             cleanup();
         };
     }, [enabled]);
 
-    const getToken = (): string | null => {
-        return localStorage.getItem('token');
-    };
+    const getToken = (): string | null => localStorage.getItem('token');
 
     const connectSSE = () => {
         const token = getToken();
         if (!token) {
-            // Không có token → dùng polling
             startFallbackPolling();
             return;
         }
 
         // EventSource không hỗ trợ Authorization header
-        // → truyền token qua query param (backend cần hỗ trợ ?token=...)
-        const url = `${SSE_ENDPOINT}?token=${encodeURIComponent(token)}`;
+        // → truyền JWT qua query param (backend SecurityConfig cần cho phép)
+        const url = `${getSseEndpoint()}?access_token=${encodeURIComponent(token)}`;
         const es = new EventSource(url, { withCredentials: false });
         eventSourceRef.current = es;
 
-        // Đặt timeout: nếu sau SSE_CONNECT_TIMEOUT_MS chưa nhận được event nào
-        // → coi như backend không hỗ trợ SSE, fallback polling
+        // Timeout fallback nếu không nhận được event nào
         connectTimeoutRef.current = setTimeout(() => {
             if (!sseActiveRef.current) {
                 console.warn('[SSE] Không nhận được event sau timeout → fallback polling');
@@ -104,21 +98,24 @@ export const useNotificationSSE = ({
             }
         }, SSE_CONNECT_TIMEOUT_MS);
 
-        // Server gửi event tên "unread-count" với data là số nguyên
-        es.addEventListener('unread-count', (e: MessageEvent) => {
+        // Backend gửi "INIT" khi vừa subscribe thành công
+        es.addEventListener('INIT', () => {
             clearTimeout(connectTimeoutRef.current!);
             sseActiveRef.current = true;
-            stopFallbackPolling(); // Hủy polling nếu đang chạy
-            const count = parseInt(e.data, 10);
-            if (!isNaN(count)) {
-                onUnreadCount(count);
-            }
+            stopFallbackPolling();
+            console.info('[SSE] Kết nối thành công');
         });
 
-        // Heartbeat event (server gửi định kỳ để giữ kết nối sống)
-        es.addEventListener('ping', () => {
+        // Backend (RabbitMQConsumerService → SseService.sendNotification) gửi event "NOTIFICATION"
+        // với data là NotificationResponse JSON object
+        es.addEventListener('NOTIFICATION', () => {
             sseActiveRef.current = true;
             clearTimeout(connectTimeoutRef.current!);
+            stopFallbackPolling();
+            // Re-fetch count để cập nhật badge số thông báo chưa đọc
+            fetchCount();
+            // Thông báo cho component cha biết có notification mới
+            onNewNotification();
         });
 
         es.onerror = () => {
@@ -127,10 +124,8 @@ export const useNotificationSSE = ({
             sseActiveRef.current = false;
             eventSourceRef.current = null;
 
-            // Bật polling tạm trong thời gian chờ reconnect
             startFallbackPolling();
 
-            // Thử reconnect sau một khoảng thời gian
             reconnectTimerRef.current = setTimeout(() => {
                 stopFallbackPolling();
                 connectSSE();
@@ -139,8 +134,8 @@ export const useNotificationSSE = ({
     };
 
     const startFallbackPolling = () => {
-        if (fallbackIntervalRef.current) return; // Đã đang chạy
-        if (document.visibilityState !== 'visible') return; // Tab đang ẩn
+        if (fallbackIntervalRef.current) return;
+        if (document.visibilityState !== 'visible') return;
         fallbackIntervalRef.current = setInterval(fetchCount, FALLBACK_POLL_MS);
     };
 
@@ -152,12 +147,9 @@ export const useNotificationSSE = ({
     };
 
     const cleanup = () => {
-        // Đóng SSE
         eventSourceRef.current?.close();
         eventSourceRef.current = null;
         sseActiveRef.current = false;
-
-        // Dọn tất cả timer
         stopFallbackPolling();
         if (reconnectTimerRef.current) clearTimeout(reconnectTimerRef.current);
         if (connectTimeoutRef.current) clearTimeout(connectTimeoutRef.current);

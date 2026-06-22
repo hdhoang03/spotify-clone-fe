@@ -1,7 +1,12 @@
 import axios from 'axios';
 
+const BASE_URLS = ['http://localhost:8080/spotify', 'http://localhost:8081/spotify'];
+let currentBaseUrlIndex = 0;
+
+export const getBaseUrl = () => BASE_URLS[currentBaseUrlIndex];
+
 const api = axios.create({
-    baseURL: 'http://localhost:8080/spotify',
+    baseURL: getBaseUrl(),
 
     // baseURL: 'https://df59rvhz-8080.asse.devtunnels.ms/spotify',
     // headers: { 'Content-Type': 'application/json' },
@@ -36,6 +41,25 @@ api.interceptors.response.use(
     (response) => response,
     async (error) => {
         const originalRequest = error.config;
+
+        // Xử lý fallback URL nếu bị lỗi Network
+        if (error.code === 'ERR_NETWORK' && !originalRequest._retryUrl) {
+            originalRequest._retryUrl = true;
+            // Chuyển sang URL dự phòng
+            currentBaseUrlIndex = (currentBaseUrlIndex + 1) % BASE_URLS.length;
+            const newUrl = getBaseUrl();
+            
+            api.defaults.baseURL = newUrl;
+            originalRequest.baseURL = newUrl;
+
+            // Fix lỗi FormData khi Retry bị mất boundary
+            if (originalRequest.data instanceof FormData) {
+                delete originalRequest.headers['Content-Type'];
+            }
+            
+            return api(originalRequest);
+        }
+
         let token = localStorage.getItem('token');
         if (token === 'null' || token === 'undefined') token = null;
 
@@ -55,7 +79,7 @@ api.interceptors.response.use(
             isRefreshing = true;
 
             try {
-                const res = await axios.post('http://localhost:8080/spotify/auth/refresh', { token });
+                const res = await axios.post(`${getBaseUrl()}/auth/refresh`, { token });
 
                 if (res.data.code === 1000) {
                     const newToken = res.data.result.token;

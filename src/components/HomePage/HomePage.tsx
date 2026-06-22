@@ -17,26 +17,18 @@ const HomePage = () => {
     const [isFollowingMode, setIsFollowingMode] = useState(false);
 
     const navigate = useNavigate();
-    const { playRadio } = useMusic();
+    const { playRadio, currentSong, isPlaying } = useMusic();
 
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(() => {
         const userString = localStorage.getItem('user');
         return !!(userString && userString !== 'undefined');
     });
 
-    /**
-     * Phát nhạc từ trang chủ theo chế độ Radio.
-     * @param song Bài hát vừa click
-     * @param queue Toàn bộ danh sách bài để tạo queue (có thể là topStreamed, topLiked hoặc cả hai)
-     */
     const handlePlaySong = (song: any, queue: any[]) => {
-        // 1. Nếu bài hát bị lỗi (không có audio)
         if (!song?.audioUrl) {
             navigate(`/song/${song.id}`);
             return;
         }
-
-        // 2. Phát Radio! (Cho phép cả khách và thành viên phát)
         const validQueue = queue.filter(s => !!s?.audioUrl);
         const startIndex = validQueue.findIndex(s => s.id === song.id);
         playRadio(validQueue, startIndex >= 0 ? startIndex : 0, t('home.playing_randomly'));
@@ -47,7 +39,6 @@ const HomePage = () => {
             const userString = localStorage.getItem('user');
             setIsLoggedIn(!!(userString && userString !== 'undefined'));
         };
-
         window.addEventListener('user-update', checkLoginStatus);
         return () => window.removeEventListener('user-update', checkLoginStatus);
     }, []);
@@ -55,7 +46,22 @@ const HomePage = () => {
     const { data, isLoading } = useHomeData(activeTab, isFollowingMode);
 
     return (
-        <div className="w-full min-h-screen bg-transparent overflow-x-hidden">
+        <div className="w-full min-h-screen bg-transparent overflow-x-hidden relative">
+
+            {/* ── Ambient orbs (subtle depth, 2026 aesthetic) ── */}
+            <div
+                aria-hidden="true"
+                className="pointer-events-none absolute top-0 right-0 w-[520px] h-[520px]
+                           rounded-full opacity-[0.07] dark:opacity-[0.04]
+                           bg-green-400 blur-[140px] -translate-y-1/4 translate-x-1/4"
+            />
+            <div
+                aria-hidden="true"
+                className="pointer-events-none absolute top-1/2 left-0 w-[460px] h-[460px]
+                           rounded-full opacity-[0.06] dark:opacity-[0.03]
+                           bg-violet-500 blur-[160px] -translate-x-1/3"
+            />
+
             <FilterBar
                 activeTab={activeTab}
                 onTabChange={(tab) => {
@@ -67,7 +73,7 @@ const HomePage = () => {
                 isLoggedIn={isLoggedIn}
             />
 
-            <div className="px-4 md:px-8 mt-6 space-y-8 min-h-[50vh]">
+            <div className="px-4 md:px-8 mt-2 space-y-2 min-h-[50vh] relative z-10">
                 {isLoading ? (
                     <div className="w-full h-64 flex items-center justify-center gap-3">
                         <Loader2 className="animate-spin text-green-500" size={28} />
@@ -75,7 +81,7 @@ const HomePage = () => {
                     </div>
                 ) : (
                     <>
-                        {/* --- TAB ALL HOẶC TAB MUSIC --- */}
+                        {/* ── Music & All tabs ── */}
                         {activeTab !== 'ARTIST' && (
                             <>
                                 {data.topStreamedSongs.length > 0 && (
@@ -86,6 +92,8 @@ const HomePage = () => {
                                                 title={song.title}
                                                 description={song.artist}
                                                 imageUrl={song.coverUrl}
+                                                isCurrent={currentSong?.id === song.id}
+                                                isPlaying={currentSong?.id === song.id && isPlaying}
                                                 onClick={() => handlePlaySong(song, data.topStreamedSongs)}
                                             />
                                         ))}
@@ -115,7 +123,7 @@ const HomePage = () => {
                             </>
                         )}
 
-                        {/* --- TAB ARTIST (hiện trong ALL + tab ARTIST riêng) --- */}
+                        {/* ── Artist tab ── */}
                         {(activeTab === 'ALL' || activeTab === 'ARTIST') && data.artists.length > 0 && (
                             <Section title={isFollowingMode ? t('home.following_artists') : t('home.featured_artists')}>
                                 {data.artists.map((artist) => (
@@ -131,13 +139,13 @@ const HomePage = () => {
                             </Section>
                         )}
 
-                        {/* Trống khi bật following mode */}
+                        {/* Empty following state */}
                         {isFollowingMode &&
                             data.topStreamedSongs.length === 0 &&
                             data.topLikedSongs.length === 0 &&
                             data.artists.length === 0 && (
-                                <div className="text-center py-12 text-gray-500">
-                                    {t('home.no_following')}
+                                <div className="text-center py-16 text-zinc-400 dark:text-zinc-500">
+                                    <p className="text-sm font-medium">{t('home.no_following')}</p>
                                 </div>
                             )}
                     </>

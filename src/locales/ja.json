@@ -55,7 +55,8 @@
 		"edit_profile": "プロフィールを編集",
 		"share_profile": "プロフィールを共有",
 		"block_user": "ユーザーをブロック",
-		"your_profile": "あなたのプロフィール"
+		"your_profile": "あなたのプロフィール",
+		"plays": "再生回数"
 	},
 	"settings": {
 		"title": "設定",
@@ -158,7 +159,8 @@
 		"save": "保存",
 		"create_new": "新規作成",
 		"not_exist": "このプレイリストは存在しないか、削除されました。",
-		"fetch_error": "プレイリスト情報を読み込めません。"
+		"fetch_error": "プレイリスト情報を読み込めません。",
+		"content_unavailable": "このコンテンツは利用できません。"
 	},
 	"library": {
 		"title": "ライブラリ",

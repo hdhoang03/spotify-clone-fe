@@ -16,6 +16,7 @@ export const normalizeSong = (song: any): any => ({
     isLiked: song.isLiked ?? false,
     addedAt: song.addedAt ?? null,
     likeCount: song.likeCount ?? song.streamCount ?? null, // từ TopLikeSongResponse
+    deleted: song.deleted || song.isDeleted || song.is_deleted || false,
 });
 
 export const useHomeData = (activeTab: string, isFollowingMode: boolean) => {

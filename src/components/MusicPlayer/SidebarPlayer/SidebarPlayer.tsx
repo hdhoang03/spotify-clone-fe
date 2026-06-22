@@ -8,7 +8,6 @@ import EqualizerBars from '../../common/EqualizerBars';
 import LyricsDisplay from '../shared/LyricsDisplay';
 import { useNavigate } from 'react-router-dom';
 import FullscreenLyrics from '../FullScreenPlayer/FullscreenLyrics';
-import { createPortal } from 'react-dom';
 import { useLyrics } from './useLyrics';
 import ProgressBar from './ProgressBar';
 import PlayerControls from './PlayerControls';
@@ -227,26 +226,24 @@ const SidebarPlayer = ({
                     </div>
                 </div>
 
-                <div className="h-[50vh] flex-shrink-0" />
+                {/* <div className="h-[50vh] flex-shrink-0" /> */}
             </div>
 
-            {/* ====== FULLSCREEN LYRICS PORTAL ====== */}
-            {createPortal(
-                <AnimatePresence>
-                    {isLyricsExpanded && (
-                        <FullscreenLyrics
-                            songTitle={currentSong.title}
-                            name={currentSong.artist}
-                            song={currentSong}
-                            lyrics={lyrics}
-                            currentTime={currentTime}
-                            isInstrumental={isInstrumental}
-                            onClose={() => setIsLyricsExpanded(false)}
-                        />
-                    )}
-                </AnimatePresence>,
-                document.body
-            )}
+            {/* ====== FULLSCREEN LYRICS ====== */}
+            <AnimatePresence>
+                {isLyricsExpanded && (
+                    <FullscreenLyrics
+                        key="fullscreen-lyrics-portal"
+                        songTitle={currentSong.title}
+                        name={currentSong.artist}
+                        song={currentSong}
+                        lyrics={lyrics}
+                        currentTime={currentTime}
+                        isInstrumental={isInstrumental}
+                        onClose={() => setIsLyricsExpanded(false)}
+                    />
+                )}
+            </AnimatePresence>
         </motion.div>
     );
 };

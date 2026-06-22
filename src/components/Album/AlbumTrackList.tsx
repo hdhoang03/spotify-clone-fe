@@ -54,17 +54,20 @@ const AlbumTrackList = ({
                 {songs.map((song, idx) => {
                     const isActive = song.id === currentSongId;
                     const isHovered = hoveredIdx === idx;
+                    const isDeleted = song.is_deleted;
 
                     return (
                         <tr
                             key={song.id}
+                            title={isDeleted ? t('playlist.content_unavailable') : undefined}
                             onClick={() => {
+                                if (isDeleted) return;
                                 if (isActive && onTogglePlay) onTogglePlay();
                                 else onPlaySong(idx);
                             }}
-                            onMouseEnter={() => setHoveredIdx(idx)}
-                            onMouseLeave={() => setHoveredIdx(null)}
-                            className="group cursor-pointer hover:bg-zinc-100 dark:hover:bg-white/5 transition-colors rounded-lg"
+                            onMouseEnter={() => !isDeleted && setHoveredIdx(idx)}
+                            onMouseLeave={() => !isDeleted && setHoveredIdx(null)}
+                            className={`group transition-colors rounded-lg ${isDeleted ? 'opacity-50 grayscale cursor-not-allowed' : 'cursor-pointer hover:bg-zinc-100 dark:hover:bg-white/5'}`}
                         >
                             {/* Cột STT / Equalizer / Play / Pause */}
                             <td className="py-3 w-12 text-center">

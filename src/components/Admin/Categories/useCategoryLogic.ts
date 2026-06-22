@@ -92,11 +92,10 @@ export const useCategoryLogic = () => {
     // 4. Gọi API Create/Update với FormData
     const handleSubmit = async (formData: FormData) => {
         try {
-            const config = { headers: { 'Content-Type': 'multipart/form-data' } };
             if (selectedCategory) {
-                await api.put(`/categories/update/${selectedCategory.id}`, formData, config);
+                await api.put(`/categories/update/${selectedCategory.id}`, formData);
             } else {
-                await api.post('/categories/create', formData, config);
+                await api.post('/categories/create', formData);
             }
             fetchCategories();
             closeModal();

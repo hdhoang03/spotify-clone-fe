@@ -55,7 +55,8 @@
 		"edit_profile": "Chỉnh sửa hồ sơ",
 		"share_profile": "Chia sẻ hồ sơ",
 		"block_user": "Chặn người dùng",
-		"your_profile": "Hồ sơ của bạn"
+		"your_profile": "Hồ sơ của bạn",
+		"plays": "lượt nghe"
 	},
 	"settings": {
 		"title": "Cài đặt",
@@ -158,7 +159,8 @@
 		"save": "Lưu",
 		"create_new": "Tạo mới",
 		"not_exist": "Playlist này không tồn tại hoặc đã bị xóa.",
-		"fetch_error": "Không thể tải thông tin Playlist."
+		"fetch_error": "Không thể tải thông tin Playlist.",
+		"content_unavailable": "Nội dung này không khả dụng."
 	},
 	"library": {
 		"title": "Thư viện",

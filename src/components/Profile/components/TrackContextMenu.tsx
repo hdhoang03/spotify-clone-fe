@@ -86,9 +86,7 @@ const TrackContextMenu = ({ song, onClose, position, isOwner, onRemoveFromPlayli
     const handleCreatePlaylist = async (formData: FormData) => {
         setIsLoading(true);
         try {
-            const res = await api.post('/playlist/create', formData, {
-                headers: { 'Content-Type': 'multipart/form-data' }
-            });
+            const res = await api.post('/playlist/create', formData);
             if (res.data.code === 1000) {
                 const newPlaylist = res.data.result;
                 const newPlaylistId = newPlaylist.id;

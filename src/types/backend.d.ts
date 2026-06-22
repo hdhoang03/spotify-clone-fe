@@ -41,12 +41,13 @@ export interface FeaturedArtistInfo {
 export interface SongResponse {
     id: string;
     title: string;
-    artist: string; // Tên Artist dạng text
     artistId?: string; // Cần thêm ID để link sang trang Artist
+    artist: string; // Tên Artist dạng text
+    artistAvatar?: string | null;
     albumId?: string;
     albumName?: string;
-    category?: string;
     categoryId?: string;
+    category?: string;
     coverUrl: string;
     audioUrl: string;
     uploadedBy: string;
@@ -55,6 +56,7 @@ export interface SongResponse {
     releaseDate?: string;
     playCount?: number;
     streamCount?: number;
+    is_deleted?: boolean;
     featuredArtists?: FeaturedArtistInfo[];
 }
 

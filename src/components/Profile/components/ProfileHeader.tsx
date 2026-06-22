@@ -50,7 +50,7 @@ const ProfileHeader = ({ user, isOwnProfile, onEditClick, onShowFollowers, onSho
 
     return (
         <div
-            className="relative w-full h-[38vh] md:h-[48vh] flex items-end px-6 md:px-10 pb-8 overflow-hidden"
+            className="relative w-full min-h-[380px] md:min-h-[340px] h-[40vh] md:h-[48vh] flex items-end px-6 md:px-10 pb-8 pt-24 overflow-hidden"
             style={{
                 backgroundColor: dominantColor,
                 transition: 'background-color 0.8s cubic-bezier(0.22,1,0.36,1)',

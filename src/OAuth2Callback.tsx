@@ -11,12 +11,10 @@ const OAuth2Callback = () => {
         const code = searchParams.get('code');
 
         if (code) {
-            // Gửi code xuống API backend của bạn https://cw33tbhh-8080.asse.devtunnels.ms/
-            fetch(`http://localhost:8080/spotify/auth/outbound/authentication?code=${code}`, {
-                method: 'POST',
-            })
-                .then((response) => response.json())
-                .then(async (data) => {
+            // Gửi code xuống API backend của bạn
+            api.post(`/auth/outbound/authentication?code=${code}`)
+                .then(async (response) => {
+                    const data = response.data;
                     if (data.code === 1000) {
                         // Đăng nhập thành công, lưu Token vào localStorage
                         localStorage.setItem('token', data.result.token);

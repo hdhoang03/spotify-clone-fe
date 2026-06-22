@@ -219,6 +219,7 @@ const ProfilePage = () => {
                                             artist={song.artistName}
                                             duration={song.duration || 0}
                                             streamCount={song.streamCount}
+                                            userStreamCount={song.likeCount !== undefined ? Number(song.likeCount) : undefined}
                                             onClick={() => handlePlaySong(song)}
                                             isPlaying={currentSong?.id === song.songId}
                                             isActive={currentSong?.id === song.songId}

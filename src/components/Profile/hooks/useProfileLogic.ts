@@ -206,9 +206,7 @@ export const useProfileLogic = (userId: string | undefined) => {
                 formData.append('avatar', file);
             }
 
-            const res = await api.put('/user/profile/update', formData, {
-                headers: { 'Content-Type': 'multipart/form-data' }
-            });
+            const res = await api.put('/user/profile/update', formData);
 
             if (res.data.code === 1000) {
                 const updatedUser = res.data.result;

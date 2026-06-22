@@ -133,7 +133,11 @@ const SongDetailPage = () => {
                     </div>
 
                     {/* Báo hiệu nghe thử nếu chưa đăng nhập */}
-                    {!isLoggedIn && (
+                    {songData.is_deleted ? (
+                        <div className="w-full bg-red-500/10 border border-red-500/20 rounded-2xl p-4 mb-6 text-center text-xs text-red-400 shadow-inner">
+                            Nội dung này không khả dụng. Bài hát có thể đã bị xóa.
+                        </div>
+                    ) : !isLoggedIn && (
                         <div className="w-full bg-zinc-900/60 border border-zinc-800/80 rounded-2xl p-4 mb-6 text-center text-xs text-zinc-400 shadow-inner">
                             Bạn chưa đăng nhập. Bài hát sẽ phát thử <span className="text-green-500 font-black">20 giây</span>.
                             <button
@@ -148,9 +152,10 @@ const SongDetailPage = () => {
                     {/* Nút Hành Động Phát - Tạo tương tác vật lý trực tiếp từ user để tránh lỗi Autoplay */}
                     <button
                         onClick={handlePlaySong}
-                        className="w-full bg-green-500 hover:bg-green-400 text-black font-extrabold py-3.5 rounded-full flex items-center justify-center gap-2.5 transition transform active:scale-95 shadow-lg shadow-green-500/25 text-base"
+                        disabled={songData.is_deleted}
+                        className={`w-full ${songData.is_deleted ? 'bg-zinc-800 text-zinc-600 cursor-not-allowed' : 'bg-green-500 hover:bg-green-400 text-black shadow-lg shadow-green-500/25'} font-extrabold py-3.5 rounded-full flex items-center justify-center gap-2.5 transition transform active:scale-95 text-base`}
                     >
-                        <Play fill="black" size={16} className="ml-0.5" />
+                        <Play fill={songData.is_deleted ? 'currentColor' : 'black'} size={16} className="ml-0.5" />
                         Phát bài hát ngay
                     </button>
 

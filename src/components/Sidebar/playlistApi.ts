@@ -32,15 +32,11 @@ export const playlistApi = {
 
     // 4. Tạo mới playlist (Gửi FormData vì có thể sau này cho up ảnh luôn)
     createPlaylist: (formData: FormData) =>
-        api.post('/playlist/create', formData, {
-            headers: { 'Content-Type': 'multipart/form-data' }
-        }),
+        api.post('/playlist/create', formData),
 
     // 5. Cập nhật playlist
     updatePlaylist: (playlistId: string, formData: FormData) =>
-        api.put(`/playlist/${playlistId}/update`, formData, {
-            headers: { 'Content-Type': 'multipart/form-data' }
-        }),
+        api.put(`/playlist/${playlistId}/update`, formData),
 
     // 6. Xóa playlist
     deletePlaylist: (playlistId: string) =>

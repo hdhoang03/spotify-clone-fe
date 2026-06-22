@@ -77,11 +77,10 @@ export const useAlbumLogic = () => {
 
     const handleFormSubmit = async (formData: FormData) => {
         try {
-            const config = { headers: { 'Content-Type': 'multipart/form-data' } };
             if (selectedAlbum) {
-                await api.put(`/albums/update/${selectedAlbum.id}`, formData, config);
+                await api.put(`/albums/update/${selectedAlbum.id}`, formData);
             } else {
-                await api.post('/albums/create', formData, config);
+                await api.post('/albums/create', formData);
             }
             closeModal();
             fetchAlbums();

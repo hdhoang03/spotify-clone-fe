@@ -69,6 +69,18 @@ const NotificationDropdown = ({ onClose, onUpdateUnreadCount, externalUnreadCoun
         fetchNotifications(page);
     }, [page]);
 
+    useEffect(() => {
+        const handleNewNotification = () => {
+            if (page === 1) {
+                fetchNotifications(1);
+            } else {
+                setPage(1);
+            }
+        };
+        window.addEventListener('new-notification', handleNewNotification);
+        return () => window.removeEventListener('new-notification', handleNewNotification);
+    }, [page]);
+
     const fetchNotifications = async (currentPage: number) => {
         try {
             setIsLoading(true);
@@ -154,7 +166,7 @@ const NotificationDropdown = ({ onClose, onUpdateUnreadCount, externalUnreadCoun
     const displayUnreadCount = externalUnreadCount ?? notifications.filter(n => !n.isRead).length;
 
     return (
-        <div className="fixed md:absolute z-50 right-0 top-[70px] md:top-full md:mt-2 w-[22rem] md:w-96">
+        <div className="fixed md:absolute z-50 right-2 md:right-0 top-[70px] md:top-full md:mt-2 w-[calc(100vw-1rem)] sm:w-[22rem] md:w-96">
             {/* Container chính */}
             <div className="bg-white dark:bg-zinc-900 border dark:border-white/10 rounded-2xl shadow-2xl overflow-hidden">
 

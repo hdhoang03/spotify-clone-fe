@@ -144,9 +144,7 @@ export const useSongLogic = () => {
 
     const handleCreateSubmit = async (formData: FormData) => {
         try {
-            await api.post('/song/create2', formData, {
-                headers: { 'Content-Type': 'multipart/form-data' }
-            });
+            await api.post('/song/create2', formData);
             setIsCreateModalOpen(false);
             fetchSongs();
         } catch (error: any) {
@@ -156,9 +154,7 @@ export const useSongLogic = () => {
 
     const handleUpdateSubmit = async (id: string, formData: FormData) => {
         try {
-            await api.put(`/song/update/${id}`, formData, {
-                headers: { 'Content-Type': 'multipart/form-data' }
-            });
+            await api.put(`/song/update/${id}`, formData);
             setIsUpdateModalOpen(false);
             fetchSongs();
         } catch (error: any) {

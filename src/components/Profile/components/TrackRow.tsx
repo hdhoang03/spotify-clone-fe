@@ -5,6 +5,7 @@ import TrackContextMenu from './TrackContextMenu';
 import { useNavigate } from 'react-router-dom';
 import EqualizerBars from '../../common/EqualizerBars';
 import ArtistLinks from '../../common/ArtistLinks';
+import { useTranslation } from 'react-i18next';
 
 interface TrackRowProps {
     index: number;
@@ -16,16 +17,19 @@ interface TrackRowProps {
     featuredArtists?: any[];
     duration: number;
     streamCount?: number;
+    userStreamCount?: number;
     isPlaying?: boolean;
     onClick?: () => void;
     isArtistView?: boolean;
     onTogglePlayPause?: () => void;
     isActive?: boolean;
+    isDeleted?: boolean;
 }
 
 const formatNumber = (num: number) => new Intl.NumberFormat('en-US').format(num);
 
-const TrackRow = ({ index, songId, coverUrl, title, artist, artistId, featuredArtists, duration, streamCount, isPlaying, onClick, onTogglePlayPause, isArtistView = false, isActive = false }: TrackRowProps) => {
+const TrackRow = ({ index, songId, coverUrl, title, artist, artistId, featuredArtists, duration, streamCount, userStreamCount, isPlaying, onClick, onTogglePlayPause, isArtistView = false, isActive = false, isDeleted = false }: TrackRowProps) => {
+    const { t } = useTranslation();
     const [isHovered, setIsHovered] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [menuPosition, setMenuPosition] = useState<{ x: number, y: number } | null>(null);
@@ -33,17 +37,22 @@ const TrackRow = ({ index, songId, coverUrl, title, artist, artistId, featuredAr
 
     return (
         <div
-            className={`group flex items-center justify-between p-2 md:px-4 md:py-2 rounded-md hover:bg-black/10 dark:hover:bg-white/10 transition cursor-pointer relative ${isMenuOpen ? 'z-50' : 'z-0'}`}
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-            onClick={onClick}
+            className={`group flex items-center justify-between p-2 md:px-4 md:py-2 rounded-md ${isDeleted ? 'opacity-50 grayscale cursor-not-allowed' : 'hover:bg-black/10 dark:hover:bg-white/10 cursor-pointer'} transition relative ${isMenuOpen ? 'z-50' : 'z-0'}`}
+            onMouseEnter={() => !isDeleted && setIsHovered(true)}
+            onMouseLeave={() => !isDeleted && setIsHovered(false)}
+            onClick={() => {
+                if (isDeleted) return;
+                if (onClick) onClick();
+            }}
+            title={isDeleted ? t('playlist.content_unavailable') : undefined}
         >
             {/* --- LEFT: Index & Info --- */}
             <div className="flex items-center gap-3 md:gap-4 flex-1 min-w-0">
                 <div
-                    className="w-6 text-center text-gray-500 font-medium text-sm hidden md:block cursor-pointer hover:scale-110 transition-transform"
+                    className={`w-6 text-center text-gray-500 font-medium text-sm hidden md:block transition-transform ${isDeleted ? '' : 'cursor-pointer hover:scale-110'}`}
                     onClick={(e) => {
                         e.stopPropagation();
+                        if (isDeleted) return;
                         if (isActive && onTogglePlayPause) {
                             onTogglePlayPause(); // Nếu đang là bài này thì Pause/Resume
                         } else if (onClick) {
@@ -96,6 +105,14 @@ const TrackRow = ({ index, songId, coverUrl, title, artist, artistId, featuredAr
 
             {/* --- RIGHT: Actions & Duration --- */}
             <div className="flex items-center gap-4 justify-end">
+
+                {/* Lượt nghe cá nhân user - chỉ hiện khi có userStreamCount */}
+                {userStreamCount !== undefined && (
+                    <div className="hidden md:flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400 font-variant-numeric tabular-nums">
+                        <span>{formatNumber(userStreamCount)}</span>
+                        <span className="text-xs opacity-70 text-green-500">{t('profile.plays')}</span>
+                    </div>
+                )}
 
                 {/* SỬA 3: Thêm 'hidden md:block' để ẩn số phút trên màn hình điện thoại */}
                 <div className="hidden md:block text-sm text-gray-500 dark:text-gray-400 font-variant-numeric w-10 text-right">

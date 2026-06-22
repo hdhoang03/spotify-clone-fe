@@ -3,6 +3,7 @@ import { useEffect, useRef, useCallback } from 'react';
 import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 import LyricsDisplay from '../shared/LyricsDisplay';
+import { createPortal } from 'react-dom';
 
 interface FullscreenLyricsProps {
     songTitle: string;
@@ -104,7 +105,7 @@ const FullscreenLyrics = ({ songTitle, name, song, lyrics, currentTime, isInstru
         return () => window.removeEventListener('keydown', handleKey, true);
     }, [onClose]);
 
-    return (
+    return createPortal(
         <motion.div
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
@@ -114,7 +115,6 @@ const FullscreenLyrics = ({ songTitle, name, song, lyrics, currentTime, isInstru
             style={{
                 background: 'linear-gradient(to bottom, #1a1a2e 0%, #0d0d0d 100%)',
                 y: dragY,
-                opacity,
                 scale,
             }}
             onPointerDown={onPointerDown}
@@ -152,7 +152,8 @@ const FullscreenLyrics = ({ songTitle, name, song, lyrics, currentTime, isInstru
                     expanded={true}
                 />
             </div>
-        </motion.div>
+        </motion.div>,
+        document.body
     );
 };
 

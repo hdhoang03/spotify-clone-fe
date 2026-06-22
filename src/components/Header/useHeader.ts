@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import type { UserResponse } from '../../types/backend';
 import { NotificationService } from '../../services/notificationServiceApi';
 import { AuthService } from '../../services/authService';
+import { useNotificationSSE } from '../../hooks/useNotificationSSE';
 
 
 export const useHeader = (onLoginSuccessAction?: (data: UserResponse) => void, onNavigate?: (tab: string) => void) => {
@@ -130,18 +131,14 @@ export const useHeader = (onLoginSuccessAction?: (data: UserResponse) => void, o
         }
     };
 
-    // Gọi API ngay khi user thay đổi + polling mỗi 30 giây
-    useEffect(() => {
-        if (!user) {
-            setUnreadCount(0);
-            return;
-        }
-
-        fetchUnreadCount(user); // Truyền user trực tiếp để tránh stale closure
-
-        const interval = setInterval(() => fetchUnreadCount(user), 30000);
-        return () => clearInterval(interval);
-    }, [user]);
+    useNotificationSSE({
+        enabled: !!user,
+        onNewNotification: () => {
+            console.log("New notification received via SSE!");
+            window.dispatchEvent(new Event('new-notification'));
+        },
+        fetchCount: () => fetchUnreadCount(user)
+    });
 
     return {
         user,

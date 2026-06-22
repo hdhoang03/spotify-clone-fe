@@ -124,6 +124,7 @@ const PlaylistTrackList = ({ songs, playlistId, isOwner = true, onPlaySong, onRe
                 {songs.map((song, index) => {
                     // KIỂM TRA BÀI HÁT ĐANG PHÁT
                     const isActive = currentSongId === song.id;
+                    const isDeleted = song.deleted || song.isDeleted || song.is_deleted;
 
                     return (
                         <div
@@ -133,21 +134,23 @@ const PlaylistTrackList = ({ songs, playlistId, isOwner = true, onPlaySong, onRe
                                 lg:grid-cols-[32px_minmax(120px,_4fr)_2fr_2fr_minmax(80px,_1fr)_40px]
                                 gap-3 md:gap-4 px-2 md:px-4 py-2 md:py-2.5 items-center text-sm
                                 transition-all duration-200 cursor-pointer group rounded-xl
-                                ${isActive
+                                ${isDeleted ? 'opacity-50 grayscale cursor-not-allowed' : (isActive
                                     ? 'bg-green-50/70 dark:bg-green-500/[0.08] border-l-2 border-green-500 pl-[6px] md:pl-[14px]'
-                                    : 'border-l-2 border-transparent hover:bg-zinc-50/80 dark:hover:bg-white/[0.05]'
+                                    : 'border-l-2 border-transparent hover:bg-zinc-50/80 dark:hover:bg-white/[0.05]')
                                 }
                             `}
+                            title={isDeleted ? t('playlist.content_unavailable') : undefined}
                             onContextMenu={(e) => handleContextMenu(e, song)}
-                            onClick={() => onPlaySong(index)}
-                            onMouseEnter={() => setHoveredIndex(index)}
-                            onMouseLeave={() => setHoveredIndex(null)}
+                            onClick={() => { if (!isDeleted) onPlaySong(index) }}
+                            onMouseEnter={() => !isDeleted && setHoveredIndex(index)}
+                            onMouseLeave={() => !isDeleted && setHoveredIndex(null)}
                         >
                             {/* Cột 1: STT / Equalizer / Play / Pause */}
                             <div
                                 className="text-center text-zinc-500 dark:text-zinc-400 relative w-8 hidden md:flex items-center justify-center"
                                 onClick={(e) => {
                                     e.stopPropagation();
+                                    if (isDeleted) return;
                                     if (isActive && onTogglePlay) {
                                         onTogglePlay();
                                     } else {
