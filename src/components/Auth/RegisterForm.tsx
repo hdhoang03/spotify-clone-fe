@@ -55,7 +55,8 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onRegisterSuccess, onSwitch
 
     const handleSocialLogin = (provider: string) => {
         if (provider === 'google') {
-            window.location.href = "https://accounts.google.com/o/oauth2/v2/auth?client_id=298101183026-abdfin7q175621usuv073tno9sf7r13f.apps.googleusercontent.com&redirect_uri=http://localhost:5173/oauth2/callback&response_type=code&scope=email%20profile";
+            const redirectUri = encodeURIComponent(`${window.location.origin}/oauth2/callback`);
+            window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?client_id=298101183026-abdfin7q175621usuv073tno9sf7r13f.apps.googleusercontent.com&redirect_uri=${redirectUri}&response_type=code&scope=email%20profile`;
         } else {
             alert(`Chức năng đăng nhập bằng ${provider} sẽ sớm được tích hợp!`);
         }
