@@ -1,15 +1,28 @@
 import axios from 'axios';
 
-const BASE_URLS = ['http://localhost:8080/spotify', 'http://localhost:8081/spotify'];
+// Lấy URL từ biến môi trường (nếu có, hỗ trợ cho production), ngược lại dùng localhost
+const envApiUrl = import.meta.env.VITE_API_URL;
+
+let defaultUrls = ['http://localhost:8080/spotify', 'http://localhost:8081/spotify'];
+// Tự động ưu tiên link ngrok nếu không chạy ở localhost (đang chạy trên Vercel)
+if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+    defaultUrls = ['https://faf8-171-244-205-251.ngrok-free.app/spotify', ...defaultUrls];
+}
+
+const BASE_URLS = envApiUrl 
+    ? envApiUrl.split(',').map((url: string) => url.trim()) 
+    : defaultUrls;
+
 let currentBaseUrlIndex = 0;
 
 export const getBaseUrl = () => BASE_URLS[currentBaseUrlIndex];
 
 const api = axios.create({
     baseURL: getBaseUrl(),
-
-    // baseURL: 'https://df59rvhz-8080.asse.devtunnels.ms/spotify',
-    // headers: { 'Content-Type': 'application/json' },
+    headers: {
+        // Cực kỳ quan trọng: Header này giúp API vượt qua màn hình cảnh báo (Warning) của ngrok
+        'ngrok-skip-browser-warning': 'true'
+    }
 });
 
 // 1. Request Interceptor: Tự đính kèm Token vào mỗi yêu cầu
