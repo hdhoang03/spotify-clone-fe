@@ -141,7 +141,7 @@ const ExtraInfo = ({ name, artistId, songId, songTitle, currentTime, onCollapse,
                                 lyrics={lyrics}
                                 currentTime={currentTime}
                                 isInstrumental={isInstrumental}
-                                expanded={false}
+                                expanded={false} className='max-h-60'
                             />
                         )}
                     </div>

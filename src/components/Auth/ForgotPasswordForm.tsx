@@ -49,7 +49,7 @@ const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({ onSubmitSuccess
                     disabled={isLoading || !email}
                     className="w-full bg-green-500 hover:bg-green-600 disabled:opacity-50 text-black font-bold py-3.5 rounded-full transition flex items-center justify-center gap-2"
                 >
-                    {isLoading ? <Loader2 className="animate-spin" size={18} /> : "Gửi mã OTP"}
+                    {isLoading ? <Loader2 className="animate-spin" size={18} /> : "Send OTP"}
                 </button>
 
                 {/* Nút Back custom cho Modal */}

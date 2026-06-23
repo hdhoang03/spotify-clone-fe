@@ -115,10 +115,50 @@ const TrackContextMenu = ({ song, onClose, position, isOwner, onRemoveFromPlayli
     // Click outside để đóng toàn bộ Menu
     useEffect(() => {
         const handleClickOutside = (e: MouseEvent) => {
-            if (menuRef.current && !menuRef.current.contains(e.target as Node)) onClose();
+            const target = e.target as HTMLElement;
+            if (target && target.closest('.track-menu-trigger')) {
+                // Click vào bất kỳ nút 3 chấm nào -> bỏ qua, để onClick tự xử lý
+                return;
+            }
+            if (menuRef.current && !menuRef.current.contains(target)) onClose();
         };
         document.addEventListener('mousedown', handleClickOutside);
         return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, [onClose]);
+
+    // Cuộn trang quá 20px để tự ẩn Menu
+    useEffect(() => {
+        const scrollStates = new Map<EventTarget, { top: number; left: number }>();
+
+        const handleScroll = (e: Event) => {
+            const target = e.target;
+            if (!target) return;
+
+            let currentTop = 0;
+            let currentLeft = 0;
+
+            if (target === document || target === window) {
+                currentTop = window.scrollY || window.pageYOffset || 0;
+                currentLeft = window.scrollX || window.pageXOffset || 0;
+            } else if (target instanceof Element) {
+                currentTop = target.scrollTop;
+                currentLeft = target.scrollLeft;
+            }
+
+            if (!scrollStates.has(target)) {
+                scrollStates.set(target, { top: currentTop, left: currentLeft });
+            } else {
+                const start = scrollStates.get(target)!;
+                const diffY = Math.abs(currentTop - start.top);
+                const diffX = Math.abs(currentLeft - start.left);
+                if (diffY > 20 || diffX > 20) {
+                    onClose();
+                }
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll, { capture: true, passive: true });
+        return () => window.removeEventListener('scroll', handleScroll, { capture: true });
     }, [onClose]);
 
     if (showShareCard) {

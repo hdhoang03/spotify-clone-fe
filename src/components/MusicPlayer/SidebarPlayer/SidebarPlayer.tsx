@@ -89,7 +89,7 @@ const SidebarPlayer = ({
                 }}
             />
 
-            <div className="relative z-10 flex flex-col h-full px-5 py-4 overflow-y-auto scrollbar-hide">
+            <div className="relative z-10 flex flex-col h-full px-5 pt-4 pb-12 overflow-y-auto scrollbar-hide">
 
                 {/* ── Header ── */}
                 <div className="flex items-center justify-between mb-5 flex-shrink-0">
@@ -199,34 +199,34 @@ const SidebarPlayer = ({
                             <button
                                 onClick={() => setIsLyricsExpanded(true)}
                                 className={`p-1 rounded-full transition-all ${iconBtn}`}
-                                title="Mở rộng lời bài hát"
+                                title="Full screen lyrics"
                             >
                                 <Maximize2 size={14} />
                             </button>
                         )}
                     </div>
 
-                    <div className={`rounded-2xl overflow-hidden ${isLight ? 'bg-black/5' : 'bg-white/5'} border ${isLight ? 'border-black/5' : 'border-white/10'} flex-1`}
-                        style={{ minHeight: 250 }}
+                    <div className={`rounded-2xl overflow-hidden ${isLight ? 'bg-black/5' : 'bg-white/5'} border ${isLight ? 'border-black/5' : 'border-white/10'} flex-1 flex flex-col`}
+                        style={{ minHeight: 270 }}
                     >
                         {isLyricsLoading ? (
-                            <div className="flex justify-center py-10">
+                            <div className="flex items-center justify-center flex-1 py-10">
                                 <div className="w-5 h-5 border-2 border-white/20 border-t-white/60 rounded-full animate-spin" />
                             </div>
                         ) : (
-                            <div className="px-4 py-2 pb-24">
+                            <div className="px-4 py-3 flex-1 flex flex-col min-h-0">
                                 <LyricsDisplay
                                     lyrics={lyrics}
                                     currentTime={currentTime}
                                     isInstrumental={isInstrumental}
                                     expanded={false}
+                                    className="flex-1 h-full"
                                 />
                             </div>
                         )}
                     </div>
                 </div>
-
-                {/* <div className="h-[50vh] flex-shrink-0" /> */}
+                <div className="h-[50vh] flex-shrink-0" />
             </div>
 
             {/* ====== FULLSCREEN LYRICS ====== */}

@@ -5,7 +5,11 @@ import { AuthService } from '../../services/authService';
 import { useNotificationSSE } from '../../hooks/useNotificationSSE';
 
 
-export const useHeader = (onLoginSuccessAction?: (data: UserResponse) => void, onNavigate?: (tab: string) => void) => {
+export const useHeader = (
+    onLoginSuccessAction?: (data: UserResponse) => void,
+    onNavigate?: (tab: string) => void,
+    disableNotifications: boolean = false
+) => {
     const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
     const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
@@ -132,7 +136,7 @@ export const useHeader = (onLoginSuccessAction?: (data: UserResponse) => void, o
     };
 
     useNotificationSSE({
-        enabled: !!user,
+        enabled: !!user && !disableNotifications,
         onNewNotification: () => {
             console.log("New notification received via SSE!");
             window.dispatchEvent(new Event('new-notification'));

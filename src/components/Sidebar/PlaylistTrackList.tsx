@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Play, Pause, Clock, Calendar, MoreHorizontal, Music2 } from 'lucide-react';
 import TrackContextMenu from '../Profile/components/TrackContextMenu';
 import { playlistApi } from './playlistApi';
@@ -31,6 +31,16 @@ const PlaylistTrackList = ({ songs, playlistId, isOwner = true, onPlaySong, onRe
     const [contextMenu, setContextMenu] = useState<{ song: any, x: number, y: number } | null>(null);
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
+    useEffect(() => {
+        const handleCloseOthers = (e: CustomEvent) => {
+            if (contextMenu && contextMenu.song.id !== e.detail.songId) {
+                setContextMenu(null);
+            }
+        };
+        window.addEventListener('CLOSE_OTHER_CONTEXT_MENUS', handleCloseOthers as EventListener);
+        return () => window.removeEventListener('CLOSE_OTHER_CONTEXT_MENUS', handleCloseOthers as EventListener);
+    }, [contextMenu]);
+
     const renderDate = (song: any) => {
         const dateString = song.addedAt || song.createdAt || song.releaseDate;
         if (!dateString) return t('playlist.just_added');
@@ -50,12 +60,18 @@ const PlaylistTrackList = ({ songs, playlistId, isOwner = true, onPlaySong, onRe
         e.preventDefault();
         e.stopPropagation();
         setContextMenu({ song, x: e.clientX, y: e.clientY });
+        window.dispatchEvent(new CustomEvent('CLOSE_OTHER_CONTEXT_MENUS', { detail: { songId: song.id } }));
     };
 
     const handleOptionsClick = (e: React.MouseEvent, song: any) => {
         e.stopPropagation();
-        const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
-        setContextMenu({ song, x: rect.right, y: rect.bottom });
+        if (contextMenu && contextMenu.song.id === song.id) {
+            setContextMenu(null);
+        } else {
+            const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+            setContextMenu({ song, x: rect.left, y: rect.top });
+            window.dispatchEvent(new CustomEvent('CLOSE_OTHER_CONTEXT_MENUS', { detail: { songId: song.id } }));
+        }
     };
 
     const handleRemoveSong = async (songId: string) => {
@@ -214,7 +230,7 @@ const PlaylistTrackList = ({ songs, playlistId, isOwner = true, onPlaySong, onRe
                             {/* Cột 6: Nút 3 chấm */}
                             <div className="flex justify-center">
                                 <button
-                                    className="opacity-100 md:opacity-0 md:group-hover:opacity-100
+                                    className="track-menu-trigger opacity-100 md:opacity-0 md:group-hover:opacity-100
                                                p-1.5 rounded-md
                                                text-zinc-500 dark:text-zinc-400
                                                hover:bg-zinc-100 dark:hover:bg-white/10

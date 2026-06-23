@@ -14,9 +14,10 @@ interface LyricsDisplayProps {
     isInstrumental?: boolean;
     /** expanded = modal view (full height, larger text) */
     expanded?: boolean;
+    className?: string;
 }
 
-const LyricsDisplay = ({ lyrics, currentTime, isInstrumental, expanded = false }: LyricsDisplayProps) => {
+const LyricsDisplay = ({ lyrics, currentTime, isInstrumental, expanded = false, className = '' }: LyricsDisplayProps) => {
     const { t } = useTranslation();
     const containerRef = useRef<HTMLDivElement>(null);
     const activeLineRef = useRef<HTMLDivElement>(null);
@@ -90,7 +91,7 @@ const LyricsDisplay = ({ lyrics, currentTime, isInstrumental, expanded = false }
     return (
         <div
             ref={containerRef}
-            className={`overflow-y-auto ${expanded ? 'h-full' : 'max-h-60'}`}
+            className={`overflow-y-auto ${className || (expanded ? 'h-full' : 'max-h-60')}`}
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
             <div className={`flex flex-col gap-0.5 ${expanded ? 'py-8 px-2' : 'py-4 px-1'}`}>

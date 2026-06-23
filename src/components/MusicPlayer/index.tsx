@@ -59,6 +59,12 @@ const MusicPlayer = () => {
     const miniDragX = useMotionValue(0);
     const miniWasDragged = useRef(false);
 
+    useEffect(() => {
+        if (!isSidebarPlayerOpen) {
+            miniDragX.set(0);
+        }
+    }, [isSidebarPlayerOpen, miniDragX]);
+
     const handleMiniDragEnd = useCallback((_: any, info: { offset: { x: number } }) => {
         const isDesktop = window.innerWidth >= 768;
         if (isDesktop && info.offset.x > 120) {

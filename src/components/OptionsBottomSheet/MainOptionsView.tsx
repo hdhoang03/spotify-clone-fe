@@ -31,19 +31,6 @@ const MainOptionsView = ({
             label: t('player.add_to_playlist'),
             action: onRequestPlaylistSelection
         },
-        // {
-        //     id: 'go_artist',
-        //     icon: Mic2,
-        //     label: 'Xem Nghệ sĩ',
-        //     action: () => {
-        //         // Logic quyết định: Chuyển view hay đi thẳng?
-        //         if (artistList.length > 1) {
-        //             onRequestArtistSelection();
-        //         } else if (artistList.length > 0) {
-        //             onNavigateToArtist(artistList[0].id);
-        //         }
-        //     }
-        // },
 
         {
             id: 'go_artist',
@@ -73,12 +60,6 @@ const MainOptionsView = ({
             label: t('player.share'),
             action: onShare // Gọi hàm từ props
         },
-        // {
-        //     id: 'credits',
-        //     icon: Info,
-        //     label: 'Thông tin bài hát',
-        //     action: () => console.log('Modal: Show Credits')
-        // }
     ];
 
     return (

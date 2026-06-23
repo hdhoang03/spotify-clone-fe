@@ -110,6 +110,7 @@ const Header = ({ onMenuClick, onNaviagate, activeTab }: HeaderProps) => {
                                 <NotificationDropdown
                                     onClose={() => setIsNotificationOpen(false)}
                                     onUpdateUnreadCount={fetchUnreadCount} // Truyền callback để update lại số
+                                    externalUnreadCount={unreadCount}
                                 />
                             )}
                         </div>

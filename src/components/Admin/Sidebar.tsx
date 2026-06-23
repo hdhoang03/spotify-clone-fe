@@ -11,7 +11,7 @@ interface AdminSidebarProps {
 const AdminSidebar = ({ isCollapsed, toggleCollapse }: AdminSidebarProps) => {
 	const navigate = useNavigate();
 	const location = useLocation();
-	const { user, handleLogout } = useHeader();
+	const { user, handleLogout } = useHeader(undefined, undefined, true);
 
 	const menuItems = [
 		{ path: '/admin/dashboard', icon: <LayoutDashboard size={22} />, label: 'Tổng quan' },

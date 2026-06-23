@@ -58,8 +58,8 @@ export const useNotificationSSE = ({
         // Tạm dừng/tiếp tục khi tab bị ẩn
         const handleVisibilityChange = () => {
             if (document.visibilityState === 'visible') {
-                fetchCount();
                 if (!sseActiveRef.current) {
+                    fetchCount();
                     startFallbackPolling();
                 }
             } else {

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Play, Pause, MoreHorizontal } from 'lucide-react';
 import { formatTime } from '../../../utils/formatTime';
 import TrackContextMenu from './TrackContextMenu';
@@ -34,6 +34,16 @@ const TrackRow = ({ index, songId, coverUrl, title, artist, artistId, featuredAr
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [menuPosition, setMenuPosition] = useState<{ x: number, y: number } | null>(null);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const handleCloseOthers = (e: CustomEvent) => {
+            if (e.detail.songId !== songId) {
+                setMenuPosition(null);
+            }
+        };
+        window.addEventListener('CLOSE_OTHER_CONTEXT_MENUS', handleCloseOthers as EventListener);
+        return () => window.removeEventListener('CLOSE_OTHER_CONTEXT_MENUS', handleCloseOthers as EventListener);
+    }, [songId]);
 
     return (
         <div
@@ -122,11 +132,17 @@ const TrackRow = ({ index, songId, coverUrl, title, artist, artistId, featuredAr
                 {/* SỬA 4: Bọc nút 3 chấm trong w-8 để cân bằng tỉ lệ cột với Header ở trên */}
                 <div className="relative flex items-center justify-center w-8">
                     <button
-                        className={`text-gray-400 hover:text-black dark:hover:text-white transition p-1
+                        className={`track-menu-trigger text-gray-400 hover:text-black dark:hover:text-white transition p-1
                                     ${isHovered || menuPosition ? 'opacity-100' : 'opacity-0 md:opacity-0 opacity-100'}`}
                         onClick={(e) => {
                             e.stopPropagation();
-                            setMenuPosition({ x: e.clientX, y: e.clientY });
+                            if (menuPosition) {
+                                setMenuPosition(null);
+                            } else {
+                                const rect = e.currentTarget.getBoundingClientRect();
+                                setMenuPosition({ x: rect.left, y: rect.top });
+                                window.dispatchEvent(new CustomEvent('CLOSE_OTHER_CONTEXT_MENUS', { detail: { songId } }));
+                            }
                         }}
                     >
                         <MoreHorizontal size={20} />
