@@ -11,8 +11,11 @@ const OAuth2Callback = () => {
         const code = searchParams.get('code');
 
         if (code) {
-            // Gửi code xuống API backend của bạn
-            api.post(`/auth/outbound/authentication?code=${code}`)
+            // Lấy lại đúng redirectUri mà frontend đã dùng để yêu cầu code ban đầu
+            const redirectUri = encodeURIComponent(`${window.location.origin}/oauth2/callback`);
+            
+            // Gửi code xuống API backend của bạn, kèm theo redirectUri
+            api.post(`/auth/outbound/authentication?code=${code}&redirectUri=${redirectUri}`)
                 .then(async (response) => {
                     const data = response.data;
                     if (data.code === 1000) {
