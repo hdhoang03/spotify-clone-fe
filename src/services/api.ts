@@ -3,11 +3,7 @@ import axios from 'axios';
 // Lấy URL từ biến môi trường (nếu có, hỗ trợ cho production), ngược lại dùng localhost
 const envApiUrl = import.meta.env.VITE_API_URL;
 
-let defaultUrls = ['http://localhost:8080/spotify', 'http://localhost:8081/spotify'];
-// Tự động ưu tiên link ngrok nếu không chạy ở localhost (đang chạy trên Vercel)
-if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
-    defaultUrls = ['https://faf8-171-244-205-251.ngrok-free.app/spotify', ...defaultUrls];
-}
+const defaultUrls = ['http://localhost:8080/spotify', 'http://localhost:8081/spotify'];
 
 const BASE_URLS = envApiUrl 
     ? envApiUrl.split(',').map((url: string) => url.trim()) 
