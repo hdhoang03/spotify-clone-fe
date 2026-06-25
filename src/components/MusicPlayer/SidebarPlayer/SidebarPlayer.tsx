@@ -189,8 +189,9 @@ const SidebarPlayer = ({
                 />
 
                 {/* ── Lyrics Section ── */}
-                <div className="flex-1 min-h-0 flex flex-col">
-                    <div className="flex items-center justify-between mb-2">
+                <div className="flex-1 min-h-0 flex flex-col relative">
+                    {/* Thêm relative và z-10 để phân tách lớp hiển thị */}
+                    <div className="relative z-10 flex items-center justify-between mb-2">
                         <div className="flex items-center gap-2">
                             <Mic2 size={14} className={subText} />
                             <p className={`text-[10px] font-bold tracking-widest uppercase ${subText}`}>{t('player.lyrics')}</p>

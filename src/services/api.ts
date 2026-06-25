@@ -1,12 +1,20 @@
 import axios from 'axios';
 
-// Lấy URL từ biến môi trường (nếu có, hỗ trợ cho production), ngược lại dùng localhost
+// Lấy URL từ biến môi trường (nếu có, hỗ trợ cho production), ngược lại dùng default
 const envApiUrl = import.meta.env.VITE_API_URL;
 
-const defaultUrls = ['http://localhost:8080/spotify', 'http://localhost:8081/spotify'];
+const defaultUrls = import.meta.env.DEV
+    ? [
+        'http://localhost:8080/spotify',
+        'https://spotify-clone-production-643e.up.railway.app/spotify'
+    ]
+    : [
+        'https://spotify-clone-production-643e.up.railway.app/spotify',
+        'http://localhost:8080/spotify'
+    ];
 
-const BASE_URLS = envApiUrl 
-    ? envApiUrl.split(',').map((url: string) => url.trim()) 
+const BASE_URLS = envApiUrl
+    ? envApiUrl.split(',').map((url: string) => url.trim())
     : defaultUrls;
 
 let currentBaseUrlIndex = 0;
@@ -57,7 +65,7 @@ api.interceptors.response.use(
             // Chuyển sang URL dự phòng
             currentBaseUrlIndex = (currentBaseUrlIndex + 1) % BASE_URLS.length;
             const newUrl = getBaseUrl();
-            
+
             api.defaults.baseURL = newUrl;
             originalRequest.baseURL = newUrl;
 
@@ -65,7 +73,7 @@ api.interceptors.response.use(
             if (originalRequest.data instanceof FormData) {
                 delete originalRequest.headers['Content-Type'];
             }
-            
+
             return api(originalRequest);
         }
 
@@ -117,4 +125,4 @@ api.interceptors.response.use(
     }
 );
 
-export default api;
+export default api;
