@@ -1,6 +1,6 @@
-# 🎵 SpringTunes Client (Frontend)
+# 🎵 Springtunes Client (Frontend)
 
-SpringTunes là một ứng dụng nghe nhạc trực tuyến chất lượng cao lấy cảm hứng từ Spotify, được xây dựng trên nền tảng **React 19**, **TypeScript**, và **Vite**. Dự án hướng tới một giao diện hiện đại (Premium Aesthetics), mượt mà, hỗ trợ đa ngôn ngữ và có chế độ tối ưu hóa đặc biệt dành cho các thiết bị cấu hình thấp.
+Springtunes là một ứng dụng nghe nhạc trực tuyến chất lượng cao lấy cảm hứng từ Spotify, được xây dựng trên nền tảng **React 19**, **TypeScript**, và **Vite**. Dự án hướng tới một giao diện hiện đại (Premium Aesthetics), mượt mà, hỗ trợ đa ngôn ngữ và có chế độ tối ưu hóa đặc biệt dành cho các thiết bị cấu hình thấp.
 
 ---
 

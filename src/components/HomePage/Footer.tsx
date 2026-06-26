@@ -57,7 +57,7 @@ const Footer = () => {
                     <div className="flex items-center gap-3">
                         <div>
                             <p className="text-base font-bold text-zinc-900 dark:text-white tracking-tight">
-                                SpringTunes
+                                Springtunes
                             </p>
                             <p className="text-xs text-zinc-500 dark:text-zinc-500 leading-none mt-0.5">
                                 {t('home.limit')}
@@ -68,14 +68,14 @@ const Footer = () => {
                     {/* Social Icons */}
                     <div className="flex items-center gap-3">
                         <SocialIcon
-                            href="https://www.facebook.com/thotslayer213"
-                            label="Facebook"
-                            path={ICONS.facebook}
-                        />
-                        <SocialIcon
                             href="https://www.instagram.com/hoang.ho3/"
                             label="Instagram"
                             path={ICONS.instagram}
+                        />
+                        <SocialIcon
+                            href="https://www.facebook.com/thotslayer213"
+                            label="Facebook"
+                            path={ICONS.facebook}
                         />
                         <SocialIcon
                             href="https://www.reddit.com/user/Hide_on_bush003/"
@@ -102,7 +102,7 @@ const Footer = () => {
                     {/* Copyright */}
                     <div className="flex items-center gap-1.5 text-zinc-500 dark:text-zinc-600 text-xs shrink-0">
                         <Copyright size={12} />
-                        <span>{year} SpringTunes · Made with ❤️</span>
+                        <span>{year} Springtunes · Made with ❤️</span>
                         <ExternalLink size={10} className="opacity-40" />
                     </div>
                 </div>

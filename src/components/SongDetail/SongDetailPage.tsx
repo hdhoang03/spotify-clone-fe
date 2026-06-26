@@ -106,7 +106,7 @@ const SongDetailPage = () => {
             {!isLoading && !error && songData && (
                 <div className="relative z-10 flex flex-col items-center bg-zinc-950/85 p-8 rounded-3xl border border-zinc-800/80 shadow-[0_20px_50px_rgba(0,0,0,0.6)] max-w-sm w-full backdrop-blur-md animate-in fade-in zoom-in-95 duration-500">
                     <span className="text-[10px] font-black uppercase tracking-[0.2em] text-green-500 mb-6 bg-green-500/10 px-3 py-1.5 rounded-full border border-green-500/20">
-                        SpringTunes Share
+                        Springtunes Share
                     </span>
 
                     {/* Khung ảnh cover bài hát */}

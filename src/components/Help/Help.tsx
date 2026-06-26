@@ -52,7 +52,7 @@ const HelpPage = () => {
                             <Headphones size={28} className="text-white" />
                         </div>
                         <div>
-                            <p className="text-white/70 text-xs font-semibold uppercase tracking-widest mb-0.5">SpringTunes Support</p>
+                            <p className="text-white/70 text-xs font-semibold uppercase tracking-widest mb-0.5">Springtunes Support</p>
                             <h2 className="text-white text-xl font-black">{t('help.hero_title')}</h2>
                             <p className="text-white/75 text-sm mt-0.5">{t('help.hero_desc')}</p>
                         </div>

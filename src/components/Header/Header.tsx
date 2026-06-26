@@ -71,7 +71,7 @@ const Header = ({ onMenuClick, onNaviagate, activeTab }: HeaderProps) => {
                 <div className="flex items-center gap-4 shrink-0">
                     <div className="md:hidden flex items-center gap-2">
                         <span onClick={handleGoHome} className="text-xl font-extrabold bg-gradient-to-r from-green-500 to-emerald-400 bg-clip-text text-transparent cursor-pointer">
-                            SpringTunes
+                            Springtunes
                         </span>
                     </div>
 
@@ -86,7 +86,7 @@ const Header = ({ onMenuClick, onNaviagate, activeTab }: HeaderProps) => {
                     )}
 
                     <span onClick={handleGoHome} className="text-xl font-bold bg-gradient-to-r from-green-500 to-emerald-400 ml-2 hidden md:block bg-clip-text text-transparent cursor-pointer hover:opacity-80 transition-opacity">
-                        SpringTunes
+                        Springtunes
                     </span>
                 </div>
 

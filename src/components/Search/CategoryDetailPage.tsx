@@ -143,7 +143,7 @@ const CategoryDetailPage = () => {
                         {category.name}
                     </h1>
                     <div className="flex flex-col md:flex-row items-center gap-2 text-sm text-zinc-600 dark:text-zinc-300 opacity-90 font-medium">
-                        <span className="font-semibold text-black dark:text-white">SpringTunes</span>
+                        <span className="font-semibold text-black dark:text-white">Springtunes</span>
                         <span className="hidden md:inline">•</span>
                         <span>{songs.length} {t('playlist.songs')}</span>
                     </div>

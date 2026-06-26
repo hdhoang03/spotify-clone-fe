@@ -52,7 +52,7 @@ const SongShareCard = ({ song, isOpen, onClose }: SongShareCardProps) => {
             // Tải ảnh về
             const link = document.createElement('a');
             link.href = dataUrl;
-            link.download = `SpringTunes_${song.title.replace(/\s+/g, '_')}.png`;
+            link.download = `Springtunes_${song.title.replace(/\s+/g, '_')}.png`;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -171,7 +171,7 @@ const SongShareCard = ({ song, isOpen, onClose }: SongShareCardProps) => {
                                         textShadow: '0 2px 2px rgba(0,0,0,0.5)'
                                     }}
                                 >
-                                    SpringTunes
+                                    Springtunes
                                 </p>
                             </div>
 

@@ -223,7 +223,7 @@ const EditProfileModal = ({ isOpen, onClose, currentName, currentAvatar, onSave 
                 </div>
 
                 <div className="p-4 text-[11px] font-bold text-gray-500 dark:text-white/60 text-center bg-gray-50 dark:bg-[#121212]/30">
-                    By proceeding, you agree to give SpringTunes access to the image you choose to upload.
+                    By proceeding, you agree to give Springtunes access to the image you choose to upload.
                 </div>
             </div>
         </div>

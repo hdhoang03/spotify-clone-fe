@@ -63,7 +63,7 @@ const AuthModal = ({ isOpen, onClose, onLoginSuccess }: AuthModalProps) => {
                             {mode === 'VERIFY_OTP' && 'Verify Email'}
                             {mode === 'RESET_PASSWORD' && 'Reset password'}
                         </h2>
-                        {mode === 'LOGIN' && <p className="text-sm text-gray-500 mt-2">Continue to experience SpringTunes</p>}
+                        {mode === 'LOGIN' && <p className="text-sm text-gray-500 mt-2">Continue to experience Springtunes</p>}
                     </div>
 
                     {mode === 'LOGIN' && (

@@ -60,7 +60,7 @@ const ProfileShareCard = ({ user, dominantColor, isOpen, onClose, type = 'user' 
 
             const link = document.createElement('a');
             link.href = dataUrl;
-            link.download = `SpringTunes_${type === 'artist' ? 'Artist' : 'Profile'}_${user.name?.replace(/\s+/g, '_')}.png`;
+            link.download = `Springtunes_${type === 'artist' ? 'Artist' : 'Profile'}_${user.name?.replace(/\s+/g, '_')}.png`;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -108,7 +108,7 @@ const ProfileShareCard = ({ user, dominantColor, isOpen, onClose, type = 'user' 
                 >
                     {/* Noise texture overlay (optional cho đẹp) */}
                     <div className="absolute inset-0 opacity-20 pointer-events-none"
-                         style={{ backgroundImage: 'url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1IiBoZWlnaHQ9IjUiPgo8cmVjdCB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSIjZmZmIiBmaWxsLW9wYWNpdHk9IjAuMSIvPgo8L3N2Zz4=")' }}>
+                        style={{ backgroundImage: 'url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1IiBoZWlnaHQ9IjUiPgo8cmVjdCB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSIjZmZmIiBmaWxsLW9wYWNpdHk9IjAuMSIvPgo8L3N2Zz4=")' }}>
                     </div>
 
                     <div className="w-full h-full flex flex-col relative z-10 justify-between">
@@ -168,7 +168,7 @@ const ProfileShareCard = ({ user, dominantColor, isOpen, onClose, type = 'user' 
                                         className="text-xl font-black tracking-tighter"
                                         style={{ color: '#22C55E' }}
                                     >
-                                        SpringTunes
+                                        Springtunes
                                     </p>
                                 </div>
                             </div>

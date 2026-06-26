@@ -4,7 +4,7 @@ import api from '../../services/api';
 export const normalizeSong = (song: any): any => ({
     id: song.id || song.songId,
     title: song.title || song.songTitle,
-    artist: song.artistName || song.artist?.name || song.artist || 'Nghệ sĩ SpringTunes',
+    artist: song.artistName || song.artist?.name || song.artist || 'Nghệ sĩ Springtunes',
     artistId: song.artistId || song.artist?.id || '',
     artistAvatar: song.artistAvatar || song.artist?.avatarUrl || null,
     featuredArtists: song.featuredArtists || [],

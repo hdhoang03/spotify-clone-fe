@@ -55,7 +55,7 @@ export const MusicProvider = ({ children }: { children: ReactNode }) => {
         if (currentSong) {
             document.title = `${currentSong.title} • ${currentSong.artist}`;
         } else {
-            document.title = 'SpringTunes | Nhái Spotify';
+            document.title = 'Springtunes | Nhái Spotify';
         }
     }, [currentSong]);
 
