@@ -1,7 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { ChevronLeft, Plus, Loader2 } from 'lucide-react';
 import api from '../../services/api';
 import { useTranslation } from 'react-i18next';
+import PlaylistModal from '../Sidebar/PlaylistModal';
+import { usePlaylists } from '../Sidebar/usePlaylists';
 
 interface PlaylistSelectionViewProps {
     songId: string;
@@ -11,25 +13,23 @@ interface PlaylistSelectionViewProps {
 
 const PlaylistSelectionView = ({ songId, onBack, onClose }: PlaylistSelectionViewProps) => {
     const { t } = useTranslation();
-    const [playlists, setPlaylists] = useState<any[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
+    const { playlists, isLoading, createNewPlaylist } = usePlaylists();
     const [isAdding, setIsAdding] = useState(false);
+    const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+    const [isCreating, setIsCreating] = useState(false);
 
-    useEffect(() => {
-        const fetchPlaylists = async () => {
-            try {
-                const res = await api.get('/playlist/my', { params: { page: 1, size: 50 } });
-                if (res.data.code === 1000) {
-                    setPlaylists(res.data.result.content || []);
-                }
-            } catch (error) {
-                console.error("Lỗi tải playlist:", error);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-        fetchPlaylists();
-    }, []);
+    const handleCreatePlaylist = async (formData: FormData) => {
+        setIsCreating(true);
+        try {
+            await createNewPlaylist(formData);
+            return true;
+        } catch (err) {
+            alert(t('sidebar.create_error'));
+            return false;
+        } finally {
+            setIsCreating(false);
+        }
+    };
 
     const handleAddToPlaylist = async (playlistId: string) => {
         setIsAdding(true);
@@ -39,9 +39,14 @@ const PlaylistSelectionView = ({ songId, onBack, onClose }: PlaylistSelectionVie
                 alert(t('player.add_success'));
                 onClose();
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error("Lỗi thêm bài hát:", error);
-            alert(t('player.add_fail'));
+            const status = error?.response?.status;
+            if (status === 409 || status === 400) {
+                alert(t('player.add_duplicate'));
+            } else {
+                alert(t('player.add_fail'));
+            }
         } finally {
             setIsAdding(false);
         }
@@ -61,7 +66,10 @@ const PlaylistSelectionView = ({ songId, onBack, onClose }: PlaylistSelectionVie
                     <div className="flex justify-center py-10"><Loader2 className="animate-spin text-green-500" size={32} /></div>
                 ) : (
                     <div className="flex flex-col gap-2">
-                        <button className="flex items-center gap-4 p-3 rounded-xl hover:bg-white/10 active:scale-[0.98] transition-all text-left group">
+                        <button 
+                            onClick={() => setIsCreateModalOpen(true)}
+                            className="flex items-center gap-4 p-3 rounded-xl hover:bg-white/10 active:scale-[0.98] transition-all text-left group"
+                        >
                             <div className="w-12 h-12 rounded-md bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition">
                                 <Plus size={24} className="text-white" />
                             </div>
@@ -82,6 +90,13 @@ const PlaylistSelectionView = ({ songId, onBack, onClose }: PlaylistSelectionVie
                     </div>
                 )}
             </div>
+
+            <PlaylistModal
+                isOpen={isCreateModalOpen}
+                onClose={() => setIsCreateModalOpen(false)}
+                onSubmit={handleCreatePlaylist}
+                isLoading={isCreating}
+            />
         </div>
     );
 };

@@ -6,10 +6,12 @@ const envApiUrl = import.meta.env.VITE_API_URL;
 const defaultUrls = import.meta.env.DEV
     ? [
         'http://localhost:8080/spotify',
-        'https://spotify-clone-production-643e.up.railway.app/spotify'
+        'https://spotify-clone-8xkm.onrender.com',
+        // 'https://spotify-clone-production-643e.up.railway.app/spotify'
     ]
     : [
-        'https://spotify-clone-production-643e.up.railway.app/spotify',
+        // 'https://spotify-clone-production-643e.up.railway.app/spotify',
+        'https://spotify-clone-8xkm.onrender.com',
         'http://localhost:8080/spotify'
     ];
 

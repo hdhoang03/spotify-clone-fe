@@ -330,8 +330,3 @@ html.low-perf .eq-bar-3 {
 	animation: none !important;
 	box-shadow: none !important;
 }
-
-html.low-perf * {
-	/* Reduce transitions on all elements to make UI responsive on old devices */
-	transition-duration: 0s !important;
-}

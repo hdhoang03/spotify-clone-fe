@@ -220,6 +220,7 @@
 		"featured_artists": "Nghệ sĩ tham gia",
 		"add_success": "Đã thêm bài hát vào playlist thành công!",
 		"add_fail": "Không thể thêm vào playlist lúc này.",
+		"add_duplicate": "Bài hát đã có trong playlist này rồi!",
 		"create_new_playlist": "Tạo Playlist mới",
 		"remove_from_playlist": "Xóa khỏi Playlist này",
 		"remove_from_liked": "Xóa khỏi Bài hát đã thích",

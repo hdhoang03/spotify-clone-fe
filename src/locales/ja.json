@@ -220,6 +220,7 @@
 		"featured_artists": "参加アーティスト",
 		"add_success": "プレイリストに曲が正常に追加されました！",
 		"add_fail": "現時点ではプレイリストに追加できません。",
+		"add_duplicate": "この曲はすでにプレイリストに入っています！",
 		"create_new_playlist": "新しいプレイリストを作成",
 		"remove_from_playlist": "このプレイリストから削除",
 		"remove_from_liked": "お気に入りの曲から削除",

@@ -105,10 +105,17 @@ const AppRoutes = () => {
 };
 
 // Component Gốc: Bọc BrowserRouter tại đây để an toàn
+import { MotionConfig } from 'framer-motion';
+import { useAppSettings } from './hooks/useAppSettings';
+
 const App = () => {
+    const { settings } = useAppSettings();
+
     return (
         <BrowserRouter>
-            <AppRoutes />
+            <MotionConfig reducedMotion={settings.lowPerf ? "always" : "user"}>
+                <AppRoutes />
+            </MotionConfig>
         </BrowserRouter>
     );
 };

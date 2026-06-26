@@ -26,38 +26,35 @@ export const useDashboardLogic = () => {
 
     // ==============================================================
     // 1. LẤY SỐ LIỆU TỔNG QUAN & TOP BÀI HÁT (Chỉ gọi 1 lần khi vào trang)
+    // Gọi 1 API duy nhất /analytics/overview (đã cache Redis 5 phút)
     // ==============================================================
     useEffect(() => {
         const fetchOverviewData = async () => {
             try {
-                // Tận dụng API search/list với size=1 để lấy thuộc tính totalElements cho nhẹ server
-                const [usersRes, songsRes, artistsRes, albumsRes, topSongsRes] = await Promise.allSettled([
-                    api.get('/user/list', { params: { size: 1 } }),
-                    api.get('/song/advanced-search', { params: { size: 1 } }),
-                    api.get('/artist/search', { params: { size: 1 } }),
-                    api.get('/albums/list', { params: { size: 1 } }),
-                    api.get('/stream/top')
-                ]);
+                const res = await api.get('/analytics/overview');
+                if (res.data.result) {
+                    const data = res.data.result;
 
-                // Cập nhật 4 thẻ Card phía trên
-                setStats(prev => ({
-                    ...prev,
-                    totalUsers: usersRes.status === 'fulfilled' ? usersRes.value.data.result?.totalElements || 0 : 0,
-                    totalSongs: songsRes.status === 'fulfilled' ? songsRes.value.data.result?.totalElements || 0 : 0,
-                    totalArtists: artistsRes.status === 'fulfilled' ? artistsRes.value.data.result?.totalElements || 0 : 0,
-                    totalAlbums: albumsRes.status === 'fulfilled' ? albumsRes.value.data.result?.totalElements || 0 : 0,
-                }));
-
-                // Cập nhật danh sách Top bài hát nghe nhiều
-                if (topSongsRes.status === 'fulfilled' && topSongsRes.value.data.result) {
-                    const mappedTop = topSongsRes.value.data.result.map((item: any) => ({
-                        id: item.songId,
-                        title: item.songTitle,
-                        artist: item.artistName,
-                        cover: item.coverUrl,
-                        streams: item.count || 0
+                    // Cập nhật 4 thẻ Card phía trên
+                    setStats(prev => ({
+                        ...prev,
+                        totalUsers: data.totalUsers || 0,
+                        totalSongs: data.totalSongs || 0,
+                        totalArtists: data.totalArtists || 0,
+                        totalAlbums: data.totalAlbums || 0,
                     }));
-                    setTopSongs(mappedTop);
+
+                    // Cập nhật danh sách Top bài hát nghe nhiều
+                    if (data.topSongs) {
+                        const mappedTop = data.topSongs.map((item: any) => ({
+                            id: item.songId,
+                            title: item.songTitle,
+                            artist: item.artistName,
+                            cover: item.coverUrl,
+                            streams: item.count || 0
+                        }));
+                        setTopSongs(mappedTop);
+                    }
                 }
             } catch (error) {
                 console.error("Lỗi khi tải dữ liệu tổng quan:", error);

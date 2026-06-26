@@ -220,6 +220,7 @@
 		"featured_artists": "참여 아티스트",
 		"add_success": "플레이리스트에 노래가 성공적으로 추가되었습니다!",
 		"add_fail": "지금은 플레이리스트에 추가할 수 없습니다.",
+		"add_duplicate": "이 노래는 이미 플레이리스트에 있습니다!",
 		"create_new_playlist": "새 플레이리스트 만들기",
 		"remove_from_playlist": "이 플레이리스트에서 삭제",
 		"remove_from_liked": "좋아요 표시한 곡에서 삭제",
