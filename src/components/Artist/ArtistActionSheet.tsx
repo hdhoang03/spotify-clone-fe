@@ -19,25 +19,25 @@ const ArtistActionSheet = ({ isOpen, onClose, artistName, artistImage }: ArtistA
             {isOpen && (
                 <>
                     {/* Overlay: Giữ nguyên */}
-                    <motion.div 
+                    <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={onClose}
                         className="fixed inset-0 bg-black/60 z-[100] md:hidden"
                     />
-                    
+
                     {/* Sheet: Sửa lại class định vị */}
-                    <motion.div 
+                    <motion.div
                         initial={{ y: "100vh" }}
                         animate={{ y: 0 }}
                         exit={{ y: "100vh" }}
                         transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                        
+
                         drag="y"
-                        dragConstraints={{ top: 0, bottom: 0 }} 
+                        dragConstraints={{ top: 0, bottom: 0 }}
                         dragElastic={{ top: 0, bottom: 0.5 }}
-                        
+
                         onDragEnd={(_, info) => {
                             if (info.offset.y > 100) onClose();
                         }}
@@ -60,15 +60,15 @@ const ArtistActionSheet = ({ isOpen, onClose, artistName, artistImage }: ArtistA
                         {/* Content Header: Thêm padding-bottom rõ ràng */}
                         <div className="px-6 pb-4 flex items-center gap-4 border-b border-zinc-100 dark:border-white/5">
                             <div className="w-14 h-14 flex-shrink-0 bg-zinc-200 dark:bg-zinc-800 rounded shadow-md overflow-hidden">
-                                <img 
-                                    src={artistImage || "https://tse1.explicit.bing.net/th/id/OIP.6Su3LVudXp80ED9_-cy7TgHaLY?rs=1&pid=ImgDetMain&o=7&rm=3" } 
+                                <img
+                                    src={artistImage || "https://tse1.explicit.bing.net/th/id/OIP.6Su3LVudXp80ED9_-cy7TgHaLY?rs=1&pid=ImgDetMain&o=7&rm=3"}
                                     alt={artistName}
                                     className="w-full h-full object-cover"
                                 />
                             </div>
                             <div className="flex flex-col min-w-0">
                                 <h2 className="text-lg font-bold text-zinc-900 dark:text-white truncate">
-                                    {artistName || "Phương Ly" }
+                                    {artistName || "Phương Ly"}
                                 </h2>
                                 <span className="text-sm text-zinc-500">{t('artist.artist_label')}</span>
                             </div>
@@ -76,11 +76,11 @@ const ArtistActionSheet = ({ isOpen, onClose, artistName, artistImage }: ArtistA
 
                         {/* Menu Items: Đảm bảo có khoảng trống cuối cùng */}
                         <div className="pt-2 pb-20 overflow-y-auto">
-                            <SheetItem icon={<Ban size={22}/>} label={t('player.dont_play_artist', "Don't play this artist")} />
+                            {/* <SheetItem icon={<Ban size={22}/>} label={t('player.dont_play_artist', "Don't play this artist")} />
                             <SheetItem icon={<Flag size={22}/>} label={t('player.report', "Report")} />
-                            <div className="h-[1px] bg-zinc-100 dark:bg-white/5 my-2 mx-6"/>
-                            <SheetItem icon={<Share2 size={22}/>} label={t('player.share', "Share")} />
-                            <SheetItem icon={<Copy size={22}/>} label={t('player.copy_link', "Copy link to artist")} />
+                            <div className="h-[1px] bg-zinc-100 dark:bg-white/5 my-2 mx-6"/> */}
+                            <SheetItem icon={<Share2 size={22} />} label={t('player.share', "Share")} />
+                            <SheetItem icon={<Copy size={22} />} label={t('player.copy_link', "Copy link to artist")} />
                         </div>
                     </motion.div>
                 </>

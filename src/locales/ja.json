@@ -241,7 +241,6 @@
 		"update_error": "更新中にエラーが発生しました！",
 		"update_avatar_success": "アバターが正常に更新されました！",
 		"update_avatar_error": "アバターの更新中にエラーが発生しました！",
-		"personal_profile": "個人プロフィール",
 		"edit": "編集",
 		"display_name": "表示名",
 		"email": "メールアドレス",
@@ -271,7 +270,17 @@
 		"change_password": "パスワードの変更",
 		"current_password": "現在のパスワード",
 		"new_password": "新しいパスワード",
-		"update_password": "パスワードの更新"
+		"update_password": "パスワードの更新",
+		"plan_details_title": "プラン詳細",
+		"personal_profile": "個人プラン",
+		"plan_active": "有効",
+		"plan_expiry": "有効期限",
+		"plan_days_left": "残り日数",
+		"plan_days_format": "残り{{count}}日",
+		"plan_extend": "サブスクリプションを延長",
+		"plan_close": "閉じる",
+		"fetch_error": "プラン詳細の読み込みに失敗しました。後でもう一度お試しください。",
+		"retry": "再試行"
 	},
 	"artist": {
 		"back": "戻る",
@@ -336,5 +345,23 @@
 		"creating": "カードを作成中...",
 		"save_card": "カードを保存する",
 		"loading": "カードのデータを読み込み中"
+	},
+	"help_documents": {
+		"terms_title": "利用規約 - Springtunes",
+		"terms_sections": [
+			{ "title": "1. 規約の承諾", "content": "Springtunesを利用することにより、本利用規約に同意したものとみなされます。同意されない場合は、サービスの利用を中止してください。" },
+			{ "title": "2. ユーザーアカウント", "content": "アカウントのパスワード管理およびそのアカウントで行われるすべての活動については、ユーザー自身が責任を負うものとします。" },
+			{ "title": "3. プレミアムプラン", "content": "プレミアムプランでは、広告なしでの再生、ロスレス高音質、その他の限定機能を提供します。決済はPayOSを通じて安全に処理されます。購入後の返金はできません。" },
+			{ "title": "4. 著作権と知的財産", "content": "Springtunes上のすべての楽曲、歌詞、画像は、それぞれの権利者に帰属します。無断でのダウンロード、コピー、配布は固く禁止されています。" },
+			{ "title": "5. 免責事項", "content": "Springtunesは「現状有姿」で提供されます。サービスの完全な無停止を保証するものではありませんが、最大限の稼働に努めます。" }
+		],
+		"privacy_title": "プライバシーポリシー - Springtunes",
+		"privacy_sections": [
+			{ "title": "1. 収集する情報", "content": "Springtunesは、パーソナライズされた音楽体験を提供するため、登録メールアドレス、表示名、IPアドレス、および再生履歴を収集します。" },
+			{ "title": "2. 情報の利用目的", "content": "収集した情報は、アカウントの維持、PayOSを介したプレミアム決済の処理、Brevo API経由のシステム通知の送信に利用されます。" },
+			{ "title": "3. セキュリティと保管", "content": "パスワードはbcryptを使用して安全に暗号化されます。また、セッションはRedisによって高速に処理され、カード情報はサーバーに直接保管されません。" },
+			{ "title": "4. ユーザーの権利", "content": "ユーザーはいつでも設定画面からプロフィール、表示名、アバター画像を変更する権利、およびアカウントの削除を請求する権利を有します。" },
+			{ "title": "5. 第三者への開示", "content": "個人情報を販売することはありません。決済代行業者（PayOS）および通知サービス（Brevo）など、サービス提供に必要な範囲に限定して共有されます。" }
+		]
 	}
 }

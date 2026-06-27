@@ -1,13 +1,22 @@
 // src/components/Help/HelpPage.tsx
+import { useState } from 'react';
 import { HelpCircle, MessageSquare, ChevronRight, Headphones } from 'lucide-react';
 import Footer from '../HomePage/Footer';
 import FAQItem from '../Help/FAQItem';
 import ContactForm from '../Help/ContactForm';
 import BackButton from '../../components/common/BackButton';
 import { useTranslation } from 'react-i18next';
+import HelpDocumentModal from './HelpDocumentModal';
 
 const HelpPage = () => {
     const { t } = useTranslation();
+    const [docModalOpen, setDocModalOpen] = useState(false);
+    const [docType, setDocType] = useState<'terms' | 'privacy'>('terms');
+
+    const openDocument = (type: 'terms' | 'privacy') => {
+        setDocType(type);
+        setDocModalOpen(true);
+    };
 
     const FAQ_DATA = [
         {
@@ -38,28 +47,13 @@ const HelpPage = () => {
                         <BackButton className="p-2 -ml-2 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors" />
                     </div>
                     <div>
-                        <h1 className="text-3xl font-black tracking-tight text-zinc-900 dark:text-white">{t('help.title')}</h1>
-                        {/* <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">Chúng tôi luôn sẵn sàng hỗ trợ bạn</p> */}
+                        <h1 className="text-xl md:text-2xl font-black text-zinc-900 dark:text-white leading-none">
+                            {t('help.title')}
+                        </h1>
                     </div>
                 </div>
 
-                {/* ── Hero banner ── */}
-                {/* <div className="relative mb-8 rounded-2xl overflow-hidden bg-gradient-to-br from-green-600 via-emerald-500 to-teal-500 p-6 md:p-8 shadow-lg shadow-green-500/20">
-                    <div className="absolute inset-0 opacity-10"
-                        style={{ backgroundImage: `radial-gradient(circle at 80% 20%, white 0%, transparent 60%)` }} />
-                    <div className="relative z-10 flex items-center gap-4">
-                        <div className="p-3 bg-white/20 rounded-2xl backdrop-blur-sm flex-shrink-0">
-                            <Headphones size={28} className="text-white" />
-                        </div>
-                        <div>
-                            <p className="text-white/70 text-xs font-semibold uppercase tracking-widest mb-0.5">Springtunes Support</p>
-                            <h2 className="text-white text-xl font-black">{t('help.hero_title')}</h2>
-                            <p className="text-white/75 text-sm mt-0.5">{t('help.hero_desc')}</p>
-                        </div>
-                    </div>
-                </div> */}
-
-                <div className="grid md:grid-cols-12 gap-6 md:gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-10">
 
                     {/* ── CỘT TRÁI: FAQ ── */}
                     <div className="md:col-span-7">
@@ -80,24 +74,30 @@ const HelpPage = () => {
 
                         {/* Quick links */}
                         <div className="mt-4 grid grid-cols-2 gap-3">
-                            {[
-                                { label: t('help.terms'), href: '#' },
-                                { label: t('help.privacy'), href: '#' },
-                            ].map(link => (
-                                <a
-                                    key={link.label}
-                                    href={link.href}
-                                    className="flex items-center justify-between px-4 py-3 bg-white/60 dark:bg-zinc-900/60
-                                               backdrop-blur-xl border border-zinc-200/80 dark:border-zinc-800/80 rounded-xl
-                                               hover:border-green-500/40 hover:bg-green-500/5 dark:hover:bg-green-500/5
-                                               transition-all duration-200 group"
-                                >
-                                    <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300 group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors">
-                                        {link.label}
-                                    </span>
-                                    <ChevronRight size={14} className="text-zinc-400 group-hover:text-green-500 transition-colors" />
-                                </a>
-                            ))}
+                            <button
+                                onClick={() => openDocument('terms')}
+                                className="flex items-center justify-between px-4 py-3 bg-white/60 dark:bg-zinc-900/60
+                                           backdrop-blur-xl border border-zinc-200/80 dark:border-zinc-800/80 rounded-xl
+                                           hover:border-green-500/40 hover:bg-green-500/5 dark:hover:bg-green-500/5
+                                           transition-all duration-200 group text-left w-full"
+                            >
+                                <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300 group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors">
+                                    {t('help.terms')}
+                                </span>
+                                <ChevronRight size={14} className="text-zinc-400 group-hover:text-green-500 transition-colors" />
+                            </button>
+                            <button
+                                onClick={() => openDocument('privacy')}
+                                className="flex items-center justify-between px-4 py-3 bg-white/60 dark:bg-zinc-900/60
+                                           backdrop-blur-xl border border-zinc-200/80 dark:border-zinc-800/80 rounded-xl
+                                           hover:border-green-500/40 hover:bg-green-500/5 dark:hover:bg-green-500/5
+                                           transition-all duration-200 group text-left w-full"
+                            >
+                                <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300 group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors">
+                                    {t('help.privacy')}
+                                </span>
+                                <ChevronRight size={14} className="text-zinc-400 group-hover:text-green-500 transition-colors" />
+                            </button>
                         </div>
                     </div>
 
@@ -122,6 +122,13 @@ const HelpPage = () => {
                 </div>
             </div>
             <Footer />
+
+            {/* Terms and Privacy Pop-up Modal */}
+            <HelpDocumentModal
+                isOpen={docModalOpen}
+                onClose={() => setDocModalOpen(false)}
+                type={docType}
+            />
         </div>
     );
 };

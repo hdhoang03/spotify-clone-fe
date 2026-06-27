@@ -272,7 +272,16 @@
 		"change_password": "Đổi mật khẩu",
 		"current_password": "Mật khẩu hiện tại",
 		"new_password": "Mật khẩu mới",
-		"update_password": "Cập nhật mật khẩu"
+		"update_password": "Cập nhật mật khẩu",
+		"plan_details_title": "Chi tiết gói cước",
+		"plan_active": "Hoạt động",
+		"plan_expiry": "Ngày hết hạn",
+		"plan_days_left": "Thời gian còn lại",
+		"plan_days_format": "{{count}} ngày",
+		"plan_extend": "Gia hạn gói cước",
+		"plan_close": "Đóng",
+		"fetch_error": "Không thể tải thông tin gói cước. Vui lòng thử lại sau.",
+		"retry": "Thử lại"
 	},
 	"artist": {
 		"back": "Quay lại",
@@ -337,5 +346,23 @@
 		"creating": "Đang tạo ảnh...",
 		"save_card": "Lưu thẻ về máy",
 		"loading": "Đang tải dữ liệu ảnh"
+	},
+	"help_documents": {
+		"terms_title": "Điều khoản sử dụng - Springtunes",
+		"terms_sections": [
+			{ "title": "1. Chấp nhận các điều khoản", "content": "Bằng cách sử dụng Springtunes, bạn đồng ý tuân thủ các Điều khoản sử dụng này. Nếu không đồng ý, vui lòng ngừng sử dụng dịch vụ." },
+			{ "title": "2. Tài khoản người dùng", "content": "Bạn chịu trách nhiệm bảo mật mật khẩu tài khoản và mọi hoạt động dưới tên đăng nhập của mình. Tài khoản phải đăng ký bằng địa chỉ email hợp lệ." },
+			{ "title": "3. Gói dịch vụ Premium", "content": "Gói Premium cung cấp trải nghiệm âm thanh không quảng cáo, chất lượng lossless và các tính năng nâng cao. Việc thanh toán được xử lý qua cổng bảo mật PayOS. Gói cước không hỗ trợ hoàn tiền sau khi giao dịch thành công." },
+			{ "title": "4. Bản quyền âm nhạc", "content": "Tất cả bài hát, lời nhạc, hình ảnh nghệ sĩ trên Springtunes thuộc quyền sở hữu của các đối tác bản quyền tương ứng. Nghiêm cấm mọi hành vi sao chép, phân phối hoặc tải xuống trái phép." },
+			{ "title": "5. Giới hạn trách nhiệm", "content": "Springtunes cung cấp dịch vụ \"như hiện tại\". Chúng tôi không cam kết dịch vụ sẽ không bị gián đoạn nhưng luôn nỗ lực tối đa để đảm bảo trải nghiệm tốt nhất cho người dùng." }
+		],
+		"privacy_title": "Chính sách quyền riêng tư - Springtunes",
+		"privacy_sections": [
+			{ "title": "1. Thông tin thu thập", "content": "Chúng tôi thu thập email đăng ký, tên hiển thị, địa chỉ IP và lịch sử phát nhạc của bạn nhằm cá nhân hóa danh sách đề xuất nhạc." },
+			{ "title": "2. Cách sử dụng thông tin", "content": "Thông tin của bạn được sử dụng để duy trì hoạt động tài khoản, xử lý đăng ký Premium thông qua đối tác PayOS, và gửi thông báo hệ thống thông qua Brevo HTTP API." },
+			{ "title": "3. Lưu trữ và Bảo mật", "content": "Mật khẩu của bạn được mã hóa một chiều (bcrypt). Chúng tôi sử dụng Redis Cache để tăng hiệu năng và không lưu trữ thông tin thẻ thanh toán trực tiếp trên máy chủ." },
+			{ "title": "4. Quyền của người dùng", "content": "Bạn có quyền thay đổi thông tin cá nhân, cập nhật ảnh đại diện hoặc yêu cầu đóng tài khoản bất kỳ lúc nào thông qua trang cài đặt cá nhân." },
+			{ "title": "5. Chia sẻ thông tin với bên thứ ba", "content": "Chúng tôi tuyệt đối không bán thông tin cá nhân của bạn. Dữ liệu chỉ được chia sẻ với các bên đối tác thanh toán (PayOS) và dịch vụ email (Brevo) để thực hiện giao dịch." }
+		]
 	}
 }

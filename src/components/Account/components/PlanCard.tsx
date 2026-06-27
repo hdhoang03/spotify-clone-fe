@@ -3,6 +3,7 @@ import { CreditCard, CheckCircle2, Zap, Loader2, Crown, ExternalLink } from 'luc
 import api from '../../../services/api';
 import { useTranslation } from 'react-i18next';
 import { usePremiumStatus } from '../../../hooks/usePremiumStatus';
+import PlanDetailsModal from './PlanDetailsModal';
 
 /**
  * Tạo orderCode theo format: YYMMDDHHmmss + 3 số random = 15 chữ số
@@ -28,6 +29,7 @@ const PlanCard = () => {
     const { t } = useTranslation();
     const { isPremium, isLoading } = usePremiumStatus();
     const [isLoadingPayment, setIsLoadingPayment] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     // Gọi API tạo link thanh toán PayOS
     const handleUpgrade = async () => {
@@ -160,13 +162,23 @@ const PlanCard = () => {
                             )}
                         </button>
                     ) : (
-                        <button className="w-full py-3 bg-white/20 hover:bg-white/30 text-white font-bold rounded-lg transition-colors flex items-center justify-center gap-2">
+                        <button
+                            onClick={() => setIsModalOpen(true)}
+                            className="w-full py-3 bg-white/20 hover:bg-white/30 text-white font-bold rounded-lg transition-colors flex items-center justify-center gap-2"
+                        >
                             <ExternalLink size={16} />
                             {t('account.manage_plan')}
                         </button>
                     )}
                 </div>
             </div>
+
+            <PlanDetailsModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onRenew={handleUpgrade}
+                isLoadingPayment={isLoadingPayment}
+            />
         </div>
     );
 };

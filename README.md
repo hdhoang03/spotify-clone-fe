@@ -1,45 +1,53 @@
 # 🎵 Springtunes Client (Frontend)
 
-Springtunes là một ứng dụng nghe nhạc trực tuyến chất lượng cao lấy cảm hứng từ Spotify, được xây dựng trên nền tảng **React 19**, **TypeScript**, và **Vite**. Dự án hướng tới một giao diện hiện đại (Premium Aesthetics), mượt mà, hỗ trợ đa ngôn ngữ và có chế độ tối ưu hóa đặc biệt dành cho các thiết bị cấu hình thấp.
+Springtunes là một ứng dụng nghe nhạc trực tuyến chất lượng cao lấy cảm hứng từ Spotify, được xây dựng trên nền tảng **React 19**, **TypeScript**, và **Vite**. Dự án hướng tới một giao diện hiện đại (Premium Aesthetics), mượt mà, hỗ trợ đa ngôn ngữ và sở hữu các tối ưu hóa đặc biệt giúp chạy ổn định trên các thiết bị cấu hình cũ.
 
 ---
 
 ## ✨ Tính Năng Nổi Bật
 
 ### 1. Giao Diện & Trải Nghiệm Người Dùng (Premium Aesthetics)
-* **Giao diện hiện đại:** Lấy cảm hứng từ thiết kế sang trọng của Spotify nhưng có bản sắc riêng, hỗ trợ chuyển đổi chủ đề Sáng (Light) và Tối (Dark).
-* **Đồng bộ hóa màu sắc:** Tự động phân tích màu chủ đạo của ảnh bìa (Avatar/Cover) bằng thuật toán phân tích màu trung bình để tạo nền gradient chuyển động mượt mà.
-* **Giao diện Premium:** Người dùng đăng ký gói Premium sẽ có vòng hào quang động quanh avatar, vương miện lấp lánh và hiệu ứng chữ ánh kim lấp lánh (Golden Shimmer Name).
+- **Đồng bộ hóa màu sắc thông minh**: Sử dụng thuật toán phân tích màu trung bình từ thư viện `fast-average-color` để tự động tách xuất màu sắc chủ đạo từ ảnh bìa bài hát/playlist. Màu sắc này được áp dụng làm nền gradient chuyển động mượt mà cho giao diện, đem lại trải nghiệm thị giác sống động.
+- **Đặc quyền tài khoản Premium**: Người dùng Premium sẽ sở hữu vòng hào quang động quanh ảnh đại diện, vương miện lấp lánh và hiệu ứng tên chữ ánh kim lấp lánh (Golden Shimmer Name Effect) nổi bật.
+- **Chế độ Sáng/Tối (Light/Dark Mode)**: Tùy biến chủ đề hiển thị toàn diện theo sở thích người dùng.
 
 ### 2. Trình Phát Nhạc Đa Dạng (Advanced Audio Player)
-* **3 Trạng thái linh hoạt:**
-  * **MiniPlayer:** Trình phát thu nhỏ thông minh hỗ trợ kéo thả (drag-and-drop) tự do.
-  * **Sidebar Player:** Tích hợp trực tiếp bên cạnh thanh điều hướng để dễ thao tác.
-  * **Fullscreen Player:** Chế độ toàn màn hình tuyệt đẹp hiển thị lời bài hát (Lyrics) cuộn động theo thời gian thực và thông tin nghệ sĩ chi tiết.
-* **Tự động phát tiếp (Autoplay):** Tiếp tục phát các bài hát liên quan khi danh sách kết thúc.
+Hỗ trợ 3 trạng thái phát nhạc linh hoạt phù hợp với nhu cầu thao tác:
+- **MiniPlayer**: Trình phát thu nhỏ thông minh hỗ trợ kéo thả (drag-and-drop) tự do đến bất kỳ vị trí nào trên màn hình.
+- **Sidebar Player**: Tích hợp trực tiếp bên cạnh thanh điều hướng để tối giản hóa vùng làm việc.
+- **Fullscreen Player**: Chế độ phát nhạc toàn màn hình tuyệt đẹp với lời bài hát (Lyrics) cuộn tự động theo thời gian thực và thông tin nghệ sĩ chi tiết.
+- **Hàng đợi & Tự động phát (Queue & Autoplay)**: Tiếp tục phát tự động các bài hát liên quan khi danh sách bài hát hiện tại kết thúc.
 
-### 3. Tối Ưu Hóa Cho Thiết Bị Cấu Hình Yếu (Low Performance Mode)
-* **Tự động & Chủ động:** Nút chuyển đổi nhanh trong trang cài đặt giúp tắt toàn bộ hiệu ứng chuyển động nặng (`transition`), làm mờ nền (`backdrop-blur`) và các hiệu ứng animation để tối ưu hóa FPS, tránh Reflow, giúp ứng dụng chạy cực kỳ mượt mà trên thiết bị cũ.
+### 3. Tối Ưu Hóa Thiết Bị Cấu Hình Thấp (Low Performance Mode)
+- **Tắt hiệu ứng nặng**: Cung cấp tùy chọn chuyển đổi nhanh trong phần cài đặt giúp vô hiệu hóa toàn bộ hiệu ứng chuyển động (`transition`), làm mờ nền (`backdrop-blur`), và các hiệu ứng keyframe animation phức tạp.
+- **Lợi ích**: Tối ưu hóa chỉ số FPS, tránh hiện tượng Reflow/Repaint, giúp ứng dụng hoạt động cực kỳ mượt mà trên các dòng máy cũ hoặc cấu hình yếu.
 
-### 4. Quản Lý Hồ Sơ & Quyền Riêng Tư
-* **Chỉnh sửa hồ sơ:** Thay đổi ảnh đại diện trực quan tích hợp công cụ cắt ảnh (`react-easy-crop`).
-* **Tính năng chia sẻ:** Xuất thẻ hồ sơ đẹp mắt (Profile Share Card) dưới dạng hình ảnh chất lượng cao kèm mã QR để chia sẻ dễ dàng.
-* **Quyền riêng tư:** Chế độ hồ sơ công khai/riêng tư, quản lý danh sách chặn người dùng (Blocked List) trực quan.
+### 4. Chia Sẻ Hồ Sơ & Mã QR
+- **Profile Share Card**: Xuất thẻ hồ sơ cá nhân đẹp mắt dưới dạng hình ảnh chất lượng cao kèm mã QR tự động (sử dụng `html-to-image` và `qrcode.react`) để chia sẻ nhanh lên mạng xã hội.
+- **Chỉnh sửa hồ sơ trực quan**: Thay đổi ảnh đại diện tích hợp công cụ cắt ảnh (`react-easy-crop`) chuẩn xác.
 
-### 5. Đa Ngôn Ngữ (Internationalization - i18n)
-* Hỗ trợ đầy đủ **4 ngôn ngữ**: **Tiếng Việt (VI)**, **Tiếng Anh (EN)**, **Tiếng Hàn (KO)**, và **Tiếng Nhật (JA)**.
+### 5. Bộ Máy Kết Nối API Nâng Cao (Axios Client in `api.ts`)
+Bộ điều phối yêu cầu HTTP của ứng dụng sở hữu các cơ chế xử lý cực kỳ mạnh mẽ:
+- **Cơ chế Dự Phòng Điểm Cuối (Endpoint Fallback)**: Nếu một máy chủ API gặp sự cố mạng (`ERR_NETWORK`), ứng dụng sẽ tự động chuyển sang địa chỉ API dự phòng tiếp theo trong danh sách cấu hình và thực hiện lại yêu cầu ngay lập tức mà không làm gián đoạn trải nghiệm người dùng.
+- **Hàng Đợi Làm Mới Token (Mutex-based Refresh Token Queue)**: Khi nhiều yêu cầu đồng thời bị từ chối do Token hết hạn (Lỗi 401), bộ lọc sẽ tạm giữ các yêu cầu này trong một hàng đợi. Ứng dụng chỉ gửi duy nhất 1 yêu cầu refresh token lên backend. Khi nhận được token mới, nó sẽ tự động phân phối lại cho toàn bộ các yêu cầu đang chờ và thực thi tiếp.
+- **Hỗ trợ Ngrok**: Tự động đính kèm tiêu đề `'ngrok-skip-browser-warning': 'true'` giúp bỏ qua màn hình cảnh báo khi nhà phát triển sử dụng ngrok làm đường truyền tunnel để test API cục bộ.
+
+### 6. Đa Ngôn Ngữ (i18n)
+- Hỗ trợ đầy đủ **4 ngôn ngữ**: **Tiếng Việt (VI)**, **Tiếng Anh (EN)**, **Tiếng Hàn (KO)**, và **Tiếng Nhật (JA)**.
 
 ---
 
 ## 🛠️ Công Nghệ Sử Dụng
 
-* **Core:** React 19, TypeScript, Vite
-* **Styling:** Tailwind CSS, Vanilla CSS
-* **Animations:** Framer Motion
-* **State Management:** Zustand (quản lý trạng thái phát nhạc, cài đặt người dùng)
-* **API Client:** Axios
-* **Localization:** i18next
-* **Charts:** Recharts (sử dụng trong trang quản trị/Admin Dashboard)
+- **Core**: React 19, TypeScript, Vite
+- **Styling**: Tailwind CSS, Vanilla CSS
+- **Animations**: Framer Motion
+- **State Management**: Zustand (Quản lý trạng thái trình phát nhạc, hàng đợi phát, cài đặt giao diện)
+- **API Client**: Axios
+- **Localization**: i18next & i18next-browser-languagedetector
+- **Media Helpers**: fast-average-color, html-to-image, qrcode.react, react-easy-crop
+- **Icons**: Lucide React
+- **Charts**: Recharts (Sử dụng trong Admin Dashboard)
 
 ---
 
@@ -47,26 +55,26 @@ Springtunes là một ứng dụng nghe nhạc trực tuyến chất lượng ca
 
 ```bash
 src/
-├── components/          # Các components giao diện chính của hệ thống
-│   ├── Account/         # Quản lý tài khoản (Profile, Bảo mật, Gói dịch vụ)
-│   ├── Admin/           # Dashboard quản trị dành cho Admin
-│   ├── Artist/          # Trang nghệ sĩ và discography
-│   ├── Auth/            # Đăng nhập, đăng ký, xác thực OTP, ReCAPTCHA
-│   ├── HomePage/        # Trang chủ, danh mục xu hướng và Footer
+├── components/          # Các components giao diện chính
+│   ├── Account/         # Quản lý tài khoản (Thông tin cá nhân, Bảo mật, Đăng ký Premium)
+│   ├── Admin/           # Dashboard quản trị, biểu đồ thống kê dành cho Admin
+│   ├── Artist/          # Trang nghệ sĩ, thông tin discography, danh sách bài hát nổi bật
+│   ├── Auth/            # Đăng nhập, đăng ký, OTP, xác thực Google OAuth, ReCAPTCHA v3
+│   ├── HomePage/        # Trang chủ, danh mục thịnh hành, Footer hệ thống
 │   ├── MusicPlayer/     # Trình phát nhạc (Mini, Fullscreen, Sidebar, Lyrics)
-│   ├── Profile/         # Trang cá nhân của người dùng và các modal tương tác
-│   ├── Search/          # Tính năng tìm kiếm thông minh và bộ lọc
-│   ├── Settings/        # Trang cài đặt (Ngôn ngữ, Quyền riêng tư, Hiệu năng)
-│   ├── Sidebar/         # Sidebar điều hướng và Thư viện nhạc (Library)
-│   └── common/          # Các component dùng chung (Loader, BackButton, v.v.)
-├── contexts/            # React Context (MusicContext quản lý luồng phát nhạc)
-├── hooks/               # Các custom hooks toàn cục
-├── locales/             # File bản dịch đa ngôn ngữ (vi, en, ko, ja)
-├── services/            # Tích hợp API (likeApi, notificationService, v.v.)
-├── utils/               # Các helper functions tiện ích
-├── App.tsx              # Component cấu hình Router và Layout chính
-├── main.tsx             # Điểm khởi chạy ứng dụng (Bootstrap)
-└── index.css            # Stylesheet toàn cục, chứa design tokens và biến tối ưu hóa
+│   ├── Profile/         # Trang cá nhân, chia sẻ hồ sơ, quản lý blocklist
+│   ├── Search/          # Tính năng tìm kiếm và bộ lọc thể loại
+│   ├── Settings/        # Cài đặt ngôn ngữ, quyền riêng tư, và Low Performance Mode
+│   ├── Sidebar/         # Sidebar điều hướng và Thư viện nhạc cá nhân (Library)
+│   └── common/          # Các component dùng chung (Toast, Loader, Button, v.v.)
+├── contexts/            # Context API toàn cục
+├── hooks/               # Custom hooks toàn cục
+├── locales/             # Tệp tin ngôn ngữ (vi.json, en.json, ko.json, ja.json)
+├── services/            # Tương tác API (likeApi, notificationService, api.ts)
+├── utils/               # Các hàm bổ trợ
+├── App.tsx              # Cấu hình Router và Layout chính
+├── main.tsx             # Điểm khởi chạy ứng dụng
+└── index.css            # Style toàn cục và biến tối ưu hóa CSS
 ```
 
 ---
@@ -74,44 +82,38 @@ src/
 ## 🚀 Hướng Dẫn Cài Đặt & Chạy Dự Án
 
 ### Yêu Cầu Hệ Thống
-* Cài đặt sẵn **Node.js** (Khuyến nghị phiên bản LTS v18 trở lên).
-* Quản lý gói: **npm** hoặc **yarn**.
+- Đã cài đặt **Node.js** (Khuyến nghị phiên bản LTS v18 trở lên).
+- Trình quản lý gói: **npm** hoặc **yarn**.
 
-### Bước 1: Clone kho lưu trữ
+### Bước 1: Clone Kho Lưu Trữ
 ```bash
 git clone https://github.com/hdhoang03/spotify-clone-fe.git
 cd spotify-clone-fe
 ```
 
-### Bước 2: Cài đặt các thư viện phụ thuộc
+### Bước 2: Cài Đặt Các Thư Viện Phụ Thuộc
 ```bash
 npm install
 ```
 
-### Bước 3: Cấu hình biến môi trường
-Tạo file `.env` ở thư mục gốc của dự án (cùng cấp với `package.json`) và điền cấu hình API Backend của bạn:
+### Bước 3: Cấu Hình Biến Môi Trường
+Tạo tệp tin `.env` ở thư mục gốc của dự án (cùng cấp với `package.json`) và điền cấu hình:
 ```env
-VITE_API_URL=http://localhost:8080/api/v1
+# Địa chỉ API của Backend (Có thể điền nhiều URL ngăn cách bằng dấu phẩy để kích hoạt cơ chế dự phòng)
+VITE_API_URL=http://localhost:8080/spotify,https://spotify-clone-8xkm.onrender.com
+
+# Khóa Public Google reCAPTCHA v3
 VITE_RECAPTCHA_SITE_KEY=your_recaptcha_site_key_here
 ```
 
-### Bước 4: Khởi động dự án ở môi trường phát triển
+### Bước 4: Khởi Động Ở Môi Trường Phát Triển
 ```bash
 npm run dev
 ```
-*Ứng dụng sẽ chạy tại địa chỉ mặc định:* `http://localhost:5173`
+Ứng dụng sẽ chạy tại địa chỉ: `http://localhost:5173`
 
-### Bước 5: Build ứng dụng cho môi trường Production
+### Bước 5: Biên Tập Cho Môi Trường Production
 ```bash
 npm run build
 ```
-*Mã nguồn sau khi tối ưu hóa và nén sẽ nằm trong thư mục `/dist`.*
-
----
-
-## 🤝 Hướng Dẫn Đóng Góp (Contribution)
-1. Fork dự án.
-2. Tạo nhánh tính năng mới (`git checkout -b feature/NewFeature`).
-3. Commit thay đổi (`git commit -m 'Add new feature'`).
-4. Push lên nhánh vừa tạo (`git push origin feature/NewFeature`).
-5. Mở một Pull Request mới để được review và merge.
+Mã nguồn sau khi được tối ưu hóa và nén sẽ nằm trong thư mục `/dist`.
