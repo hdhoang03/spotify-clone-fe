@@ -4,8 +4,7 @@ import { ArrowLeft, Loader2 } from 'lucide-react';
 import BackButton from '../common/BackButton';
 import api from '../../services/api';
 import { useMusic } from '../../contexts/MusicContent';
-import PlaylistTrackList from '../Sidebar/PlaylistTrackList';
-import HeroBackground from '../common/HeroBackground';
+import SearchableTrackList from '../Shared/SearchableTrackList';
 import { useTranslation } from 'react-i18next';
 
 const CategoryDetailPage = () => {
@@ -14,8 +13,6 @@ const CategoryDetailPage = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const { playPlaylist, currentSong, isPlaying, togglePlay } = useMusic();
-
-    const colorHex = location.state?.colorHex || '#535353'; // Màu mặc định nếu không có state
 
     const [category, setCategory] = useState<any>(null);
     const [songs, setSongs] = useState<any[]>([]);
@@ -91,8 +88,6 @@ const CategoryDetailPage = () => {
             <div className="absolute top-4 left-4 z-20">
                 <BackButton className="bg-black/20 backdrop-blur-sm p-1 rounded-full text-white" />
             </div>
-            {/* Background Color Effect */}
-            <HeroBackground fallbackColor={colorHex} />
 
             {/* STICKY HEADER */}
             <div
@@ -154,13 +149,14 @@ const CategoryDetailPage = () => {
             <div className="relative z-10">
                 <div className="absolute inset-0 bg-gradient-to-b from-black/5 to-transparent dark:from-white/5 h-64 pointer-events-none" />
                 <div className="pt-6 relative">
-                    <PlaylistTrackList
+                    <SearchableTrackList
                         songs={songs}
                         isOwner={false}
                         onPlaySong={handlePlaySongAtIndex}
                         currentSongId={currentSong?.id}
                         globalIsPlaying={isPlaying}
                         onTogglePlay={togglePlay}
+                        searchMode="local"
                     />
                 </div>
             </div>

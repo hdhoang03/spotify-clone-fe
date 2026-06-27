@@ -5,7 +5,7 @@ import { ArrowLeft, Heart } from 'lucide-react';
 import { likeApi } from '../../services/likeApi';
 import { useMusic } from '../../contexts/MusicContent';
 import { normalizeSong } from '../HomePage/useHomeData';
-import PlaylistTrackList from '../Sidebar/PlaylistTrackList';
+import SearchableTrackList from '../Shared/SearchableTrackList';
 import PlaybackActionBar from '../common/PlaybackActionBar';
 import { useTranslation } from 'react-i18next';
 
@@ -238,14 +238,17 @@ const LikedSongsPage = () => {
 
             {/* Track List */}
             {!isLoading && (
-                <PlaylistTrackList
-                    songs={songs}
-                    isOwner={true}
-                    onPlaySong={handlePlaySongAtIndex}
-                    currentSongId={currentSong?.id}
-                    globalIsPlaying={isPlaying}
-                    onTogglePlay={togglePlay}
-                />
+                <div className="mt-4">
+                    <SearchableTrackList
+                        songs={songs}
+                        isOwner={true}
+                        onPlaySong={handlePlaySongAtIndex}
+                        currentSongId={currentSong?.id}
+                        globalIsPlaying={isPlaying}
+                        onTogglePlay={togglePlay}
+                        searchMode="local"
+                    />
+                </div>
             )}
 
             <div className="pb-32" />

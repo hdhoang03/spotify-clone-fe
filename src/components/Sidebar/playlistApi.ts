@@ -53,4 +53,8 @@ export const playlistApi = {
     // 9. Lấy danh sách bài hát trong playlist
     getPlaylistSongs: (playlistId: string, page = 1, size = 20) =>
         api.get(`/playlist/${playlistId}/songs?page=${page}&size=${size}`),
+
+    // 10. Tìm kiếm bài hát trong playlist (gọi server)
+    searchSongs: (playlistId: string, keyword: string, page = 1, size = 50) =>
+        api.get(`/playlist/${playlistId}/songs/search?q=${encodeURIComponent(keyword)}&page=${page}&size=${size}`),
 };

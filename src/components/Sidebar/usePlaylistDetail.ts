@@ -9,7 +9,7 @@ export const usePlaylistDetail = (playlistId: string | undefined) => {
     const { t } = useTranslation();
     const [playlist, setPlaylist] = useState<PlaylistResponse | null>(null);
     const [songs, setSongs] = useState<any[]>([]);
-    
+
     const updatePlaylistStore = usePlaylistStore(state => state.updatePlaylist);
 
     // States cho Playlist
@@ -20,11 +20,17 @@ export const usePlaylistDetail = (playlistId: string | undefined) => {
     const [isLoadingSongs, setIsLoadingSongs] = useState(false);
     const [page, setPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
+    const [searchKeyword, setSearchKeyword] = useState('');
 
     // 1. Fetch thông tin chi tiết Playlist
     const fetchDetail = useCallback(async () => {
         if (!playlistId) return;
-        setIsLoading(true);
+
+        // Chỉ hiện skeleton khi mới vào trang (chưa có data hoặc chuyển sang playlist khác)
+        if (!playlist || playlist.id !== playlistId) {
+            setIsLoading(true);
+        }
+
         try {
             const response = await playlistApi.getPlaylistById(playlistId);
             if (response.data.code === 1000) {
@@ -44,12 +50,19 @@ export const usePlaylistDetail = (playlistId: string | undefined) => {
         }
     }, [playlistId]);
 
-    // 2. Fetch danh sách bài hát có phân trang
-    const fetchSongs = useCallback(async (pageNum: number, isLoadMore = false) => {
+    // 2. Fetch danh sách bài hát có phân trang (hoặc tìm kiếm)
+    const fetchSongs = useCallback(async (pageNum: number, isLoadMore = false, keyword = searchKeyword) => {
         if (!playlistId) return;
         setIsLoadingSongs(true);
         try {
-            const res = await playlistApi.getPlaylistSongs(playlistId, pageNum, 20); // Lấy 20 bài 1 trang
+            let res;
+            if (keyword && keyword.trim() !== '') {
+                // Khi search, ta lấy nhiều kết quả hơn (vd 50 bài)
+                res = await playlistApi.searchSongs(playlistId, keyword, pageNum, 10);
+            } else {
+                res = await playlistApi.getPlaylistSongs(playlistId, pageNum, 20); // Lấy 20 bài 1 trang
+            }
+
             if (res.data.code === 1000) {
                 const newSongs = res.data.result.content.map(normalizeSong);
                 setSongs(prev => isLoadMore ? [...prev, ...newSongs] : newSongs);
@@ -60,13 +73,16 @@ export const usePlaylistDetail = (playlistId: string | undefined) => {
         } finally {
             setIsLoadingSongs(false);
         }
-    }, [playlistId]);
+    }, [playlistId, searchKeyword]);
 
-    // Gọi API khi vào trang
+    // Gọi API khi vào trang (Chỉ gọi 1 lần khi đổi playlistId)
     useEffect(() => {
-        fetchDetail();
-        fetchSongs(1);
-    }, [fetchDetail, fetchSongs]);
+        if (playlistId) {
+            fetchDetail();
+            fetchSongs(1, false, '');
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [playlistId]);
 
     // Hàm gọi khi bấm "Xem thêm"
     const loadMoreSongs = () => {
@@ -77,6 +93,13 @@ export const usePlaylistDetail = (playlistId: string | undefined) => {
         }
     };
 
+    // Hàm xử lý tìm kiếm
+    const handleSearch = useCallback((keyword: string) => {
+        setSearchKeyword(keyword);
+        setPage(1);
+        fetchSongs(1, false, keyword);
+    }, [fetchSongs]);
+
     // Xử lý Cập nhật Playlist
     const handleUpdate = async (formData: FormData) => {
         if (!playlistId) return false;
@@ -84,14 +107,14 @@ export const usePlaylistDetail = (playlistId: string | undefined) => {
             const res = await playlistApi.updatePlaylist(playlistId, formData);
             if (res.data.code === 1000) {
                 await fetchDetail();
-                
+
                 // Update global store to reflect changes in sidebar
                 updatePlaylistStore(playlistId, {
                     name: res.data.result?.name || formData.get('name') as string,
                     description: res.data.result?.description || formData.get('description') as string,
                     coverUrl: res.data.result?.coverUrl
                 });
-                
+
                 return true;
             }
             return false;
@@ -116,6 +139,7 @@ export const usePlaylistDetail = (playlistId: string | undefined) => {
         hasMore,
         loadMoreSongs,
         refetch: refetchAll,
-        handleUpdate
+        handleUpdate,
+        handleSearch
     };
 };

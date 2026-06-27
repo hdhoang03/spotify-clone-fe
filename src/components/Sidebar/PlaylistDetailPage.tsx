@@ -10,7 +10,7 @@ import PlaylistModal from './PlaylistModal';
 import { useMusic } from '../../contexts/MusicContent';
 import PlaylistHero from './PlaylistHero';
 import PlaylistActionBar from './PlaylistActionBar';
-import PlaylistTrackList from './PlaylistTrackList';
+import SearchableTrackList from '../Shared/SearchableTrackList';
 import { usePlaylistStore } from '../../stores/usePlaylistStore';
 import HeroBackground from '../common/HeroBackground';
 import { useTranslation } from 'react-i18next';
@@ -29,7 +29,8 @@ const PlaylistDetailPage = () => {
         hasMore,
         loadMoreSongs,
         handleUpdate,
-        refetch
+        refetch,
+        handleSearch
     } = usePlaylistDetail(id);
 
     const { playPlaylist } = useMusic();
@@ -170,7 +171,7 @@ const PlaylistDetailPage = () => {
                 />
 
                 {/* Danh sách bài hát chi tiết */}
-                <PlaylistTrackList
+                <SearchableTrackList
                     songs={songs}
                     playlistId={playlist.id}
                     isOwner={isOwner}
@@ -179,6 +180,8 @@ const PlaylistDetailPage = () => {
                     globalIsPlaying={globalIsPlaying}
                     onTogglePlay={togglePlay}
                     onRemoveSuccess={() => refetch()} // Gọi refetch để làm mới list sau khi xóa bài[cite: 112]
+                    searchMode="api"
+                    onSearchApi={handleSearch}
                 />
 
                 {/* Nút "Xem thêm" hỗ trợ phân trang */}
