@@ -153,8 +153,8 @@ const NotificationDropdown = ({ onClose, onUpdateUnreadCount, externalUnreadCoun
         try {
             await NotificationService.deleteNotification(item.id);
             setNotifications(prev => prev.filter(n => n.id !== item.id));
-            // Nếu đây là thông báo chưa đọc, cập nhật lại badge
-            if (!item.isRead) onUpdateUnreadCount();
+            // Cập nhật lại badge số lượng thông báo chưa đọc
+            onUpdateUnreadCount();
         } catch (error) {
             console.error('Lỗi xóa thông báo', error);
         } finally {
