@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import type { ConfirmActionType } from '../../Admin/ConfirmModal';
 import { getPlaylistCover, getArtistAvatar } from '../../../utils/avatarUrl';
 import { useTranslation } from 'react-i18next';
+import { playlistApi } from '../../../components/Sidebar/playlistApi';
 
 export const useProfileLogic = (userId: string | undefined) => {
     const { t } = useTranslation();
@@ -21,6 +22,8 @@ export const useProfileLogic = (userId: string | undefined) => {
     const [privateFollowing, setPrivateFollowing] = useState(false); // Follow state khi không có profile data
 
     const globalPlaylists = usePlaylistStore(state => state.playlists);
+    const hasFetched = usePlaylistStore(state => state.hasFetched);
+    const setPlaylists = usePlaylistStore(state => state.setPlaylists);
 
     // --- STATE CHO CONFIRM MODAL CHẶN NGƯỜI DÙNG ---
     const [confirmBlockModal, setConfirmBlockModal] = useState<{
@@ -59,7 +62,9 @@ export const useProfileLogic = (userId: string | undefined) => {
 
             // 3. NẾU PUBLIC HOẶC LÀ CỦA MÌNH -> Gọi API phụ
             const apiCalls: Promise<any>[] = [
-                api.get(`/playlist/user/${actualId}`),
+                isOwn
+                    ? (!hasFetched ? playlistApi.getMyPlaylists(1, 50) : Promise.resolve({ data: { code: 1000, result: null } }))
+                    : api.get(`/playlist/user/${actualId}`),
                 api.get(`/user/follow/${actualId}/artist`) // Hoặc api lấy danh sách following
             ];
 
@@ -71,15 +76,20 @@ export const useProfileLogic = (userId: string | undefined) => {
             const results = await Promise.allSettled(apiCalls);
 
             if (results[0].status === 'fulfilled' && results[0].value.data.result) {
-                const formattedPlaylists = results[0].value.data.result.content.map((p: any) => ({
-                    id: String(p.id),
-                    title: p.name,
-                    subTitle: p.isPublic ? t('playlist.public_playlist') : t('playlist.private_playlist'),
-                    imageUrl: getPlaylistCover(p.coverUrl, p.name),
-                    rounded: false,
-                    type: 'playlist'
-                }));
-                setFetchedPlaylists(formattedPlaylists);
+                if (isOwn && !hasFetched) {
+                    const content = results[0].value.data.result.content || [];
+                    setPlaylists(content);
+                } else if (!isOwn) {
+                    const formattedPlaylists = results[0].value.data.result.content.map((p: any) => ({
+                        id: String(p.id),
+                        title: p.name,
+                        subTitle: p.isPublic ? t('playlist.public_playlist') : t('playlist.private_playlist'),
+                        imageUrl: getPlaylistCover(p.coverUrl, p.name),
+                        rounded: false,
+                        type: 'playlist'
+                    }));
+                    setFetchedPlaylists(formattedPlaylists);
+                }
             }
 
             if (results[1].status === 'fulfilled' && results[1].value.data.result) {
@@ -121,7 +131,7 @@ export const useProfileLogic = (userId: string | undefined) => {
         } finally {
             setIsLoading(false);
         }
-    }, [userId, navigate]);
+    }, [userId, navigate, hasFetched, setPlaylists]);
 
     useEffect(() => {
         fetchProfileData();

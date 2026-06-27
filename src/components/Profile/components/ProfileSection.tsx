@@ -51,8 +51,8 @@ const ProfileSection = ({ title, subTitle, items, onShowAll, className = "mb-8" 
             {/* Container */}
             <div className={
                 isScrollable 
-                ? `flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 
-                   -mx-2 px-6 md:mx-0 md:px-0
+                ? `flex overflow-x-auto snap-x snap-mandatory gap-3 pb-4 
+                   -mx-6 px-6 md:mx-0 md:px-0
                    no-scrollbar md:grid md:grid-cols-4 lg:grid-cols-5 md:gap-6 md:pb-0`
                 
                 : "grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6"
@@ -60,7 +60,7 @@ const ProfileSection = ({ title, subTitle, items, onShowAll, className = "mb-8" 
                 {items.map((item) => (
                     <div 
                         key={item.id} 
-                        className={isScrollable ? 'flex-shrink-0 w-[40vw] min-w-[150px] md:w-auto snap-start' : 'w-auto'}
+                        className={isScrollable ? 'flex-shrink-0 w-[38vw] min-w-[120px] md:w-auto snap-start' : 'w-auto'}
                     >
                         {/* Image */}
                         <CardItem 
