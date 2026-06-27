@@ -19,11 +19,13 @@ const SearchInput = ({ onTabChange, activeTab }: SearchInputProps) => {
     const navigate = useNavigate();
     const previousState = useRef({ path: "/", tab: "HOME" });
 
-    // Tự động đóng và xóa chữ khi rời khỏi tab SEARCH
+    // Tự động đóng và xóa chữ khi rời khỏi tab SEARCH, hoặc tự động mở khi vào tab SEARCH
     useEffect(() => {
         if (activeTab !== 'SEARCH' && isOpen) {
             setIsOpen(false);
             clearQuery();
+        } else if (activeTab === 'SEARCH' && !isOpen) {
+            setIsOpen(true);
         }
     }, [activeTab, isOpen, clearQuery]);
 

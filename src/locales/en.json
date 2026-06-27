@@ -172,7 +172,8 @@
 		"create_new": "Create new",
 		"not_exist": "This playlist does not exist or has been deleted.",
 		"fetch_error": "Cannot load Playlist info.",
-		"content_unavailable": "This content is not available."
+		"content_unavailable": "This content is not available.",
+		"song_removed_from_platform": "This song has been removed from the platform and cannot be played."
 	},
 	"library": {
 		"title": "Library",

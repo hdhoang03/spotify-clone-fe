@@ -6,6 +6,8 @@ import { useNavigate } from 'react-router-dom';
 import EqualizerBars from '../common/EqualizerBars';
 import ArtistLinks from '../common/ArtistLinks';
 import { useTranslation } from 'react-i18next';
+import Toast from '../common/Toast';
+import type { ToastType } from '../common/Toast';
 
 interface PlaylistTrackListProps {
     songs: any[];
@@ -30,6 +32,8 @@ const PlaylistTrackList = ({ songs, playlistId, isOwner = true, onPlaySong, onRe
     const { t, i18n } = useTranslation();
     const [contextMenu, setContextMenu] = useState<{ song: any, x: number, y: number } | null>(null);
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+    // Toast state — tái sử dụng cho cả playlist lẫn category
+    const [toast, setToast] = useState<{ message: string; type: ToastType } | null>(null);
 
     useEffect(() => {
         const handleCloseOthers = (e: CustomEvent) => {
@@ -157,7 +161,14 @@ const PlaylistTrackList = ({ songs, playlistId, isOwner = true, onPlaySong, onRe
                             `}
                             title={isDeleted ? t('playlist.content_unavailable') : undefined}
                             onContextMenu={(e) => handleContextMenu(e, song)}
-                            onClick={() => { if (!isDeleted) onPlaySong(index) }}
+                            onClick={() => {
+                                if (isDeleted) {
+                                    // Hiện toast rõ ràng thay vì chỉ dùng cursor-not-allowed
+                                    setToast({ message: t('playlist.song_removed_from_platform'), type: 'warning' });
+                                    return;
+                                }
+                                onPlaySong(index);
+                            }}
                             onMouseEnter={() => !isDeleted && setHoveredIndex(index)}
                             onMouseLeave={() => !isDeleted && setHoveredIndex(null)}
                         >
@@ -258,6 +269,16 @@ const PlaylistTrackList = ({ songs, playlistId, isOwner = true, onPlaySong, onRe
                     }}
                     onNavigateToArtist={(artistId) => navigate(`/artist/${artistId}`)}
                     onNavigateToAlbum={(albumId) => navigate(`/album/${albumId}`)}
+                />
+            )}
+
+            {/* Toast thông báo khi click bài bị xóa mềm — tái sử dụng được cho mọi tracklist */}
+            {toast && (
+                <Toast
+                    message={toast.message}
+                    type={toast.type}
+                    duration={3500}
+                    onClose={() => setToast(null)}
                 />
             )}
         </div>

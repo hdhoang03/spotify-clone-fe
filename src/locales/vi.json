@@ -160,7 +160,8 @@
 		"create_new": "Tạo mới",
 		"not_exist": "Playlist này không tồn tại hoặc đã bị xóa.",
 		"fetch_error": "Không thể tải thông tin Playlist.",
-		"content_unavailable": "Nội dung này không khả dụng."
+		"content_unavailable": "Nội dung này không khả dụng.",
+		"song_removed_from_platform": "Bài hát này đã bị gỡ khỏi nền tảng và không thể phát lúc này."
 	},
 	"library": {
 		"title": "Thư viện",

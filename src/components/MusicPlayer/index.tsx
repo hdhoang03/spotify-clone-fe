@@ -22,6 +22,63 @@ const readAutoplay = (): boolean => {
     return true;
 };
 
+const isSongDeleted = (song: any): boolean => {
+    return song?.deleted || song?.isDeleted || song?.is_deleted || false;
+};
+
+const getNextValidIndex = (
+    playlist: any[],
+    currentIndex: number,
+    direction: 1 | -1,
+    repeatMode: string,
+    isShuffling: boolean
+): number => {
+    if (playlist.length === 0) return -1;
+
+    const hasAnyValid = playlist.some(s => !isSongDeleted(s));
+    if (!hasAnyValid) return -1;
+
+    let nextIdx = currentIndex;
+
+    if (isShuffling) {
+        const validIndices = playlist
+            .map((s, i) => ({ s, i }))
+            .filter(item => !isSongDeleted(item.s) && item.i !== currentIndex)
+            .map(item => item.i);
+
+        if (validIndices.length > 0) {
+            return validIndices[Math.floor(Math.random() * validIndices.length)];
+        }
+        return currentIndex;
+    }
+
+    let attempts = 0;
+    while (attempts < playlist.length) {
+        nextIdx += direction;
+        attempts++;
+
+        if (nextIdx > playlist.length - 1) {
+            if (repeatMode === 'all') {
+                nextIdx = 0;
+            } else {
+                return -1;
+            }
+        } else if (nextIdx < 0) {
+            if (repeatMode === 'all') {
+                nextIdx = playlist.length - 1;
+            } else {
+                return -1;
+            }
+        }
+
+        if (!isSongDeleted(playlist[nextIdx])) {
+            return nextIdx;
+        }
+    }
+
+    return -1;
+};
+
 const MusicPlayer = () => {
     const {
         currentSong, playlist, playPlaylist, playbackSource, playRadio,
@@ -83,28 +140,23 @@ const MusicPlayer = () => {
     const handleNext = useCallback(() => {
         if (!currentSong || playlist.length === 0) return;
         const idx = playlist.findIndex(s => s.id === currentSong.id);
-        let nextIdx: number;
-        if (player.isShuffling) {
-            do { nextIdx = Math.floor(Math.random() * playlist.length); }
-            while (nextIdx === idx && playlist.length > 1);
+        const nextIdx = getNextValidIndex(playlist, idx, 1, player.repeatMode, player.isShuffling);
+        if (nextIdx !== -1) {
             playbackSource === 'radio' ? playRadio(playlist, nextIdx) : playPlaylist(playlist, nextIdx);
         } else {
-            if (idx < playlist.length - 1) {
-                playPlaylist(playlist, idx + 1);
-            } else {
-                if (player.repeatMode === 'all') playPlaylist(playlist, 0);
-                else { player.audioRef.current?.pause(); setIsPlaying(false); }
-            }
+            player.audioRef.current?.pause();
+            setIsPlaying(false);
         }
-    }, [currentSong, playlist, player.isShuffling, player.repeatMode, playbackSource, playPlaylist, playRadio, setIsPlaying]);
+    }, [currentSong, playlist, player, playbackSource, playPlaylist, playRadio, setIsPlaying]);
 
     const handlePrev = useCallback(() => {
         if (!currentSong || playlist.length === 0) return;
         const idx = playlist.findIndex(s => s.id === currentSong.id);
-        if (player.isShuffling) { handleNext(); return; }
-        if (idx > 0) playPlaylist(playlist, idx - 1);
-        else if (player.repeatMode === 'all') playPlaylist(playlist, playlist.length - 1);
-    }, [currentSong, playlist, player.isShuffling, player.repeatMode, playPlaylist, handleNext]);
+        const prevIdx = getNextValidIndex(playlist, idx, -1, player.repeatMode, player.isShuffling);
+        if (prevIdx !== -1) {
+            playPlaylist(playlist, prevIdx);
+        }
+    }, [currentSong, playlist, player, playPlaylist]);
 
     const handleSongEnded = useCallback(() => {
         if (player.repeatMode === 'one') return;
@@ -115,15 +167,28 @@ const MusicPlayer = () => {
             return;
         }
         const idx = playlist.findIndex(s => s.id === currentSong?.id);
-        const isAtEnd = idx >= playlist.length - 1;
-        if (isAtEnd && !player.isShuffling && player.repeatMode !== 'all') {
-            if (autoplay) {
-                let nextIdx;
-                do { nextIdx = Math.floor(Math.random() * playlist.length); }
-                while (nextIdx === idx && playlist.length > 1);
-                playPlaylist(playlist, nextIdx);
-            } else { player.audioRef.current?.pause(); setIsPlaying(false); }
-        } else handleNext();
+        const nextIdx = getNextValidIndex(playlist, idx, 1, player.repeatMode, player.isShuffling);
+        if (nextIdx !== -1) {
+            playPlaylist(playlist, nextIdx);
+        } else {
+            const isAtEnd = idx >= playlist.length - 1;
+            if (isAtEnd && !player.isShuffling && player.repeatMode !== 'all' && autoplay) {
+                const validIndices = playlist
+                    .map((s, i) => ({ s, i }))
+                    .filter(item => !isSongDeleted(item.s) && item.i !== idx)
+                    .map(item => item.i);
+                if (validIndices.length > 0) {
+                    const randIdx = validIndices[Math.floor(Math.random() * validIndices.length)];
+                    playPlaylist(playlist, randIdx);
+                } else {
+                    player.audioRef.current?.pause();
+                    setIsPlaying(false);
+                }
+            } else {
+                player.audioRef.current?.pause();
+                setIsPlaying(false);
+            }
+        }
     }, [currentSong, playlist, player, playbackSource, playPlaylist, setIsPlaying, handleNext]);
 
     // --- EFFECTS ---
