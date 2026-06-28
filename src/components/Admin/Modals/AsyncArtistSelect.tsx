@@ -14,7 +14,9 @@ interface AsyncArtistSelectProps {
     initialOptions?: any[]; // Thêm prop này để truyền dữ liệu khởi tạo
 }
 
-const AsyncArtistSelect = ({ label, icon, isMulti = false, value, onChange, required = false, placeholder = "Tìm kiếm nghệ sĩ...", initialOptions = [] }: AsyncArtistSelectProps) => {
+const EMPTY_ARRAY: any[] = [];
+
+const AsyncArtistSelect = ({ label, icon, isMulti = false, value, onChange, required = false, placeholder = "Tìm kiếm nghệ sĩ...", initialOptions = EMPTY_ARRAY }: AsyncArtistSelectProps) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [results, setResults] = useState<ArtistResponse[]>([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -22,17 +24,52 @@ const AsyncArtistSelect = ({ label, icon, isMulti = false, value, onChange, requ
     const [selectedArtists, setSelectedArtists] = useState<ArtistResponse[]>([]);
     const wrapperRef = useRef<HTMLDivElement>(null);
 
-    // Fetch details for initial values if any
+    // Sync selectedArtists with value prop and fetch missing details if needed
     useEffect(() => {
-        if (initialOptions && initialOptions.length > 0) {
-            setSelectedArtists(initialOptions);
-        } else {
-            const idsToFetch = isMulti ? (value as string[]) : (value ? [value as string] : []);
-            if (idsToFetch.length === 0) {
-                setSelectedArtists([]);
+        const ids = isMulti ? (value as string[] || []) : (value ? [value as string] : []);
+        
+        setSelectedArtists(prevSelected => {
+            // 1. Remove artists that are no longer in value
+            const updatedSelected = prevSelected.filter(artist => ids.includes(artist.id));
+            
+            // 2. Find IDs that are in value but not in updatedSelected
+            const existingIds = updatedSelected.map(a => a.id);
+            const missingIds = ids.filter(id => !existingIds.includes(id));
+            
+            if (missingIds.length > 0) {
+                const fetchMissing = async () => {
+                    try {
+                        const fetched = await Promise.all(
+                            missingIds.map(async (id) => {
+                                const initialMatch = initialOptions.find(o => o.id === id);
+                                if (initialMatch) return initialMatch;
+                                
+                                const res = await api.get(`/artist/${id}`);
+                                return res.data?.result;
+                            })
+                        );
+                        
+                        const validFetched = fetched.filter(Boolean) as ArtistResponse[];
+                        setSelectedArtists(current => {
+                            const stillValid = current.filter(artist => ids.includes(artist.id));
+                            const merged = [...stillValid];
+                            validFetched.forEach(fetchedArt => {
+                                if (!merged.some(m => m.id === fetchedArt.id)) {
+                                    merged.push(fetchedArt);
+                                }
+                            });
+                            return merged;
+                        });
+                    } catch (err) {
+                        console.error("Lỗi khi tải thông tin nghệ sĩ:", err);
+                    }
+                };
+                fetchMissing();
             }
-        }
-    }, [initialOptions, value, isMulti]);
+            
+            return updatedSelected;
+        });
+    }, [value, isMulti, initialOptions]);
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
