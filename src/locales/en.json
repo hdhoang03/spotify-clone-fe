@@ -41,7 +41,9 @@
 		"browse_all": "Browse All",
 		"searching": "Searching...",
 		"try_again": "Please check your spelling or use fewer or different keywords.",
-		"profile_role": "Profile"
+		"profile_role": "Profile",
+		"ai_search_toggle": "AI Search",
+		"loading_results": "Loading results..."
 	},
 	"profile": {
 		"followers": "Followers",
@@ -350,19 +352,49 @@
 	"help_documents": {
 		"terms_title": "Terms of Use - Springtunes",
 		"terms_sections": [
-			{ "title": "1. Acceptance of Terms", "content": "By accessing or using Springtunes, you agree to be bound by these Terms of Use. If you do not agree, please discontinue using the service." },
-			{ "title": "2. User Registration", "content": "You are responsible for safeguarding your account password and all activities under your credentials. Accounts must be registered with a valid email address." },
-			{ "title": "3. Premium Subscription", "content": "Premium subscription grants an ad-free experience, lossless audio playback, and advanced features. Payments are securely processed via PayOS. Subscriptions are non-refundable." },
-			{ "title": "4. Copyright & Intellectual Property", "content": "All tracks, lyrics, and artist media on Springtunes are owned by their respective copyright holders. Unauthorized downloading, copying, or redistribution is strictly prohibited." },
-			{ "title": "5. Limitation of Liability", "content": "Springtunes is provided on an \"as is\" and \"as available\" basis. We do not guarantee uninterrupted service but will strive to maintain maximum uptime and performance." }
+			{
+				"title": "1. Acceptance of Terms",
+				"content": "By accessing or using Springtunes, you agree to be bound by these Terms of Use. If you do not agree, please discontinue using the service."
+			},
+			{
+				"title": "2. User Registration",
+				"content": "You are responsible for safeguarding your account password and all activities under your credentials. Accounts must be registered with a valid email address."
+			},
+			{
+				"title": "3. Premium Subscription",
+				"content": "Premium subscription grants an ad-free experience, lossless audio playback, and advanced features. Payments are securely processed via PayOS. Subscriptions are non-refundable."
+			},
+			{
+				"title": "4. Copyright & Intellectual Property",
+				"content": "All tracks, lyrics, and artist media on Springtunes are owned by their respective copyright holders. Unauthorized downloading, copying, or redistribution is strictly prohibited."
+			},
+			{
+				"title": "5. Limitation of Liability",
+				"content": "Springtunes is provided on an \"as is\" and \"as available\" basis. We do not guarantee uninterrupted service but will strive to maintain maximum uptime and performance."
+			}
 		],
 		"privacy_title": "Privacy Policy - Springtunes",
 		"privacy_sections": [
-			{ "title": "1. Information We Collect", "content": "We collect your registered email address, display name, IP address, and playback history to customize and enhance your music streaming experience." },
-			{ "title": "2. How We Use Information", "content": "Your data is utilized to maintain your account, process Premium subscriptions via PayOS, and deliver system notifications using the Brevo HTTP API." },
-			{ "title": "3. Storage & Security", "content": "Passwords are securely encrypted using bcrypt. We cache sessions via Redis for optimization and do not store raw card/payment credentials on our servers." },
-			{ "title": "4. Your Privacy Rights", "content": "You reserve the right to update your profile details, change display name/avatar, or request account deletion at any time via the Settings page." },
-			{ "title": "5. Third-Party Sharing", "content": "We never sell your personal information. Sharing is strictly limited to transaction processors (PayOS) and notification senders (Brevo) to fulfill core service requirements." }
+			{
+				"title": "1. Information We Collect",
+				"content": "We collect your registered email address, display name, IP address, and playback history to customize and enhance your music streaming experience."
+			},
+			{
+				"title": "2. How We Use Information",
+				"content": "Your data is utilized to maintain your account, process Premium subscriptions via PayOS, and deliver system notifications using the Brevo HTTP API."
+			},
+			{
+				"title": "3. Storage & Security",
+				"content": "Passwords are securely encrypted using bcrypt. We cache sessions via Redis for optimization and do not store raw card/payment credentials on our servers."
+			},
+			{
+				"title": "4. Your Privacy Rights",
+				"content": "You reserve the right to update your profile details, change display name/avatar, or request account deletion at any time via the Settings page."
+			},
+			{
+				"title": "5. Third-Party Sharing",
+				"content": "We never sell your personal information. Sharing is strictly limited to transaction processors (PayOS) and notification senders (Brevo) to fulfill core service requirements."
+			}
 		]
 	}
 }

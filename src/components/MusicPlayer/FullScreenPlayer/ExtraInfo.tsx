@@ -109,7 +109,7 @@ const ExtraInfo = ({ name, artistId, songId, songTitle, currentTime, onCollapse,
 
     const hasLyrics = lyrics.length > 0 || isInstrumental;
 
-    if (!artistData && !isLoading) return null;
+    // if (!artistData && !isLoading) return null;
 
     return (
         <>

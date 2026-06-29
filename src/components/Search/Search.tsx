@@ -3,26 +3,30 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
+import { Sparkles } from 'lucide-react';
 import SearchBar from './SearchBar';
 import CategoryCard from './CategoryCard';
 import SearchResults from './SearchResult';
+import AISearchResults from './AISearchResults';
 import BackButton from '../common/BackButton';
 import api from '../../services/api';
 import { useSearchStore } from '../../hooks/useSearch';
+import { useAISearch } from './useAISearch';
+import { useSystemSongs } from '../AICompanion/useSystemSongs';
 
 const PALETTE = [
-    { cls: 'bg-purple-600',  hex: '#9333ea' },
+    { cls: 'bg-purple-600', hex: '#9333ea' },
     { cls: 'bg-emerald-600', hex: '#059669' },
-    { cls: 'bg-orange-500',  hex: '#f97316' },
-    { cls: 'bg-blue-600',    hex: '#2563eb' },
-    { cls: 'bg-teal-600',    hex: '#0d9488' },
-    { cls: 'bg-pink-600',    hex: '#db2777' },
-    { cls: 'bg-indigo-500',  hex: '#6366f1' },
-    { cls: 'bg-red-600',     hex: '#dc2626' },
-    { cls: 'bg-yellow-500',  hex: '#eab308' },
-    { cls: 'bg-cyan-600',    hex: '#0891b2' },
-    { cls: 'bg-rose-600',    hex: '#e11d48' },
-    { cls: 'bg-lime-600',    hex: '#65a30d' },
+    { cls: 'bg-orange-500', hex: '#f97316' },
+    { cls: 'bg-blue-600', hex: '#2563eb' },
+    { cls: 'bg-teal-600', hex: '#0d9488' },
+    { cls: 'bg-pink-600', hex: '#db2777' },
+    { cls: 'bg-indigo-500', hex: '#6366f1' },
+    { cls: 'bg-red-600', hex: '#dc2626' },
+    { cls: 'bg-yellow-500', hex: '#eab308' },
+    { cls: 'bg-cyan-600', hex: '#0891b2' },
+    { cls: 'bg-rose-600', hex: '#e11d48' },
+    { cls: 'bg-lime-600', hex: '#65a30d' },
 ];
 
 const SearchPage = () => {
@@ -30,7 +34,13 @@ const SearchPage = () => {
     const { query, setQuery } = useSearchStore();
     const [isScrolled, setIsScrolled] = useState(false);
     const [categories, setCategories] = useState<any[]>([]);
+    const [isAIEnabled, setIsAIEnabled] = useState(false);
+
     const navigate = useNavigate();
+
+    // AI Search Hooks
+    const { systemSongs } = useSystemSongs();
+    const { performAISearch, isAISearching, aiSearchResults, aiSearchError, clearAISearch } = useAISearch();
 
     // Fetch categories on mount
     useEffect(() => {
@@ -49,8 +59,11 @@ const SearchPage = () => {
 
     // Clear search when leaving page
     useEffect(() => {
-        return () => setQuery('');
-    }, [setQuery]);
+        return () => {
+            setQuery('');
+            clearAISearch();
+        };
+    }, [setQuery, clearAISearch]);
 
     // Sticky search bar on mobile
     useEffect(() => {
@@ -59,11 +72,30 @@ const SearchPage = () => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
+    // Trigger AI Search when query changes and AI is enabled
+    useEffect(() => {
+        if (isAIEnabled && query.length > 2) {
+            const timer = setTimeout(() => {
+                performAISearch(query, systemSongs);
+            }, 800); // Debounce AI search
+            return () => clearTimeout(timer);
+        } else if (isAIEnabled && query.length === 0) {
+            clearAISearch();
+        }
+    }, [query, isAIEnabled, systemSongs, performAISearch, clearAISearch]);
+
+    // Effect for toggling AI mode
+    useEffect(() => {
+        if (isAIEnabled && query.length > 2) {
+            performAISearch(query, systemSongs);
+        }
+    }, [isAIEnabled]);
+
     return (
         <div className="relative min-h-screen bg-white dark:bg-[#121212] text-zinc-900 dark:text-white p-4 md:p-8 pb-32">
 
             {/* ── Mobile sticky search bar ── */}
-            <div className={`md:hidden sticky top-0 z-30 -mx-4 px-4 mb-6 transition-all duration-300
+            <div className={`md:hidden sticky top-0 z-30 -mx-4 px-4 mb-4 transition-all duration-300
                 ${isScrolled
                     ? 'py-3 bg-white/90 dark:bg-[#121212]/90 backdrop-blur-md border-b border-black/5 dark:border-white/10 shadow-sm'
                     : 'py-3 bg-transparent'
@@ -79,14 +111,38 @@ const SearchPage = () => {
             </div>
 
             {/* ── Desktop back button ── */}
-            <div className="hidden md:flex mb-6">
+            <div className="hidden md:flex mb-6 items-center gap-4">
                 <BackButton className="bg-black/5 hover:bg-black/10 dark:bg-white/10 dark:hover:bg-white/20
                     p-2 rounded-full text-black dark:text-white transition-all" />
             </div>
 
+            {/* ── AI Toggle ── */}
+            <div className="mb-8 flex items-center justify-end">
+                <button
+                    onClick={() => setIsAIEnabled(!isAIEnabled)}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold transition-all duration-300 ${isAIEnabled
+                        ? 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 shadow-md'
+                        : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 border border-transparent hover:bg-zinc-200 dark:hover:bg-zinc-700'
+                        }`}
+                >
+                    <Sparkles size={16} className={isAIEnabled ? 'animate-pulse' : ''} />
+                    {t('search.ai_search_toggle')}
+                </button>
+            </div>
+
             {/* ── Content ── */}
             {query ? (
-                <SearchResults query={query} />
+                isAIEnabled ? (
+                    <AISearchResults
+                        query={query}
+                        isSearching={isAISearching}
+                        error={aiSearchError}
+                        resultIds={aiSearchResults}
+                        systemSongs={systemSongs}
+                    />
+                ) : (
+                    <SearchResults query={query} />
+                )
             ) : (
                 <motion.div
                     initial={{ opacity: 0 }}

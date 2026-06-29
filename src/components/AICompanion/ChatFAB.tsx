@@ -9,7 +9,7 @@ interface ChatFABProps {
 
 export const ChatFAB: React.FC<ChatFABProps> = ({ isOpen, onClick }) => {
     return (
-        <div className="fixed bottom-24 md:bottom-28 right-6 z-40">
+        <div className="fixed bottom-24 md:bottom-8 right-6 z-40">
             <motion.button
                 onClick={onClick}
                 whileHover={{ scale: 1.05 }}
@@ -19,7 +19,7 @@ export const ChatFAB: React.FC<ChatFABProps> = ({ isOpen, onClick }) => {
             >
                 {/* Subtle hover gradient ring for 2026 aesthetics */}
                 <div className="absolute inset-0 bg-gradient-to-tr from-primary-500/10 to-primary-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                
+
                 <Sparkles className="w-5 h-5 relative z-10 transition-transform duration-500 group-hover:scale-110 text-primary-500 dark:text-primary-400" strokeWidth={1.5} />
             </motion.button>
         </div>

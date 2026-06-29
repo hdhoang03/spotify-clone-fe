@@ -3,7 +3,7 @@ import React from 'react';
 interface QuickActionsProps {
     currentSong: any;
     isLoading: boolean;
-    onAction: (type: 'explain' | 'translate' | 'recommend' | 'chat') => void;
+    onAction: (type: 'explain' | 'translate' | 'recommend' | 'chat' | 'recommend_taste') => void;
 }
 
 export const QuickActions: React.FC<QuickActionsProps> = ({ currentSong, isLoading, onAction }) => {
@@ -42,6 +42,13 @@ export const QuickActions: React.FC<QuickActionsProps> = ({ currentSong, isLoadi
                     Suggest something fun to listen to
                 </button>
             )}
+            <button
+                onClick={() => onAction('recommend_taste')}
+                disabled={isLoading}
+                className="px-4 py-2 rounded-full text-[11px] font-medium border border-emerald-200 dark:border-emerald-800 hover:border-emerald-400 dark:hover:border-emerald-600 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-300 transition-colors shrink-0"
+            >
+                Hiểu Gu: Gợi ý nhạc cho tôi
+            </button>
         </div>
     );
 };

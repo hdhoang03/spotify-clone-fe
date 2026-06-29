@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import api from '../../services/api';
+import { likeApi } from '../../services/likeApi';
 import type { SongInfo } from './types';
 
 export const useSystemSongs = () => {
     const [systemSongs, setSystemSongs] = useState<SongInfo[]>([]);
+    const [likedSongs, setLikedSongs] = useState<string[]>([]);
 
     useEffect(() => {
         const fetchSongs = async () => {
@@ -16,8 +18,15 @@ export const useSystemSongs = () => {
                     id: s.id,
                     title: s.title,
                     artist: s.artistName || s.artist?.name || s.artist || 'Unknown',
+                    artistId: s.artistId || s.artist?.id || '',
+                    albumId: s.albumId || '',
+                    albumName: s.albumName || '',
                     coverUrl: s.coverUrl || '',
-                    audioUrl: s.audioUrl || ''
+                    duration: s.duration || 0,
+                    audioUrl: s.audioUrl || '',
+                    isLiked: s.isLiked ?? false,
+                    featuredArtists: s.featuredArtists || [],
+                    lyrics: s.lyrics || ''
                 }));
                 
                 setSystemSongs(formattedSongs);
@@ -26,8 +35,22 @@ export const useSystemSongs = () => {
             }
         };
 
+        const fetchLikedSongs = async () => {
+            try {
+                const res = await likeApi.getMyLikedSongs(1, 50);
+                if (res.data.code === 1000) {
+                    const data = res.data.result.content;
+                    const likedTitles = data.map((item: any) => `"${item.song?.title}" - ${item.song?.artistName || item.song?.artist?.name || 'Unknown'}`);
+                    setLikedSongs(likedTitles);
+                }
+            } catch (error) {
+                console.error('Failed to fetch liked songs for AI context', error);
+            }
+        };
+
         fetchSongs();
+        fetchLikedSongs();
     }, []);
 
-    return { systemSongs };
+    return { systemSongs, likedSongs };
 };
