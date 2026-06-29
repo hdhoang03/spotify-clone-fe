@@ -78,7 +78,7 @@ const CategoryTable = ({
                                 </td>
 
                                 <td className="p-4 text-center">
-                                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wide ${cat.active ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-400'}`}>
+                                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wide ${cat.active ? 'bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-400' : 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-400'}`}>
                                         {cat.active ? 'Active' : 'Hidden'}
                                     </span>
                                 </td>
@@ -86,7 +86,7 @@ const CategoryTable = ({
                                 <td className="p-4">
                                     <div className="flex items-center justify-center gap-2">
                                         {isDeletedView ? (
-                                            <button onClick={(e) => { e.stopPropagation(); onRestore(cat.id); }} className="p-2 text-green-500 hover:bg-green-50 dark:hover:bg-green-900/20 rounded-lg transition" title="Khôi phục danh mục">
+                                            <button onClick={(e) => { e.stopPropagation(); onRestore(cat.id); }} className="p-2 text-primary-500 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-lg transition" title="Khôi phục danh mục">
                                                 <RotateCcw size={18} />
                                             </button>
                                         ) : (

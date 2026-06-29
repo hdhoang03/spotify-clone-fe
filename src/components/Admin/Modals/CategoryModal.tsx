@@ -151,7 +151,7 @@ const CategoryModal = ({ isOpen, onClose, categoryData, onSubmit }: CategoryModa
                         <div className="flex flex-col gap-1.5 pb-1">
                             <label className="text-xs font-bold text-gray-500 uppercase">Trạng thái</label>
                             <div className="flex items-center gap-3 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg py-2 px-4 h-[42px]">
-                                <span className={`text-[10px] font-black ${active ? 'text-green-500' : 'text-gray-400'}`}>
+                                <span className={`text-[10px] font-black ${active ? 'text-primary-500' : 'text-gray-400'}`}>
                                     {active ? 'ACTIVE' : 'HIDDEN'}
                                 </span>
                                 <button

@@ -134,7 +134,7 @@ const PlaylistDetailPage = () => {
             <div className={`fixed top-0 left-0 right-0 z-[45] h-16 bg-white/95 dark:bg-[#121212]/95 backdrop-blur-md border-b border-zinc-200 dark:border-white/10 px-6 flex items-center gap-4 transition-all duration-300 ${isStickyBarVisible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'}`}>
                 <button
                     onClick={handlePlayPlaylist}
-                    className="w-11 h-11 bg-green-500 rounded-full flex items-center justify-center hover:scale-105 transition shadow-lg shrink-0"
+                    className="w-11 h-11 bg-primary-500 rounded-full flex items-center justify-center hover:scale-105 transition shadow-lg shrink-0"
                 >
                     <Play size={22} fill="black" className="ml-1" />
                 </button>

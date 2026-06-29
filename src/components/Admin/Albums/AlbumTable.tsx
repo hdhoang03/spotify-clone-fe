@@ -71,7 +71,7 @@ export const AlbumTable = ({
                                             /* Nút Khôi phục trong Thùng rác */
                                             <button
                                                 onClick={(e) => { e.stopPropagation(); onRestore(album.id); }}
-                                                className="p-2 text-green-500 hover:bg-green-50 dark:hover:bg-green-900/20 rounded-lg transition"
+                                                className="p-2 text-primary-500 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-lg transition"
                                                 title="Khôi phục album"
                                             >
                                                 <RotateCcw size={18} />

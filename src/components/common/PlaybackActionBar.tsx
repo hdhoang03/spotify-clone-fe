@@ -38,7 +38,7 @@ const PlaybackActionBar = ({ isPlaying, onPlayClick, onTogglePlay, menuItems }: 
             {/* Nút Play/Pause lớn */}
             <button
                 onClick={isPlaying && onTogglePlay ? onTogglePlay : onPlayClick}
-                className="w-14 h-14 bg-green-500 rounded-full flex items-center justify-center hover:scale-105 transition-transform shadow-lg text-black"
+                className="w-14 h-14 bg-primary-500 rounded-full flex items-center justify-center hover:scale-105 transition-transform shadow-lg text-black"
             >
                 {isPlaying
                     ? <Pause size={28} fill="currentColor" />
@@ -50,13 +50,13 @@ const PlaybackActionBar = ({ isPlaying, onPlayClick, onTogglePlay, menuItems }: 
             <button
                 onClick={toggleShuffle}
                 className={`transition-colors relative ${isShuffling
-                    ? 'text-green-500'
+                    ? 'text-primary-500'
                     : 'text-zinc-500 dark:text-zinc-400 hover:text-black dark:hover:text-white'
                 }`}
             >
                 <Shuffle size={28} />
                 {isShuffling && (
-                    <div className="w-1 h-1 bg-green-500 rounded-full absolute left-1/2 -translate-x-1/2 -bottom-1.5" />
+                    <div className="w-1 h-1 bg-primary-500 rounded-full absolute left-1/2 -translate-x-1/2 -bottom-1.5" />
                 )}
             </button>
 

@@ -20,7 +20,7 @@ const MainControls = ({ isPlaying, onTogglePlay, speed, isShuffling, repeatMode,
 
     const getActiveColor = (isActive: boolean) =>
         isActive
-            ? 'text-green-400 drop-shadow-[0_0_8px_rgba(74,222,128,0.5)]'
+            ? 'text-primary-400 drop-shadow-[0_0_8px_rgba(74,222,128,0.5)]'
             : 'text-white/50 hover:text-white';
 
     return (
@@ -40,7 +40,7 @@ const MainControls = ({ isPlaying, onTogglePlay, speed, isShuffling, repeatMode,
                         <motion.div
                             initial={{ scale: 0 }}
                             animate={{ scale: 1 }}
-                            className="w-1 h-1 bg-green-400 rounded-full mt-1"
+                            className="w-1 h-1 bg-primary-400 rounded-full mt-1"
                         />
                     )}
                 </motion.button>
@@ -101,7 +101,7 @@ const MainControls = ({ isPlaying, onTogglePlay, speed, isShuffling, repeatMode,
                         <motion.div
                             initial={{ scale: 0 }}
                             animate={{ scale: 1 }}
-                            className="w-1 h-1 bg-green-400 rounded-full mt-1"
+                            className="w-1 h-1 bg-primary-400 rounded-full mt-1"
                         />
                     )}
                 </motion.button>

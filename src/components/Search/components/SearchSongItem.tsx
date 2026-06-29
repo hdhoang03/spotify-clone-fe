@@ -54,7 +54,7 @@ const SearchSongItem = ({ song, index, currentSong, isPlaying, onPlay }: Props) 
                         {isActiveAndPlaying ? (
                             <EqualizerBars />
                         ) : (
-                            <span className={isCurrent ? 'text-green-500' : 'text-zinc-400 dark:text-zinc-500'}>
+                            <span className={isCurrent ? 'text-primary-500' : 'text-zinc-400 dark:text-zinc-500'}>
                                 {index + 1}
                             </span>
                         )}
@@ -82,7 +82,7 @@ const SearchSongItem = ({ song, index, currentSong, isPlaying, onPlay }: Props) 
                     {/* Song info */}
                     <div className="min-w-0 flex-1">
                         <p className={`font-semibold truncate text-sm leading-snug
-                        ${isCurrent ? 'text-green-500 dark:text-green-400' : 'text-zinc-900 dark:text-white'}`}>
+                        ${isCurrent ? 'text-primary-500 dark:text-primary-400' : 'text-zinc-900 dark:text-white'}`}>
                             {song.title}
                         </p>
                         <ArtistLinks
@@ -108,7 +108,7 @@ const SearchSongItem = ({ song, index, currentSong, isPlaying, onPlay }: Props) 
                 >
                     <Heart
                         size={15}
-                        className={isLiked ? 'text-green-500 fill-green-500' : 'text-zinc-400 hover:text-zinc-700 dark:hover:text-white'}
+                        className={isLiked ? 'text-primary-500 fill-primary-500' : 'text-zinc-400 hover:text-zinc-700 dark:hover:text-white'}
                     />
                 </button>
             </motion.div>

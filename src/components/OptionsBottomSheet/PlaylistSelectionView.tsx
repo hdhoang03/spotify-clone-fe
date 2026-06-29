@@ -63,7 +63,7 @@ const PlaylistSelectionView = ({ songId, onBack, onClose }: PlaylistSelectionVie
 
             <div className="flex-1 overflow-y-auto scrollbar-hide pb-4">
                 {isLoading ? (
-                    <div className="flex justify-center py-10"><Loader2 className="animate-spin text-green-500" size={32} /></div>
+                    <div className="flex justify-center py-10"><Loader2 className="animate-spin text-primary-500" size={32} /></div>
                 ) : (
                     <div className="flex flex-col gap-2">
                         <button 

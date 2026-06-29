@@ -50,9 +50,9 @@ const HelpDocumentModal = ({ isOpen, onClose, type }: HelpDocumentModalProps) =>
                     <div className="flex items-center justify-between p-5 border-b border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50">
                         <div className="flex items-center gap-3">
                             {type === 'terms' ? (
-                                <FileText className="text-green-500" size={22} />
+                                <FileText className="text-primary-500" size={22} />
                             ) : (
-                                <Shield className="text-green-500" size={22} />
+                                <Shield className="text-primary-500" size={22} />
                             )}
                             <h3 className="text-lg font-bold tracking-tight">{titleText}</h3>
                         </div>
@@ -82,7 +82,7 @@ const HelpDocumentModal = ({ isOpen, onClose, type }: HelpDocumentModalProps) =>
                     <div className="p-4 border-t border-zinc-200 dark:border-zinc-800 flex justify-end bg-zinc-50/50 dark:bg-zinc-900/50">
                         <button
                             onClick={onClose}
-                            className="px-6 py-2.5 bg-green-500 hover:bg-green-600 text-white font-bold rounded-lg transition-colors text-sm shadow-md shadow-green-500/10"
+                            className="px-6 py-2.5 bg-primary-500 hover:bg-primary-600 text-white font-bold rounded-lg transition-colors text-sm shadow-md shadow-primary-500/10"
                         >
                             {t('confirm_modal.confirm', 'Xác nhận')}
                         </button>

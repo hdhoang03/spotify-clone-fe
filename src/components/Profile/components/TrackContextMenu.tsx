@@ -308,7 +308,7 @@ const TrackContextMenu = ({ song, onClose, position, isOwner, onRemoveFromPlayli
             )}
 
             <MenuItem
-                icon={<Heart size={16} className={isLiked ? "text-green-500 fill-green-500" : ""} />}
+                icon={<Heart size={16} className={isLiked ? "text-primary-500 fill-primary-500" : ""} />}
                 label={isLiked ? t('player.remove_from_liked') : t('player.save_to_liked')}
                 onClick={(e) => {
                     e.stopPropagation();

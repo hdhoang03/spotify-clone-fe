@@ -27,7 +27,7 @@ const QuickPickCard = ({ title, imageUrl, onClick }: QuickPickCardProps) => {
                     {title}
                 </p>
                 {/* Play button appears on hover */}
-                <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 mr-2 shadow-lg rounded-full bg-green-500 p-2.5 text-black">
+                <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 mr-2 shadow-lg rounded-full bg-primary-500 p-2.5 text-black">
                     <Play size={16} fill="black" className="ml-0.5" />
                 </div>
             </div>

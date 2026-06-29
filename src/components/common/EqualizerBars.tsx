@@ -22,9 +22,9 @@ if (typeof document !== 'undefined' && !document.getElementById(EQUALIZER_STYLE_
 
 const EqualizerBars = () => (
     <div className="flex items-end justify-center gap-[2px] h-4 w-4">
-        <div className="eq-bar1 w-[3px] bg-green-500 rounded-sm" />
-        <div className="eq-bar2 w-[3px] bg-green-500 rounded-sm" />
-        <div className="eq-bar3 w-[3px] bg-green-500 rounded-sm" />
+        <div className="eq-bar1 w-[3px] bg-primary-500 rounded-sm" />
+        <div className="eq-bar2 w-[3px] bg-primary-500 rounded-sm" />
+        <div className="eq-bar3 w-[3px] bg-primary-500 rounded-sm" />
     </div>
 );
 

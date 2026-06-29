@@ -31,7 +31,7 @@ const SecurityCard = () => {
                             <input
                                 type="password" placeholder={t('account.current_password')}
                                 value={oldPassword} onChange={(e) => setOldPassword(e.target.value)}
-                                className="w-full bg-zinc-100 dark:bg-zinc-800 px-4 py-2.5 pl-10 rounded-lg text-sm outline-none focus:ring-2 focus:ring-green-500"
+                                className="w-full bg-zinc-100 dark:bg-zinc-800 px-4 py-2.5 pl-10 rounded-lg text-sm outline-none focus:ring-2 focus:ring-primary-500"
                             />
                             <Lock size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400" />
                         </div>
@@ -39,14 +39,14 @@ const SecurityCard = () => {
                             <input
                                 type="password" placeholder={t('account.new_password')}
                                 value={newPassword} onChange={(e) => setNewPassword(e.target.value)}
-                                className="w-full bg-zinc-100 dark:bg-zinc-800 px-4 py-2.5 pl-10 rounded-lg text-sm outline-none focus:ring-2 focus:ring-green-500"
+                                className="w-full bg-zinc-100 dark:bg-zinc-800 px-4 py-2.5 pl-10 rounded-lg text-sm outline-none focus:ring-2 focus:ring-primary-500"
                             />
                             <KeyRound size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400" />
                         </div>
                     </div>
 
                     {passwordMessage && (
-                        <p className={`text-sm font-medium ${passwordMessage.type === 'success' ? 'text-green-500' : 'text-red-500'}`}>
+                        <p className={`text-sm font-medium ${passwordMessage.type === 'success' ? 'text-primary-500' : 'text-red-500'}`}>
                             {passwordMessage.text}
                         </p>
                     )}

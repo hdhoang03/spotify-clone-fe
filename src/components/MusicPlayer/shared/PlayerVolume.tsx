@@ -40,7 +40,7 @@ const PlayerVolume = ({ speed, onSpeedChange, volume, onVolumeChange, toggleMute
                 <button
                     className={`flex items-center gap-1.5 transition px-2 py-1 rounded-md
                         ${isSpeedChanged
-                            ? 'text-green-400 bg-white/10' // Màu xanh sáng hơn trên nền tối
+                            ? 'text-primary-400 bg-white/10' // Màu xanh sáng hơn trên nền tối
                             : 'text-white/60 hover:text-white' // Màu trắng mờ
                         }`}
                     title="Tốc độ phát"
@@ -69,7 +69,7 @@ const PlayerVolume = ({ speed, onSpeedChange, volume, onVolumeChange, toggleMute
                         step="0.01"
                         value={isMuted ? 0 : volume}
                         onChange={(e) => onVolumeChange(parseFloat(e.target.value))}
-                        className="w-full h-1 bg-gray-300 dark:bg-zinc-600 rounded-lg appearance-none cursor-pointer accent-green-500 hover:h-1.5 transition-all"
+                        className="w-full h-1 bg-gray-300 dark:bg-zinc-600 rounded-lg appearance-none cursor-pointer accent-primary-500 hover:h-1.5 transition-all"
                     />
                 </div>
             </div>
@@ -79,7 +79,7 @@ const PlayerVolume = ({ speed, onSpeedChange, volume, onVolumeChange, toggleMute
                 <button
                     onClick={() => toggleMenu('full')}
                     className={`p-2 rounded-full transition ${isMenuOpen
-                        ? 'bg-green-500 text-black'
+                        ? 'bg-primary-500 text-black'
                         : 'text-white/80 hover:text-white'
                         }`}
                 >

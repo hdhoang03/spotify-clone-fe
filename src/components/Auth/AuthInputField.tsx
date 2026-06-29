@@ -12,7 +12,7 @@ const AuthInputField: React.FC<AuthInputFieldProps> = ({ icon, className = '', .
             </div>
             <input 
                 {...props}
-                className={`w-full bg-gray-50 text-gray-900 dark:bg-zinc-800 dark:text-white border border-gray-200 dark:border-zinc-700 rounded-lg py-2.5 pl-10 pr-4 text-sm outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 transition dark:text-white ${className}`}
+                className={`w-full bg-gray-50 text-gray-900 dark:bg-zinc-800 dark:text-white border border-gray-200 dark:border-zinc-700 rounded-lg py-2.5 pl-10 pr-4 text-sm outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition dark:text-white ${className}`}
             />
         </div>
     );

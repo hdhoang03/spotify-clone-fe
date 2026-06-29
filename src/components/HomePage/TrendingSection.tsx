@@ -59,7 +59,7 @@ const SongRow = ({
                 group relative flex items-center gap-4 pr-3 py-2 rounded-xl cursor-pointer
                 transition-all duration-200 select-none
                 ${isCurrent
-                    ? 'bg-green-500/10 dark:bg-green-500/[0.08]'
+                    ? 'bg-primary-500/10 dark:bg-primary-500/[0.08]'
                     : 'hover:bg-zinc-100 dark:hover:bg-white/[0.06]'
                 }
             `}
@@ -82,7 +82,7 @@ const SongRow = ({
                             exit={{ opacity: 0, scale: 0.7 }} transition={{ duration: 0.12 }}
                             className="text-zinc-900 dark:text-white">
                             {isCurrent
-                                ? <Pause size={15} fill="currentColor" className="text-green-500" />
+                                ? <Pause size={15} fill="currentColor" className="text-primary-500" />
                                 : <Play size={15} fill="currentColor" />}
                         </motion.div>
                     ) : index < 3 ? (
@@ -109,13 +109,13 @@ const SongRow = ({
                     alt={song.title}
                     className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-110"
                 />
-                {isActiveAndPlaying && <div className="absolute inset-0 bg-green-500/10" />}
+                {isActiveAndPlaying && <div className="absolute inset-0 bg-primary-500/10" />}
             </div>
 
             {/* Title & artist */}
             <div className="flex-1 min-w-0">
                 <p className={`text-sm font-semibold truncate leading-snug transition-colors duration-150
-                    ${isCurrent ? 'text-green-500 dark:text-green-400' : 'text-zinc-900 dark:text-white'}`}>
+                    ${isCurrent ? 'text-primary-500 dark:text-primary-400' : 'text-zinc-900 dark:text-white'}`}>
                     {song.title}
                 </p>
                 <p className="text-xs text-zinc-500 dark:text-zinc-400 truncate mt-0.5">

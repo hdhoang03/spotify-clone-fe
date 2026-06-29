@@ -10,7 +10,7 @@ const AccountPage = () => {
     const { t } = useTranslation();
     return (
         <div className="w-full min-h-screen flex flex-col bg-transparent">
-            <div className="flex-1 p-4 md:p-10 pb-32 max-w-5xl mx-auto w-full text-zinc-900 dark:text-white selection:bg-green-500/30">
+            <div className="flex-1 p-4 md:p-10 pb-32 max-w-5xl mx-auto w-full text-zinc-900 dark:text-white selection:bg-primary-500/30">
                 <div className="flex items-center gap-4 mb-10 md:mb-12">
                     {/* Nút Back: Chỉ hiện ở Mobile (md:hidden) */}
                     <div>

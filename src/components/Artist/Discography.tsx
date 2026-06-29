@@ -39,7 +39,7 @@ const Discography = ({ items }: DiscographyProps) => {
                                 px-3.5 py-1.5 rounded-full text-xs font-semibold
                                 transition-all duration-200 capitalize
                                 ${filter === type
-                                    ? 'bg-green-500 text-white dark:bg-white dark:text-black'
+                                    ? 'bg-primary-500 text-white dark:bg-white dark:text-black'
                                     : 'bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-[#2a2a2a] dark:text-white dark:hover:bg-[#3a3a3a]'
                                 }
                             `}

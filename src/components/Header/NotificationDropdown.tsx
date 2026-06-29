@@ -19,7 +19,7 @@ const getTypeStyle = (type: string): { icon: React.ReactNode; badgeBg: string } 
         case 'NEW_SONG':
             return {
                 icon: <Music size={12} className="text-white" />,
-                badgeBg: 'bg-green-500',
+                badgeBg: 'bg-primary-500',
             };
         case 'NEW_FOLLOWER':
             return {
@@ -178,7 +178,7 @@ const NotificationDropdown = ({ onClose, onUpdateUnreadCount, externalUnreadCoun
                     </div>
                     <button
                         onClick={handleMarkAllAsRead}
-                        className="text-xs text-green-600 dark:text-green-400 font-medium hover:underline transition"
+                        className="text-xs text-primary-600 dark:text-primary-400 font-medium hover:underline transition"
                     >
                         {t('notification.read_all')}
                     </button>
@@ -205,13 +205,13 @@ const NotificationDropdown = ({ onClose, onUpdateUnreadCount, externalUnreadCoun
                                             group relative flex items-start gap-3 px-4 py-3 cursor-pointer
                                             transition-all duration-200
                                             hover:bg-gray-50 dark:hover:bg-zinc-800/60
-                                            ${!item.isRead ? 'bg-green-50/60 dark:bg-green-950/20' : ''}
+                                            ${!item.isRead ? 'bg-primary-50/60 dark:bg-primary-950/20' : ''}
                                             ${isDeleting ? 'opacity-40 pointer-events-none' : ''}
                                         `}
                                     >
                                         {/* Chỉ báo chưa đọc */}
                                         {!item.isRead && (
-                                            <span className="absolute left-1.5 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-green-500 flex-shrink-0" />
+                                            <span className="absolute left-1.5 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-primary-500 flex-shrink-0" />
                                         )}
 
                                         {/* Avatar + badge loại */}
@@ -246,11 +246,11 @@ const NotificationDropdown = ({ onClose, onUpdateUnreadCount, externalUnreadCoun
                                             <button
                                                 onClick={e => handleToggleStatus(item, e)}
                                                 title={item.isRead ? t('notification.mark_as_unread') : t('notification.mark_as_read')}
-                                                className="p-1.5 rounded-full text-gray-400 hover:text-green-500 hover:bg-green-50 dark:hover:bg-green-900/30 transition"
+                                                className="p-1.5 rounded-full text-gray-400 hover:text-primary-500 hover:bg-primary-50 dark:hover:bg-primary-900/30 transition"
                                             >
                                                 {item.isRead
                                                     ? <CheckCircle2 size={16} />
-                                                    : <Circle size={16} className="fill-green-500 text-green-500" />
+                                                    : <Circle size={16} className="fill-primary-500 text-primary-500" />
                                                 }
                                             </button>
 
@@ -273,7 +273,7 @@ const NotificationDropdown = ({ onClose, onUpdateUnreadCount, externalUnreadCoun
                     {hasMore && (
                         <button
                             onClick={handleLoadMore}
-                            className="w-full py-3 text-xs font-medium text-gray-500 dark:text-gray-400 hover:text-green-600 dark:hover:text-green-400 hover:bg-gray-50 dark:hover:bg-zinc-800/50 transition flex items-center justify-center gap-1 border-t border-gray-100 dark:border-white/5"
+                            className="w-full py-3 text-xs font-medium text-gray-500 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-50 dark:hover:bg-zinc-800/50 transition flex items-center justify-center gap-1 border-t border-gray-100 dark:border-white/5"
                         >
                             {isLoading ? (
                                 <span className="flex items-center gap-1.5">

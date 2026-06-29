@@ -56,7 +56,7 @@ const NavItem = ({ icon, label, isActive, onClick }: NavItemProps) => (
         flex flex-col items-center gap-1 cursor-pointer 
         p-2 transition-colors duration-200 
         ${isActive
-				? 'text-green-500 dark:text-green-400'
+				? 'text-primary-500 dark:text-primary-400'
 				: 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
 			}
     `}

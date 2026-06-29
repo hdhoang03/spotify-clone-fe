@@ -64,7 +64,7 @@ const PlayerOptionsMenu = ({
             {/* Header */}
             <div className="flex justify-between items-center mb-4 border-b border-black/5 dark:border-white/5 pb-3">
                 <h3 className="font-semibold text-sm text-zinc-800 dark:text-zinc-200 flex items-center gap-2">
-                    {type === 'speed' && <Clock size={16} className="text-green-500" />}
+                    {type === 'speed' && <Clock size={16} className="text-primary-500" />}
                     {type === 'speed' ? t('player.speed') : t('player.settings')}
                 </h3>
                 <button
@@ -85,7 +85,7 @@ const PlayerOptionsMenu = ({
                                 <div className="flex items-center gap-2">
                                     <button
                                         onClick={(e) => { e.stopPropagation(); toggleMute && toggleMute(); }}
-                                        className="hover:text-green-500 transition-colors hover:scale-110"
+                                        className="hover:text-primary-500 transition-colors hover:scale-110"
                                     >
                                         <VolumeIcon />
                                     </button>
@@ -105,7 +105,7 @@ const PlayerOptionsMenu = ({
                                         if (onVolumeChange) onVolumeChange(parseFloat(e.target.value))
                                     }}
                                     className="w-full h-1.5 bg-black/10 dark:bg-white/10 rounded-full appearance-none cursor-pointer 
-                                            accent-green-500 hover:accent-green-400 focus:outline-none
+                                            accent-primary-500 hover:accent-primary-400 focus:outline-none
                                             [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 
                                             [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:shadow-md
                                             transition-all"
@@ -139,7 +139,7 @@ const PlayerOptionsMenu = ({
                                         ${isLocked
                                             ? 'bg-yellow-500/10 text-yellow-600 dark:text-yellow-400 border border-yellow-500/30 cursor-not-allowed'
                                             : isActive
-                                                ? 'bg-green-500 text-white shadow-[0_2px_10px_rgba(34,197,94,0.3)] scale-105'
+                                                ? 'bg-primary-500 text-white shadow-[0_2px_10px_rgba(34,197,94,0.3)] scale-105'
                                                 : 'bg-black/5 dark:bg-white/5 text-zinc-600 dark:text-zinc-300 hover:bg-black/10 dark:hover:bg-white/10 hover:scale-105'
                                         }
                                     `}

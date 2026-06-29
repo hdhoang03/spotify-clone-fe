@@ -71,10 +71,10 @@ const ArtistActionBar = ({
                 {/* Play/Pause button — shadow xanh lá 2026 */}
                 <button
                     onClick={onTogglePlay}
-                    className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-green-500 text-black
+                    className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-primary-500 text-black
                                flex items-center justify-center
                                transition-all duration-200 hover:scale-105 active:scale-95
-                               shadow-lg shadow-green-500/30 hover:shadow-green-500/50 hover:bg-green-400
+                               shadow-lg shadow-primary-500/30 hover:shadow-primary-500/50 hover:bg-primary-400
                                flex-shrink-0"
                 >
                     {isPlaying
@@ -99,14 +99,14 @@ const ArtistActionBar = ({
                     onClick={onToggleShuffle}
                     className={`transition-all duration-200 relative
                         ${isShuffling
-                            ? 'text-green-500 scale-110'
+                            ? 'text-primary-500 scale-110'
                             : 'text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:scale-105'
                         }`}
                 >
                     <Shuffle className="w-5 h-5 md:w-6 md:h-6" />
                     {/* Dấu chấm xanh khi active */}
                     {isShuffling && (
-                        <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-1 h-1 bg-green-500 rounded-full" />
+                        <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-1 h-1 bg-primary-500 rounded-full" />
                     )}
                 </button>
 
@@ -117,7 +117,7 @@ const ArtistActionBar = ({
                         className={`whitespace-nowrap px-4 py-1.5 rounded-full text-sm font-bold tracking-wide
                                     transition-all duration-200 hover:scale-105 active:scale-95
                                     ${isFollowing
-                                ? 'border border-green-500 text-green-500 hover:bg-green-500/10'
+                                ? 'border border-primary-500 text-primary-500 hover:bg-primary-500/10'
                                 : 'border border-zinc-300/80 dark:border-zinc-600/80 text-zinc-900 dark:text-white hover:border-zinc-500 dark:hover:border-zinc-400 hover:bg-black/5 dark:hover:bg-white/10'
                             }`}
                     >

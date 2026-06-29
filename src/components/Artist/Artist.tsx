@@ -74,7 +74,7 @@ const ArtistPage = () => {
     if (isLoading) {
         return (
             <div className="flex justify-center items-center h-[calc(100vh-200px)]">
-                <Loader2 className="animate-spin text-green-500" size={40} />
+                <Loader2 className="animate-spin text-primary-500" size={40} />
             </div>
         );
     }
@@ -83,7 +83,7 @@ const ArtistPage = () => {
         return (
             <div className="min-h-screen flex flex-col items-center justify-center bg-white dark:bg-[#121212] text-zinc-900 dark:text-white">
                 <h2 className="text-2xl font-bold mb-4">{error}</h2>
-                <button onClick={() => navigate(-1)} className="px-4 py-2 bg-green-500 rounded-full font-bold text-black">
+                <button onClick={() => navigate(-1)} className="px-4 py-2 bg-primary-500 rounded-full font-bold text-black">
                     {t('artist.back')}
                 </button>
             </div>

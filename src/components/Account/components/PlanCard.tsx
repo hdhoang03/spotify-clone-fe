@@ -106,7 +106,7 @@ const PlanCard = () => {
                     <CreditCard className="text-purple-500" />
                     {t('account.plan_title')}
                 </h2>
-                <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase ${isPremium ? 'bg-green-500/20 text-green-500' : 'bg-zinc-200 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400'}`}>
+                <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase ${isPremium ? 'bg-primary-500/20 text-primary-500' : 'bg-zinc-200 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400'}`}>
                     {isPremium ? t('account.premium') : t('account.free')}
                 </span>
             </div>
@@ -114,18 +114,18 @@ const PlanCard = () => {
             <div className={`
                     flex-1 rounded-[16px] sm:rounded-[20px] p-4 sm:p-7 relative overflow-hidden transition-all duration-500
                     ${isPremium
-                    ? 'bg-gradient-to-br from-green-500 via-emerald-700 to-teal-900 text-white shadow-lg shadow-green-900/20'
+                    ? 'bg-gradient-to-br from-primary-500 via-emerald-700 to-teal-900 text-white shadow-lg shadow-primary-900/20'
                     : 'bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200/50 dark:border-white/5 text-zinc-900 dark:text-white'}
 `}>
                 {/* Decor */}
                 <div className="absolute -top-24 -right-24 w-48 h-48 bg-white/20 rounded-full blur-3xl" />
-                <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-green-400/20 rounded-full blur-2xl" />
+                <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-primary-400/20 rounded-full blur-2xl" />
                 <div className="relative z-10">
                     <h3 className="text-2xl font-bold mb-1 flex items-center gap-2">
                         {isPremium && <Crown size={20} className="text-yellow-300" />}
                         {isPremium ? t('account.springtunes_premium') : t('account.springtunes_free')}
                     </h3>
-                    <p className={`text-sm mb-6 ${isPremium ? 'text-green-100' : 'text-zinc-500'}`}>
+                    <p className={`text-sm mb-6 ${isPremium ? 'text-primary-100' : 'text-zinc-500'}`}>
                         {isPremium
                             ? t('account.premium_thanks')
                             : t('account.upgrade_prompt')}
@@ -133,15 +133,15 @@ const PlanCard = () => {
 
                     <ul className="space-y-3 mb-8">
                         <li className="flex items-center gap-2 text-sm font-medium">
-                            <CheckCircle2 size={18} className={isPremium ? 'text-green-300' : 'text-green-500'} />
+                            <CheckCircle2 size={18} className={isPremium ? 'text-primary-300' : 'text-primary-500'} />
                             {isPremium ? t('account.feature_no_ads') : t('account.feature_all_devices')}
                         </li>
                         <li className="flex items-center gap-2 text-sm font-medium">
-                            <CheckCircle2 size={18} className={isPremium ? 'text-green-300' : 'text-green-500'} />
+                            <CheckCircle2 size={18} className={isPremium ? 'text-primary-300' : 'text-primary-500'} />
                             {isPremium ? t('account.feature_lossless') : t('account.feature_unlimited_playlist')}
                         </li>
                         <li className="flex items-center gap-2 text-sm font-medium">
-                            <CheckCircle2 size={18} className={isPremium ? 'text-green-300' : 'text-green-500'} />
+                            <CheckCircle2 size={18} className={isPremium ? 'text-primary-300' : 'text-primary-500'} />
                             {isPremium ? t('account.feature_2x_lossless') : t('account.feature_skip_limit')}
                         </li>
                     </ul>

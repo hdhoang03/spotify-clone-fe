@@ -49,10 +49,10 @@ const PlaylistCard = ({ id, title, description, imageUrl, index = 0, onPlay }: P
                                     e.stopPropagation();
                                     onPlay?.(e) ?? console.log('Play playlist', id);
                                 }}
-                                className="w-11 h-11 md:w-12 md:h-12 bg-green-500 rounded-full
+                                className="w-11 h-11 md:w-12 md:h-12 bg-primary-500 rounded-full
                                            flex items-center justify-center text-black
                                            shadow-[0_4px_20px_rgba(34,197,94,0.5)]
-                                           hover:bg-green-400 transition-colors duration-150"
+                                           hover:bg-primary-400 transition-colors duration-150"
                             >
                                 <Play fill="black" size={20} className="ml-0.5" />
                             </motion.button>

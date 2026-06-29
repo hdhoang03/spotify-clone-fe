@@ -22,19 +22,19 @@ const FAQItem = ({ question, answer, icon, isLast = false }: FAQItemProps) => {
                 {icon && (
                     <span className={`flex-shrink-0 p-1.5 rounded-lg transition-colors duration-200
                         ${isOpen
-                            ? 'bg-green-500/15 text-green-500'
-                            : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-400 group-hover:bg-green-500/10 group-hover:text-green-500 dark:group-hover:text-green-400'
+                            ? 'bg-primary-500/15 text-primary-500'
+                            : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-400 group-hover:bg-primary-500/10 group-hover:text-primary-500 dark:group-hover:text-primary-400'
                         }`}>
                         {icon}
                     </span>
                 )}
                 <span className={`flex-1 font-semibold text-base transition-colors leading-snug
-                    ${isOpen ? 'text-green-500 dark:text-green-400' : 'text-zinc-900 dark:text-white group-hover:text-green-600 dark:group-hover:text-green-400'}`}>
+                    ${isOpen ? 'text-primary-500 dark:text-primary-400' : 'text-zinc-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400'}`}>
                     {question}
                 </span>
                 <ChevronDown
                     size={18}
-                    className={`flex-shrink-0 text-zinc-400 transition-all duration-300 ${isOpen ? 'rotate-180 text-green-500' : ''}`}
+                    className={`flex-shrink-0 text-zinc-400 transition-all duration-300 ${isOpen ? 'rotate-180 text-primary-500' : ''}`}
                 />
             </button>
 
@@ -48,7 +48,7 @@ const FAQItem = ({ question, answer, icon, isLast = false }: FAQItemProps) => {
                         className="overflow-hidden"
                     >
                         <p className="px-5 pb-5 text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed
-                                      border-l-2 border-green-500/40 ml-5 pl-4">
+                                      border-l-2 border-primary-500/40 ml-5 pl-4">
                             {answer}
                         </p>
                     </motion.div>

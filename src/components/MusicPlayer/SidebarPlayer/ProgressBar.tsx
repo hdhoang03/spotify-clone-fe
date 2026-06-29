@@ -28,7 +28,7 @@ const ProgressBar = ({ currentTime, duration, onTimeChange, formatTime, isLight,
                 onMouseUp={() => setIsDragging(false)}
             >
                 <div
-                    className="h-full rounded-full bg-green-500 relative transition-all"
+                    className="h-full rounded-full bg-primary-500 relative transition-all"
                     style={{ width: `${progressPct}%` }}
                 >
                     <div className={`absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full shadow-md

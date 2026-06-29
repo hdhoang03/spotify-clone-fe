@@ -57,7 +57,7 @@ const LibraryPage = () => {
                             key={filter}
                             onClick={() => setActiveFilter(filter)}
                             className={`whitespace-nowrap px-4 py-1.5 rounded-full text-xs font-semibold transition-all border ${activeFilter === filter
-                                ? 'bg-green-500 text-white border-green-500'
+                                ? 'bg-primary-500 text-white border-primary-500'
                                 : 'bg-transparent text-black dark:text-white border-zinc-300 dark:border-zinc-700'
                                 }`}>
                             {t(`library.${filter.toLowerCase()}`)}
@@ -74,7 +74,7 @@ const LibraryPage = () => {
                         onClick={() => setActiveFilter(filter)}
                         // Sửa lại class của active button: giữ nguyên green + white text cho cả 2 mode
                         className={`px-4 py-1.5 rounded-full text-sm font-bold transition-all border border-transparent ${activeFilter === filter
-                            ? 'bg-green-500 text-white shadow-md shadow-green-500/20 scale-105' // Xóa bỏ 'dark:bg-white dark:text-black'
+                            ? 'bg-primary-500 text-white shadow-md shadow-primary-500/20 scale-105' // Xóa bỏ 'dark:bg-white dark:text-black'
                             : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-[#2a2a2a] dark:text-white dark:hover:bg-[#3a3a3a]'
                             }`}>
                         {t(`library.${filter.toLowerCase()}`)}

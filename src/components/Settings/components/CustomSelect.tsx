@@ -36,7 +36,7 @@ const CustomSelect = ({ value, options, onChange, placeholder, className = "w-fu
             <button
                 type="button" // Quan trọng để không submit form nhầm
                 onClick={() => setIsOpen(!isOpen)}
-                className="w-full flex items-center justify-between px-4 py-2.5 bg-zinc-100 dark:bg-zinc-800 rounded-lg text-sm font-medium hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors border border-transparent focus:border-green-500 outline-none"
+                className="w-full flex items-center justify-between px-4 py-2.5 bg-zinc-100 dark:bg-zinc-800 rounded-lg text-sm font-medium hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors border border-transparent focus:border-primary-500 outline-none"
             >
                 <span className={`truncate ${!value ? 'text-zinc-500' : 'text-zinc-900 dark:text-white'}`}>
                     {selectedLabel}
@@ -62,7 +62,7 @@ const CustomSelect = ({ value, options, onChange, placeholder, className = "w-fu
                                 }}
                                 className={`px-4 py-2.5 text-sm cursor-pointer flex items-center justify-between transition-colors
                                     ${value === opt.value
-                                        ? 'bg-green-500/10 text-green-600 dark:text-green-400 font-bold'
+                                        ? 'bg-primary-500/10 text-primary-600 dark:text-primary-400 font-bold'
                                         : 'text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-700'
                                     }`}
                             >

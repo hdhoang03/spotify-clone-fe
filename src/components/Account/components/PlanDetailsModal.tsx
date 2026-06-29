@@ -105,7 +105,7 @@ const PlanDetailsModal = ({ isOpen, onClose, onRenew, isLoadingPayment }: PlanDe
                     {/* Content Section */}
                     {isLoading ? (
                         <div className="h-48 flex flex-col items-center justify-center gap-3">
-                            <Loader2 className="animate-spin text-green-500" size={32} />
+                            <Loader2 className="animate-spin text-primary-500" size={32} />
                             <p className="text-zinc-500 text-sm">{t('account.loading_profile', 'Đang tải...')}</p>
                         </div>
                     ) : error ? (
@@ -132,7 +132,7 @@ const PlanDetailsModal = ({ isOpen, onClose, onRenew, isLoadingPayment }: PlanDe
                                         {t('account.personal_profile', 'Gói cá nhân')}
                                     </p>
                                 </div>
-                                <span className="px-3 py-1 bg-green-500/10 dark:bg-green-500/20 text-green-600 dark:text-green-400 text-xs font-bold rounded-full uppercase tracking-wider">
+                                <span className="px-3 py-1 bg-primary-500/10 dark:bg-primary-500/20 text-primary-600 dark:text-primary-400 text-xs font-bold rounded-full uppercase tracking-wider">
                                     {t('account.plan_active', 'Hoạt động')}
                                 </span>
                             </div>

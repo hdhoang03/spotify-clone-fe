@@ -41,7 +41,7 @@ const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({ email, onResetSuc
         <form onSubmit={handleSubmit} className="space-y-4 animate-in fade-in duration-300">
             <div className="text-center mb-4">
                 <p className="text-sm text-gray-500">OTP has been sent to</p>
-                <p className="font-bold text-green-500 truncate px-4">{email}</p>
+                <p className="font-bold text-primary-500 truncate px-4">{email}</p>
             </div>
 
             <AuthInputField
@@ -76,7 +76,7 @@ const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({ email, onResetSuc
                 <button
                     type="submit"
                     disabled={isLoading || formData.otpCode.length < 6}
-                    className="w-full bg-green-500 hover:bg-green-600 disabled:opacity-50 text-black font-bold py-3.5 rounded-full transition flex items-center justify-center gap-2"
+                    className="w-full bg-primary-500 hover:bg-primary-600 disabled:opacity-50 text-black font-bold py-3.5 rounded-full transition flex items-center justify-center gap-2"
                 >
                     {isLoading ? <Loader2 className="animate-spin" size={18} /> : "Confirm change password"}
                 </button>

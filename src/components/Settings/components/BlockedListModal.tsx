@@ -78,7 +78,7 @@ const BlockedListModal = ({ isOpen, onClose }: BlockedListModalProps) => {
                             placeholder={t('settings.search_blocked')}
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="w-full bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-white px-10 py-3 rounded-xl text-sm outline-none focus:ring-2 focus:ring-green-500 transition-all"
+                            className="w-full bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-white px-10 py-3 rounded-xl text-sm outline-none focus:ring-2 focus:ring-primary-500 transition-all"
                         />
                         <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400" />
                     </div>
@@ -88,7 +88,7 @@ const BlockedListModal = ({ isOpen, onClose }: BlockedListModalProps) => {
                 <div className="flex-1 overflow-y-auto p-4 custom-scrollbar">
                     {isLoading && blockedUsers.length === 0 ? (
                         <div className="h-full flex items-center justify-center">
-                            <Loader2 className="animate-spin text-green-500" size={32} />
+                            <Loader2 className="animate-spin text-primary-500" size={32} />
                         </div>
                     ) : filteredUsers.length > 0 ? (
                         <div className="space-y-2">

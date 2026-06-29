@@ -21,7 +21,7 @@ const AlbumPage = () => {
     if (isLoading) {
         return (
             <div className="flex justify-center items-center h-[calc(100vh-200px)]">
-                <Loader2 className="animate-spin text-green-500" size={40} />
+                <Loader2 className="animate-spin text-primary-500" size={40} />
             </div>
         );
     }
@@ -32,7 +32,7 @@ const AlbumPage = () => {
                 <h2 className="text-2xl font-bold mb-4">{t('album.not_found')}</h2>
                 <button
                     onClick={() => navigate(-1)}
-                    className="px-4 py-2 bg-green-500 rounded-full font-bold text-black"
+                    className="px-4 py-2 bg-primary-500 rounded-full font-bold text-black"
                 >
                     {t('album.back')}
                 </button>

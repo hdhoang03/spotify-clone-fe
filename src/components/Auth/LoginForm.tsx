@@ -77,7 +77,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLoginSuccess, onForgotPassword,
             </div>
 
             <div className="flex justify-end">
-                <button type="button" onClick={onForgotPassword} className="text-xs font-bold text-gray-500 hover:text-green-500 hover:underline">
+                <button type="button" onClick={onForgotPassword} className="text-xs font-bold text-gray-500 hover:text-primary-500 hover:underline">
                     Forgot password?
                 </button>
             </div>
@@ -85,7 +85,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLoginSuccess, onForgotPassword,
             <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded-full transition transform active:scale-95 flex justify-center items-center gap-2 shadow-lg shadow-green-500/20"
+                className="w-full bg-primary-500 hover:bg-primary-600 text-white font-bold py-3 rounded-full transition transform active:scale-95 flex justify-center items-center gap-2 shadow-lg shadow-primary-500/20"
             >
                 {isLoading ? <Loader2 className="animate-spin" size={20} /> : "Log in"}
             </button>

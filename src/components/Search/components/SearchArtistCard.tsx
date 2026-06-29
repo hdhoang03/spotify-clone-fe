@@ -42,7 +42,7 @@ const SearchArtistCard = ({ artist, index }: Props) => {
             </div>
 
             <h3 className="font-bold text-zinc-900 dark:text-white truncate w-full text-center text-sm
-                group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors duration-200">
+                group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-200">
                 {artist.name}
             </h3>
             <span className="text-xs text-zinc-400 dark:text-zinc-500 mt-1">

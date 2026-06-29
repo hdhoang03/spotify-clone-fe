@@ -77,12 +77,12 @@ const SongDetailPage = () => {
     return (
         <div className="relative flex flex-col items-center justify-center min-h-[85vh] w-full px-4 py-12 select-none overflow-hidden rounded-3xl bg-gradient-to-b from-zinc-900 to-black text-white shadow-2xl border border-zinc-800/20">
             {/* Ambient Background Glow */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] bg-green-500/10 rounded-full blur-[100px] pointer-events-none" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] bg-primary-500/10 rounded-full blur-[100px] pointer-events-none" />
 
             {/* TRẠNG THÁI ĐANG TẢI */}
             {isLoading && (
                 <div className="relative z-10 flex flex-col items-center gap-4 bg-zinc-900/80 p-8 rounded-2xl border border-zinc-800/80 backdrop-blur-md animate-pulse">
-                    <Loader2 className="w-10 h-10 text-green-500 animate-spin" />
+                    <Loader2 className="w-10 h-10 text-primary-500 animate-spin" />
                     <p className="text-zinc-350 font-medium">Đang nhận diện bài hát từ mã QR...</p>
                 </div>
             )}
@@ -105,7 +105,7 @@ const SongDetailPage = () => {
             {/* TRẠNG THÁI THÀNH CÔNG VÀ SẴN SÀNG PHÁT CHUYỂN TIẾP */}
             {!isLoading && !error && songData && (
                 <div className="relative z-10 flex flex-col items-center bg-zinc-950/85 p-8 rounded-3xl border border-zinc-800/80 shadow-[0_20px_50px_rgba(0,0,0,0.6)] max-w-sm w-full backdrop-blur-md animate-in fade-in zoom-in-95 duration-500">
-                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-green-500 mb-6 bg-green-500/10 px-3 py-1.5 rounded-full border border-green-500/20">
+                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-primary-500 mb-6 bg-primary-500/10 px-3 py-1.5 rounded-full border border-primary-500/20">
                         Springtunes Share
                     </span>
 
@@ -139,10 +139,10 @@ const SongDetailPage = () => {
                         </div>
                     ) : !isLoggedIn && (
                         <div className="w-full bg-zinc-900/60 border border-zinc-800/80 rounded-2xl p-4 mb-6 text-center text-xs text-zinc-400 shadow-inner">
-                            Bạn chưa đăng nhập. Bài hát sẽ phát thử <span className="text-green-500 font-black">20 giây</span>.
+                            Bạn chưa đăng nhập. Bài hát sẽ phát thử <span className="text-primary-500 font-black">20 giây</span>.
                             <button
                                 onClick={handleLoginPrompt}
-                                className="block mx-auto mt-2 text-green-500 hover:text-green-400 font-bold underline transition"
+                                className="block mx-auto mt-2 text-primary-500 hover:text-primary-400 font-bold underline transition"
                             >
                                 Đăng nhập để nghe bản Full
                             </button>
@@ -153,7 +153,7 @@ const SongDetailPage = () => {
                     <button
                         onClick={handlePlaySong}
                         disabled={songData.is_deleted}
-                        className={`w-full ${songData.is_deleted ? 'bg-zinc-800 text-zinc-600 cursor-not-allowed' : 'bg-green-500 hover:bg-green-400 text-black shadow-lg shadow-green-500/25'} font-extrabold py-3.5 rounded-full flex items-center justify-center gap-2.5 transition transform active:scale-95 text-base`}
+                        className={`w-full ${songData.is_deleted ? 'bg-zinc-800 text-zinc-600 cursor-not-allowed' : 'bg-primary-500 hover:bg-primary-400 text-black shadow-lg shadow-primary-500/25'} font-extrabold py-3.5 rounded-full flex items-center justify-center gap-2.5 transition transform active:scale-95 text-base`}
                     >
                         <Play fill={songData.is_deleted ? 'currentColor' : 'black'} size={16} className="ml-0.5" />
                         Phát bài hát ngay

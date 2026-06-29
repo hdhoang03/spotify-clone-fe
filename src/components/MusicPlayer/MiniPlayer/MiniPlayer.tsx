@@ -150,7 +150,7 @@ const MiniPlayer = ({
                 <button
                     className={`transition-all p-1.5 rounded-full text-xs font-bold
                         ${isSpeedChanged || showOptions
-                            ? 'text-green-500 bg-green-500/15 border border-green-500/30'
+                            ? 'text-primary-500 bg-primary-500/15 border border-primary-500/30'
                             : `${iconBaseClass} hover:bg-white/10`
                         }`}
                     onClick={(e) => {
@@ -172,7 +172,7 @@ const MiniPlayer = ({
                     >
                         <Heart
                             size={17}
-                            className={`transition-colors ${isLiked ? 'text-green-400 fill-green-400' : ''}`}
+                            className={`transition-colors ${isLiked ? 'text-primary-400 fill-primary-400' : ''}`}
                         />
                     </button>
                 )}
@@ -227,8 +227,8 @@ const MiniPlayer = ({
                 >
                     <div className="flex items-center gap-2">
                         <span className="flex h-2 w-2 relative">
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                            <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary-400 opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-2 w-2 bg-primary-500"></span>
                         </span>
                         <span>{t('player.sidebar_drag_hint')}</span>
                     </div>

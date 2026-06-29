@@ -80,14 +80,14 @@ const TrackRow = ({ index, songId, coverUrl, title, artist, artistId, featuredAr
                         {isHovered ? (
                             // Hover: luôn hiện Play/Pause icon
                             isPlaying && isActive
-                                ? <Pause size={16} className="text-green-500 mx-auto" />
-                                : <Play size={16} className={`mx-auto ${isActive ? 'text-green-500' : 'text-white'}`} />
+                                ? <Pause size={16} className="text-primary-500 mx-auto" />
+                                : <Play size={16} className={`mx-auto ${isActive ? 'text-primary-500' : 'text-white'}`} />
                         ) : isActive && isPlaying ? (
                             // Đang phát, không hover: hiện equalizer animation
                             <EqualizerBars />
                         ) : isActive ? (
                             // Active nhưng paused: hiện Play màu xanh
-                            <Play size={16} className="text-green-500 mx-auto" />
+                            <Play size={16} className="text-primary-500 mx-auto" />
                         ) : (
                             // Bình thường: hiện số thứ tự
                             <span>{index + 1}</span>
@@ -97,7 +97,7 @@ const TrackRow = ({ index, songId, coverUrl, title, artist, artistId, featuredAr
                     <div className="flex items-center gap-3 flex-1 min-w-0">
                         <img src={coverUrl} alt={title} className="w-10 h-10 md:w-10 md:h-10 rounded shadow-md object-cover shrink-0" />
                         <div className="flex flex-col min-w-0">
-                            <span className={`font-bold truncate text-sm md:text-base ${isActive ? 'text-green-500' : 'text-gray-900 dark:text-white'}`}>
+                            <span className={`font-bold truncate text-sm md:text-base ${isActive ? 'text-primary-500' : 'text-gray-900 dark:text-white'}`}>
                                 {title}
                             </span>
                             <div className="block md:hidden text-xs text-gray-500 dark:text-gray-400">
@@ -127,7 +127,7 @@ const TrackRow = ({ index, songId, coverUrl, title, artist, artistId, featuredAr
                     {userStreamCount !== undefined && (
                         <div className="hidden md:flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400 font-variant-numeric tabular-nums">
                             <span>{formatNumber(userStreamCount)}</span>
-                            <span className="text-xs opacity-70 text-green-500">{t('profile.plays')}</span>
+                            <span className="text-xs opacity-70 text-primary-500">{t('profile.plays')}</span>
                         </div>
                     )}
 

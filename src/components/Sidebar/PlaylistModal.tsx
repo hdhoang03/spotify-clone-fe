@@ -85,11 +85,11 @@ const PlaylistModal = ({ isOpen, onClose, onSubmit, initialData, isLoading }: Pl
                         <div className="flex-1 space-y-3">
                             <input
                                 required placeholder={t('playlist.playlist_name')} value={name} onChange={e => setName(e.target.value)}
-                                className="w-full bg-zinc-100 dark:bg-[#3E3E3E] text-zinc-900 dark:text-white px-3 py-2 rounded-md outline-none focus:ring-2 focus:ring-green-500 font-bold text-sm"
+                                className="w-full bg-zinc-100 dark:bg-[#3E3E3E] text-zinc-900 dark:text-white px-3 py-2 rounded-md outline-none focus:ring-2 focus:ring-primary-500 font-bold text-sm"
                             />
                             <textarea
                                 placeholder={t('playlist.add_description')} value={description} onChange={e => setDescription(e.target.value)} rows={3}
-                                className="w-full bg-zinc-100 dark:bg-[#3E3E3E] text-zinc-900 dark:text-white px-3 py-2 rounded-md outline-none focus:ring-2 focus:ring-green-500 text-xs resize-none"
+                                className="w-full bg-zinc-100 dark:bg-[#3E3E3E] text-zinc-900 dark:text-white px-3 py-2 rounded-md outline-none focus:ring-2 focus:ring-primary-500 text-xs resize-none"
                             />
                         </div>
                     </div>
@@ -99,7 +99,7 @@ const PlaylistModal = ({ isOpen, onClose, onSubmit, initialData, isLoading }: Pl
                         <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">{t('playlist.public_on_profile')}</span>
                         <button
                             type="button" onClick={() => setIsPublic(!isPublic)}
-                            className={`w-10 h-5 rounded-full transition-colors relative ${isPublic ? 'bg-green-500' : 'bg-zinc-400 dark:bg-zinc-600'}`}
+                            className={`w-10 h-5 rounded-full transition-colors relative ${isPublic ? 'bg-primary-500' : 'bg-zinc-400 dark:bg-zinc-600'}`}
                         >
                             <span className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full transition-transform ${isPublic ? 'translate-x-5' : 'translate-x-0'}`} />
                         </button>

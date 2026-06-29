@@ -71,7 +71,7 @@ const VolumeControl = ({ volume, onVolumeChange, isMuted, toggleMute, isLight, i
                 onTouchStart={handleTouchStart}
             >
                 <div className={`w-full h-1 rounded-full ${isLight ? 'bg-black/15' : 'bg-white/15'}`}>
-                    <div className="h-full rounded-full bg-green-500 relative" style={{ width: `${isMuted ? 0 : volume * 100}%` }}>
+                    <div className="h-full rounded-full bg-primary-500 relative" style={{ width: `${isMuted ? 0 : volume * 100}%` }}>
                         <div className={`absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full shadow-md transition-transform
                             ${isDragging ? 'scale-125' : 'scale-0 group-hover:scale-100'}`} 
                         />

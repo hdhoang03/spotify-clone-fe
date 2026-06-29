@@ -201,7 +201,7 @@ const SongShareCard = ({ song, isOpen, onClose }: SongShareCardProps) => {
                 <button
                     onClick={handleDownloadImage}
                     disabled={isGenerating || !!(imageRef.current && !imageRef.current.complete)}
-                    className="mt-6 w-full bg-green-500 hover:bg-green-400 text-black font-bold py-3 rounded-full flex items-center justify-center gap-2 transition active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="mt-6 w-full bg-primary-500 hover:bg-primary-400 text-black font-bold py-3 rounded-full flex items-center justify-center gap-2 transition active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
                     style={{ boxShadow: '0 10px 15px -3px rgba(34, 197, 94, 0.2)' }}
                 >
                     {isGenerating ? <Loader2 className="animate-spin" /> : <Download size={20} />}

@@ -79,7 +79,7 @@ const SearchInput = ({ onTabChange, activeTab }: SearchInputProps) => {
                     }`}
             >
                 <button onClick={handleToggleSearch} className="p-3 shrink-0">
-                    <Search size={22} className={isOpen ? "text-zinc-900 dark:text-white" : "text-green-500"} />
+                    <Search size={22} className={isOpen ? "text-zinc-900 dark:text-white" : "text-primary-500"} />
                 </button>
 
                 <AnimatePresence>

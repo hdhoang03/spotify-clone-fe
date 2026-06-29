@@ -70,7 +70,7 @@ const Header = ({ onMenuClick, onNaviagate, activeTab }: HeaderProps) => {
                 {/* Left Section */}
                 <div className="flex items-center gap-4 shrink-0">
                     <div className="md:hidden flex items-center gap-2">
-                        <span onClick={handleGoHome} className="text-xl font-extrabold bg-gradient-to-r from-green-500 to-emerald-400 bg-clip-text text-transparent cursor-pointer">
+                        <span onClick={handleGoHome} className="text-xl font-extrabold bg-gradient-to-r from-primary-500 to-emerald-400 bg-clip-text text-transparent cursor-pointer">
                             Springtunes
                         </span>
                     </div>
@@ -85,7 +85,7 @@ const Header = ({ onMenuClick, onNaviagate, activeTab }: HeaderProps) => {
                         </button>
                     )}
 
-                    <span onClick={handleGoHome} className="text-xl font-bold bg-gradient-to-r from-green-500 to-emerald-400 ml-2 hidden md:block bg-clip-text text-transparent cursor-pointer hover:opacity-80 transition-opacity">
+                    <span onClick={handleGoHome} className="text-xl font-bold bg-gradient-to-r from-primary-500 to-emerald-400 ml-2 hidden md:block bg-clip-text text-transparent cursor-pointer hover:opacity-80 transition-opacity">
                         Springtunes
                     </span>
                 </div>
@@ -132,7 +132,7 @@ const Header = ({ onMenuClick, onNaviagate, activeTab }: HeaderProps) => {
                     ) : (
                         <div className="flex items-center gap-4">
                             <div className="md:hidden"><ThemeToggle /></div>
-                            <button onClick={() => setIsAuthModalOpen(true)} className="bg-green-500 text-white font-bold px-6 py-2 rounded-full text-sm hover:scale-105 transition shadow-lg">
+                            <button onClick={() => setIsAuthModalOpen(true)} className="bg-primary-500 text-white font-bold px-6 py-2 rounded-full text-sm hover:scale-105 transition shadow-lg">
                                 Log in
                             </button>
                         </div>

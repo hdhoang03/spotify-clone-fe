@@ -33,7 +33,7 @@ const CardItem = ({
             className={`
                 group p-3 rounded-2xl cursor-pointer transition-all duration-300 relative
                 ${isCurrent
-                    ? 'bg-green-500/[0.07] dark:bg-green-500/[0.05] ring-1 ring-green-500/20'
+                    ? 'bg-primary-500/[0.07] dark:bg-primary-500/[0.05] ring-1 ring-primary-500/20'
                     : 'hover:bg-zinc-100 dark:hover:bg-white/[0.06]'
                 }
                 active:scale-[0.97]
@@ -56,7 +56,7 @@ const CardItem = ({
                                     whileHover={{ scale: 1.1 }}
                                     whileTap={{ scale: 0.92 }}
                                     onClick={(e) => { e.stopPropagation(); onClick?.(); }}
-                                    className="w-10 h-10 md:w-11 md:h-11 bg-green-500 rounded-full
+                                    className="w-10 h-10 md:w-11 md:h-11 bg-primary-500 rounded-full
                                                flex items-center justify-center
                                                shadow-[0_8px_24px_rgba(30,215,96,0.45)]
                                                text-black"
@@ -84,7 +84,7 @@ const CardItem = ({
             {/* Info */}
             <div className="flex flex-col gap-0.5 px-0.5">
                 <h3 className={`font-bold text-sm truncate transition-colors duration-150
-                    ${isCurrent ? 'text-green-500 dark:text-green-400' : 'text-zinc-900 dark:text-white'}`}>
+                    ${isCurrent ? 'text-primary-500 dark:text-primary-400' : 'text-zinc-900 dark:text-white'}`}>
                     {title}
                 </h3>
                 <p className="text-xs text-zinc-500 dark:text-zinc-400 line-clamp-2 leading-snug">

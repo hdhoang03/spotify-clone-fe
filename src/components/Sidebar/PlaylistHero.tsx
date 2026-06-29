@@ -49,7 +49,7 @@ const PlaylistHero = ({ playlist, songs, isOwner, onEditClick, onColorExtracted 
                                 bg-white/10 border border-white/20 backdrop-blur-sm
                                 text-zinc-800 dark:text-white/90">
                     {playlist.isPublic
-                        ? <Globe size={12} className="text-green-400" />
+                        ? <Globe size={12} className="text-primary-400" />
                         : <Lock size={12} className="text-zinc-400" />
                     }
                     {playlist.isPublic ? t('playlist.public') : t('playlist.private')}

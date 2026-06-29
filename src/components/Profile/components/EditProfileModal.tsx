@@ -79,7 +79,7 @@ const EditProfileModal = ({ isOpen, onClose, currentName, currentAvatar, onSave 
     // Helper render Avatar mặc định
     const renderDefaultAvatar = () => (
         <div className="w-full h-full flex items-center justify-center 
-                        bg-gradient-to-br from-green-400 to-green-600 
+                        bg-gradient-to-br from-primary-400 to-primary-600 
                         shadow-[inset_0_0_20px_rgba(0,0,0,0.2)] 
                         animate-in fade-in duration-300">
             {/* Tạo hiệu ứng Blur/Glow phía sau chữ */}
@@ -174,7 +174,7 @@ const EditProfileModal = ({ isOpen, onClose, currentName, currentAvatar, onSave 
                         {selectedFile && (
                             <button
                                 onClick={triggerFileSelect}
-                                className="text-xs font-bold text-green-500 hover:text-black dark:hover:text-white transition"
+                                className="text-xs font-bold text-primary-500 hover:text-black dark:hover:text-white transition"
                             >
                                 Change Image
                             </button>
@@ -186,7 +186,7 @@ const EditProfileModal = ({ isOpen, onClose, currentName, currentAvatar, onSave 
                         <input
                             type="text" value={name} onChange={(e) => setName(e.target.value)}
                             className="bg-gray-100 dark:bg-[#3e3e3e] border-none rounded-md px-3 py-2
-                                    text-gray-900 dark:text-white font-bold focus:ring-1 focus:ring-green-500
+                                    text-gray-900 dark:text-white font-bold focus:ring-1 focus:ring-primary-500
                                     focus:outline-none w-full text-sm"
                             placeholder="Name"
                         />
@@ -205,7 +205,7 @@ const EditProfileModal = ({ isOpen, onClose, currentName, currentAvatar, onSave 
                                     max={3}
                                     step={0.1}
                                     onChange={(e) => setZoom(Number(e.target.value))}
-                                    className="w-full h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700 accent-green-500"
+                                    className="w-full h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700 accent-primary-500"
                                 />
                                 <p className="text-[10px] text-gray-400 mt-1">Drag image to adjust position</p>
                             </div>
@@ -214,7 +214,7 @@ const EditProfileModal = ({ isOpen, onClose, currentName, currentAvatar, onSave 
                         <div className="flex-1"></div>
                         <button
                             onClick={handleSave}
-                            className="self-end px-8 py-3 bg-green-500 hover:bg-green-600 dark:bg-white dark:text-black 
+                            className="self-end px-8 py-3 bg-primary-500 hover:bg-primary-600 dark:bg-white dark:text-black 
                                     dark:hover:scale-105 text-white font-bold rounded-full transition shadow-lg"
                         >
                             Save

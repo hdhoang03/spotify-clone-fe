@@ -155,7 +155,7 @@ const PlaylistTrackList = ({ songs, playlistId, isOwner = true, onPlaySong, onRe
                                 gap-3 md:gap-4 px-2 md:px-4 py-2 md:py-2.5 items-center text-sm
                                 transition-all duration-200 cursor-pointer group rounded-xl
                                 ${isDeleted ? 'opacity-50 grayscale cursor-not-allowed' : (isActive
-                                    ? 'bg-green-50/70 dark:bg-green-500/[0.08] border-l-2 border-green-500 pl-[6px] md:pl-[14px]'
+                                    ? 'bg-primary-50/70 dark:bg-primary-500/[0.08] border-l-2 border-primary-500 pl-[6px] md:pl-[14px]'
                                     : 'border-l-2 border-transparent hover:bg-zinc-50/80 dark:hover:bg-white/[0.05]')
                                 }
                             `}
@@ -188,13 +188,13 @@ const PlaylistTrackList = ({ songs, playlistId, isOwner = true, onPlaySong, onRe
                                 {hoveredIndex === index ? (
                                     // Hover: hiện Play/Pause icon
                                     isActive && globalIsPlaying
-                                        ? <Pause size={16} className="text-green-500" />
-                                        : <Play size={16} fill="currentColor" className={isActive ? 'text-green-500' : 'text-black dark:text-white'} />
+                                        ? <Pause size={16} className="text-primary-500" />
+                                        : <Play size={16} fill="currentColor" className={isActive ? 'text-primary-500' : 'text-black dark:text-white'} />
                                 ) : isActive && globalIsPlaying ? (
                                     <EqualizerBars />
                                 ) : isActive ? (
                                     // Active nhưng paused: Play màu xanh
-                                    <Play size={16} fill="currentColor" className="text-green-500" />
+                                    <Play size={16} fill="currentColor" className="text-primary-500" />
                                 ) : (
                                     // Bình thường: số thứ tự
                                     <span>{index + 1}</span>
@@ -211,7 +211,7 @@ const PlaylistTrackList = ({ songs, playlistId, isOwner = true, onPlaySong, onRe
                                 />
                                 <div className="truncate flex-1 min-w-0">
                                     <div className={`font-semibold truncate text-sm leading-snug
-                                                     ${isActive ? 'text-green-500' : 'text-zinc-900 dark:text-white'}`}>
+                                                     ${isActive ? 'text-primary-500' : 'text-zinc-900 dark:text-white'}`}>
                                         {song.title}
                                     </div>
                                     <div className="text-zinc-500 dark:text-zinc-400 group-hover:text-zinc-700

@@ -58,7 +58,7 @@ const HelpPage = () => {
                     {/* ── CỘT TRÁI: FAQ ── */}
                     <div className="md:col-span-7">
                         <div className="flex items-center gap-2.5 mb-4 px-1">
-                            <span className="p-1.5 bg-green-500/10 rounded-lg text-green-500 border border-green-500/20">
+                            <span className="p-1.5 bg-primary-500/10 rounded-lg text-primary-500 border border-primary-500/20">
                                 <HelpCircle size={16} />
                             </span>
                             <h2 className="text-sm font-bold tracking-widest uppercase text-zinc-500 dark:text-zinc-400">
@@ -78,25 +78,25 @@ const HelpPage = () => {
                                 onClick={() => openDocument('terms')}
                                 className="flex items-center justify-between px-4 py-3 bg-white/60 dark:bg-zinc-900/60
                                            backdrop-blur-xl border border-zinc-200/80 dark:border-zinc-800/80 rounded-xl
-                                           hover:border-green-500/40 hover:bg-green-500/5 dark:hover:bg-green-500/5
+                                           hover:border-primary-500/40 hover:bg-primary-500/5 dark:hover:bg-primary-500/5
                                            transition-all duration-200 group text-left w-full"
                             >
-                                <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300 group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors">
+                                <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
                                     {t('help.terms')}
                                 </span>
-                                <ChevronRight size={14} className="text-zinc-400 group-hover:text-green-500 transition-colors" />
+                                <ChevronRight size={14} className="text-zinc-400 group-hover:text-primary-500 transition-colors" />
                             </button>
                             <button
                                 onClick={() => openDocument('privacy')}
                                 className="flex items-center justify-between px-4 py-3 bg-white/60 dark:bg-zinc-900/60
                                            backdrop-blur-xl border border-zinc-200/80 dark:border-zinc-800/80 rounded-xl
-                                           hover:border-green-500/40 hover:bg-green-500/5 dark:hover:bg-green-500/5
+                                           hover:border-primary-500/40 hover:bg-primary-500/5 dark:hover:bg-primary-500/5
                                            transition-all duration-200 group text-left w-full"
                             >
-                                <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300 group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors">
+                                <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
                                     {t('help.privacy')}
                                 </span>
-                                <ChevronRight size={14} className="text-zinc-400 group-hover:text-green-500 transition-colors" />
+                                <ChevronRight size={14} className="text-zinc-400 group-hover:text-primary-500 transition-colors" />
                             </button>
                         </div>
                     </div>

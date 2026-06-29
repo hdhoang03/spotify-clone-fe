@@ -134,7 +134,7 @@ const ProfileShareCard = ({ user, dominantColor, isOpen, onClose, type = 'user' 
                                         className="w-full h-full object-cover rounded-full"
                                     />
                                 ) : (
-                                    <div className="w-full h-full rounded-full bg-green-500 flex items-center justify-center">
+                                    <div className="w-full h-full rounded-full bg-primary-500 flex items-center justify-center">
                                         <span className="text-6xl font-black uppercase">{user.name.charAt(0)}</span>
                                     </div>
                                 )}

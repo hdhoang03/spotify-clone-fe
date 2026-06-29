@@ -32,8 +32,8 @@ const ConfirmModal = ({ isOpen, onClose, onConfirm, type, title, message, isLoad
             confirmText: 'Xóa vĩnh viễn'
         },
         RESTORE: {
-            icon: <RefreshCw size={48} className="text-green-500" />,
-            confirmBtnColor: 'bg-green-600 hover:bg-green-700',
+            icon: <RefreshCw size={48} className="text-primary-500" />,
+            confirmBtnColor: 'bg-primary-600 hover:bg-primary-700',
             confirmText: 'Khôi phục lại'
         },
         BLOCK: {
@@ -58,7 +58,7 @@ const ConfirmModal = ({ isOpen, onClose, onConfirm, type, title, message, isLoad
             {/* Modal Content */}
             <div className="relative bg-white dark:bg-zinc-900 w-full max-w-sm rounded-2xl shadow-2xl border border-gray-200 dark:border-white/10 overflow-hidden flex flex-col items-center text-center p-6 space-y-4 scale-100 animate-in zoom-in-95 duration-200">
 
-                <div className={`p-4 rounded-full bg-opacity-10 dark:bg-opacity-20 ${type === 'DELETE_HARD' || type === 'BLOCK' ? 'bg-red-100' : type === 'RESTORE' ? 'bg-green-100' : type === 'UNBLOCK' ? 'bg-blue-100' : 'bg-orange-100'}`}>
+                <div className={`p-4 rounded-full bg-opacity-10 dark:bg-opacity-20 ${type === 'DELETE_HARD' || type === 'BLOCK' ? 'bg-red-100' : type === 'RESTORE' ? 'bg-primary-100' : type === 'UNBLOCK' ? 'bg-blue-100' : 'bg-orange-100'}`}>
                     {currentConfig.icon}
                 </div>
 

@@ -25,8 +25,8 @@ const SectionHeader = ({ title }: { title: string }) => (
 const SearchLoader = () => (
     <div className="mt-12 flex flex-col items-center gap-3 text-zinc-400">
         <div className="relative w-12 h-12">
-            <div className="absolute inset-0 rounded-full border-2 border-green-500/30" />
-            <div className="absolute inset-0 rounded-full border-2 border-green-500 border-t-transparent animate-spin" />
+            <div className="absolute inset-0 rounded-full border-2 border-primary-500/30" />
+            <div className="absolute inset-0 rounded-full border-2 border-primary-500 border-t-transparent animate-spin" />
         </div>
         <span className="text-sm font-medium animate-pulse">
             {/* intentional: avoids flicker on fast connections */}

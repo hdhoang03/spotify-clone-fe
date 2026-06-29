@@ -16,7 +16,7 @@ const ToastIcon = ({ type }: { type: ToastType }) => {
         case 'error':
             return <AlertCircle size={20} className="shrink-0 text-red-500 dark:text-red-400" />;
         case 'success':
-            return <CheckCircle2 size={20} className="shrink-0 text-green-500 dark:text-green-400" />;
+            return <CheckCircle2 size={20} className="shrink-0 text-primary-500 dark:text-primary-400" />;
         case 'warning':
             return <AlertCircle size={20} className="shrink-0 text-amber-500 dark:text-amber-400" />;
         case 'info':
@@ -41,7 +41,7 @@ const ToastCloseButton = ({ onClick }: { onClick: () => void }) => {
 // Border styles mapping light/dark
 const borderStyles: Record<ToastType, string> = {
     error: 'border-red-500/20 dark:border-red-500/30',
-    success: 'border-green-500/20 dark:border-green-500/30',
+    success: 'border-primary-500/20 dark:border-primary-500/30',
     warning: 'border-amber-500/20 dark:border-amber-500/30',
     info: 'border-sky-500/20 dark:border-sky-500/30',
 };

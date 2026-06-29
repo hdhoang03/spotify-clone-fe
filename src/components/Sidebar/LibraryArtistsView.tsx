@@ -17,7 +17,7 @@ const LibraryArtistsView = () => {
     if (isLoading) {
         return (
             <div className="flex justify-center items-center py-20">
-                <Loader2 className="animate-spin text-green-500" size={32} />
+                <Loader2 className="animate-spin text-primary-500" size={32} />
             </div>
         );
     }

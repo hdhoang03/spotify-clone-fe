@@ -74,10 +74,10 @@ const LikedSongsCard = () => {
                     transformStyle: 'preserve-3d',
                     willChange: 'transform',
                 }}
-                className="relative group bg-gradient-to-br from-green-400 via-emerald-500 to-teal-600
-                           dark:from-green-600 dark:via-emerald-700 dark:to-teal-900
+                className="relative group bg-gradient-to-br from-primary-400 via-emerald-500 to-teal-600
+                           dark:from-primary-600 dark:via-emerald-700 dark:to-teal-900
                            rounded-xl p-4 md:p-6 flex flex-col justify-between
-                           shadow-lg shadow-green-500/20 min-h-[140px] md:min-h-[180px] overflow-hidden"
+                           shadow-lg shadow-primary-500/20 min-h-[140px] md:min-h-[180px] overflow-hidden"
             >
                 {/* Spotlight */}
                 <div

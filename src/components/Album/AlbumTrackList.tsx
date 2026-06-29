@@ -80,12 +80,12 @@ const AlbumTrackList = ({
                                 <td className="py-3 w-12 text-center">
                                     {isHovered ? (
                                         isActive && globalIsPlaying
-                                            ? <Pause size={16} className="mx-auto text-green-500" />
-                                            : <Play size={16} fill="currentColor" className={`mx-auto ${isActive ? 'text-green-500' : 'text-zinc-900 dark:text-white'}`} />
+                                            ? <Pause size={16} className="mx-auto text-primary-500" />
+                                            : <Play size={16} fill="currentColor" className={`mx-auto ${isActive ? 'text-primary-500' : 'text-zinc-900 dark:text-white'}`} />
                                     ) : isActive && globalIsPlaying ? (
                                         <span className="flex justify-center"><EqualizerBars /></span>
                                     ) : (
-                                        <span className={`text-sm ${isActive ? 'text-green-500' : 'text-zinc-400'}`}>
+                                        <span className={`text-sm ${isActive ? 'text-primary-500' : 'text-zinc-400'}`}>
                                             {idx + 1}
                                         </span>
                                     )}
@@ -101,7 +101,7 @@ const AlbumTrackList = ({
                                             draggable={false}
                                         />
                                         <div className="min-w-0">
-                                            <p className={`font-semibold truncate text-sm ${isActive ? 'text-green-500' : 'text-zinc-900 dark:text-white'}`}>
+                                            <p className={`font-semibold truncate text-sm ${isActive ? 'text-primary-500' : 'text-zinc-900 dark:text-white'}`}>
                                                 {song.title}
                                             </p>
                                             <p className="text-xs text-zinc-500 truncate md:hidden mt-0.5">

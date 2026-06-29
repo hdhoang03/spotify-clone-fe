@@ -54,7 +54,7 @@ const ArtistAboutModal = ({ isOpen, onClose, artist }: ArtistAboutModalProps) =>
                         className="relative w-full max-w-3xl max-h-[90vh] bg-zinc-950 rounded-[2rem] md:rounded-[2.5rem] overflow-hidden shadow-[0_0_100px_rgba(0,0,0,0.5)] border border-white/10 flex flex-col z-10"
                     >
                         {/* Ambient Glows */}
-                        <div className="absolute top-0 right-0 w-96 h-96 bg-green-500/10 rounded-full blur-[100px] pointer-events-none" />
+                        <div className="absolute top-0 right-0 w-96 h-96 bg-primary-500/10 rounded-full blur-[100px] pointer-events-none" />
                         <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-500/10 rounded-full blur-[100px] pointer-events-none" />
 
                         {/* Close Button */}

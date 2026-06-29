@@ -80,9 +80,9 @@ const ContactForm = () => {
                     value={formData.content}
                     onChange={(e) => setFormData({ ...formData, content: e.target.value })}
                     className="w-full px-4 py-3 bg-zinc-100/80 dark:bg-zinc-800/80 text-zinc-900 dark:text-white
-                               rounded-xl outline-none focus:ring-2 focus:ring-green-500/60 text-sm
+                               rounded-xl outline-none focus:ring-2 focus:ring-primary-500/60 text-sm
                                placeholder-zinc-400 resize-none border border-zinc-200 dark:border-zinc-700
-                               focus:border-green-500/40 transition-all duration-200"
+                               focus:border-primary-500/40 transition-all duration-200"
                 />
             </div>
 
@@ -90,10 +90,10 @@ const ContactForm = () => {
             <button
                 type="submit"
                 disabled={isLoading || !user}
-                className="w-full py-3 mt-1 bg-green-500 hover:bg-green-600 active:scale-95
+                className="w-full py-3 mt-1 bg-primary-500 hover:bg-primary-600 active:scale-95
                            text-white font-bold rounded-xl transition-all duration-200
                            flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed
-                           shadow-lg shadow-green-500/25 hover:shadow-green-500/40"
+                           shadow-lg shadow-primary-500/25 hover:shadow-primary-500/40"
             >
                 {isLoading ? (
                     <><Loader2 size={17} className="animate-spin" /> {t('help.processing')}</>
@@ -109,7 +109,7 @@ const ContactForm = () => {
                         initial={{ opacity: 0, y: 8 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 8 }}
-                        className="flex items-center gap-2.5 p-3.5 rounded-xl bg-green-500/10 border border-green-500/25 text-green-600 dark:text-green-400"
+                        className="flex items-center gap-2.5 p-3.5 rounded-xl bg-primary-500/10 border border-primary-500/25 text-primary-600 dark:text-primary-400"
                     >
                         <CheckCircle2 size={17} className="flex-shrink-0" />
                         <p className="text-sm font-medium">{t('help.success')}</p>

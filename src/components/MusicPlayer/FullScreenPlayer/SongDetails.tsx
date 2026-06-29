@@ -69,14 +69,14 @@ const SongDetails = ({ songId, coverUrl, title, artist, song, isLiked, dominantC
                                 initial={{ scale: 0, opacity: 0 }}
                                 animate={{ scale: 1, opacity: 1 }}
                                 exit={{ scale: 0, opacity: 0 }}
-                                className="absolute inset-0 rounded-full bg-green-500/20 blur-md"
+                                className="absolute inset-0 rounded-full bg-primary-500/20 blur-md"
                             />
                         )}
                         <Heart
                             size={28}
                             className={`relative z-10 transition-colors duration-300 ${
                                 syncedIsLiked
-                                    ? 'text-green-400 fill-green-400 drop-shadow-[0_0_8px_rgba(74,222,128,0.6)]'
+                                    ? 'text-primary-400 fill-primary-400 drop-shadow-[0_0_8px_rgba(74,222,128,0.6)]'
                                     : 'text-white/50 hover:text-white'
                             }`}
                         />

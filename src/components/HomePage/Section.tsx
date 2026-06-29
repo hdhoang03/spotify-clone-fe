@@ -23,7 +23,7 @@ const Section = ({ title, onSeeAll, children }: SectionProps) => {
             <div className="flex justify-between items-center mb-5 mt-10">
                 <div className="flex items-center gap-3">
                     {/* Accent bar */}
-                    <span className="block w-1 h-5 rounded-full bg-green-500 shadow-[0_0_8px_rgba(30,215,96,0.6)]" />
+                    <span className="block w-1 h-5 rounded-full bg-primary-500 shadow-[0_0_8px_rgba(30,215,96,0.6)]" />
                     <h2 className="text-lg md:text-xl font-extrabold text-zinc-900 dark:text-white tracking-tight">
                         {title}
                     </h2>

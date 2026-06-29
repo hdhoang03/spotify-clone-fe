@@ -6,6 +6,8 @@ import MusicPlayer from '../components/MusicPlayer';
 import MobileNavigation from '../components/Sidebar/MobileNavigation';
 import { useNavigate } from 'react-router-dom';
 import { useMusic } from '../contexts/MusicContent';
+import { AICompanion } from '../components/AICompanion';
+
 
 interface MainLayoutProps {
 	children: React.ReactNode;
@@ -114,8 +116,10 @@ const MainLayout = ({ children, activeTab = 'HOME', onTabChange }: MainLayoutPro
 
 			<MusicPlayer />
 			{isMobile && <MobileNavigation activeTab={activeTab} onTabChange={handleSwitchTab} />}
+			<AICompanion />
 		</div>
 	);
+
 };
 
 export default MainLayout;

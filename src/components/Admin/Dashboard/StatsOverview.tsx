@@ -24,7 +24,7 @@ const STAT_CARDS = [
         key: 'totalSongs' as const,
         title: 'Tổng bài hát',
         icon: Music,
-        color: 'bg-green-500',
+        color: 'bg-primary-500',
         glowColor: 'rgba(34,197,94,0.4)',
         spotlightColor: 'rgba(34,197,94,0.12)',
     },

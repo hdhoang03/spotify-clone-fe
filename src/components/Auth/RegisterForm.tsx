@@ -74,7 +74,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onRegisterSuccess, onSwitch
             <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full bg-green-500 hover:bg-green-600 text-black font-bold py-3 rounded-full transition mt-2 flex items-center justify-center gap-2 shadow-lg shadow-green-500/20 disabled:opacity-50"
+                className="w-full bg-primary-500 hover:bg-primary-600 text-black font-bold py-3 rounded-full transition mt-2 flex items-center justify-center gap-2 shadow-lg shadow-primary-500/20 disabled:opacity-50"
             >
                 {isLoading ? (
                     <><Loader2 className="animate-spin" size={20} /> Checking...</>

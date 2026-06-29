@@ -63,8 +63,8 @@ const OtpVerifyForm: React.FC<OtpVerifyFormProps> = ({ email, onVerifySuccess, o
         <form onSubmit={handleSubmit} className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
             {/* Header section với Icon */}
             <div className="flex flex-col items-center text-center space-y-2">
-                <div className="w-16 h-16 bg-green-500/10 rounded-full flex items-center justify-center mb-2">
-                    <Mail className="text-green-500" size={32} />
+                <div className="w-16 h-16 bg-primary-500/10 rounded-full flex items-center justify-center mb-2">
+                    <Mail className="text-primary-500" size={32} />
                 </div>
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Verify your email</h2>
                 <p className="text-sm text-gray-500 dark:text-gray-400 px-4">
@@ -85,7 +85,7 @@ const OtpVerifyForm: React.FC<OtpVerifyFormProps> = ({ email, onVerifySuccess, o
                     icon={<Lock size={18} />}
                     placeholder="• • • • • •"
                     maxLength={6}
-                    className="text-center tracking-[1em] text-2xl font-black py-4 border-2 focus:border-green-500 transition-all"
+                    className="text-center tracking-[1em] text-2xl font-black py-4 border-2 focus:border-primary-500 transition-all"
                     value={otpCode}
                     onChange={e => setOtpCode(e.target.value.replace(/[^0-9]/g, ''))} // Chỉ cho nhập số
                 />
@@ -98,7 +98,7 @@ const OtpVerifyForm: React.FC<OtpVerifyFormProps> = ({ email, onVerifySuccess, o
                         className={`text-xs font-bold flex items-center gap-1.5 transition-colors group ${
                             resendTimer > 0 || isResending
                                 ? 'text-gray-500 cursor-not-allowed opacity-70'
-                                : 'text-gray-500 hover:text-green-500'
+                                : 'text-gray-500 hover:text-primary-500'
                         }`}
                     >
                         <RefreshCcw size={14} className={`${resendTimer === 0 && !isResending ? 'group-hover:rotate-180' : ''} ${isResending ? 'animate-spin' : ''} transition-transform duration-500`} />
@@ -112,7 +112,7 @@ const OtpVerifyForm: React.FC<OtpVerifyFormProps> = ({ email, onVerifySuccess, o
                 <button
                     type="submit"
                     disabled={otpCode.length < 6 || isLoading}
-                    className="w-full bg-green-500 hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed text-black font-bold py-3.5 rounded-full transition-all flex items-center justify-center gap-2 shadow-lg shadow-green-500/20"
+                    className="w-full bg-primary-500 hover:bg-primary-600 disabled:opacity-50 disabled:cursor-not-allowed text-black font-bold py-3.5 rounded-full transition-all flex items-center justify-center gap-2 shadow-lg shadow-primary-500/20"
                 >
                     {isLoading ? "Đang xác thực..." : "Confirm & Login"}
                     {!isLoading && <ArrowRight size={18} />}

@@ -38,7 +38,7 @@ export const CategoryDetailHeader = ({ category, songCount, onBack }: CategoryDe
                         <Music size={18} className="text-pink-500" />
                         {songCount} Bài hát
                     </div>
-                    <div className={`px-3 py-1 rounded-full text-xs font-bold ${category.active ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'}`}>
+                    <div className={`px-3 py-1 rounded-full text-xs font-bold ${category.active ? 'bg-primary-100 text-primary-700 dark:bg-primary-900/30 dark:text-primary-400' : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'}`}>
                         {category.active ? 'Đang hoạt động' : 'Đã ẩn'}
                     </div>
                 </div>

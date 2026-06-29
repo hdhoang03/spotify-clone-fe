@@ -33,7 +33,7 @@ const SettingsToggle = ({
         <div
             className={`relative flex-shrink-0 rounded-full transition-all duration-300 shadow-inner
                 ${checked
-                    ? 'bg-green-500 shadow-green-500/30'
+                    ? 'bg-primary-500 shadow-primary-500/30'
                     : 'bg-zinc-200 dark:bg-zinc-700'
                 }`}
             style={{ width: '2.75rem', height: '1.5rem' }}

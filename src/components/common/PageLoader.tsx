@@ -15,7 +15,7 @@ interface PageLoaderProps {
  */
 const PageLoader = ({ size = 40 }: PageLoaderProps) => (
     <div className="h-screen flex items-center justify-center bg-white dark:bg-[#121212]">
-        <Loader2 className="animate-spin text-green-500" size={size} />
+        <Loader2 className="animate-spin text-primary-500" size={size} />
     </div>
 );
 

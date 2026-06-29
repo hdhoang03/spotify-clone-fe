@@ -106,7 +106,7 @@ export const SongTable = ({
                     startIndex={startIndex}
                     currentItemsCount={songs.length}
                     onPageChange={onPageChange}
-                    activeColorClass="bg-green-500 shadow-green-500/30"
+                    activeColorClass="bg-primary-500 shadow-primary-500/30"
                 />
             ) : (
                 <div className="p-12 text-center text-gray-500 flex flex-col items-center">

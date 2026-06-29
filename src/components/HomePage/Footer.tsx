@@ -11,7 +11,7 @@ const SocialIcon = ({ href, label, path, }: { href: string; label: string; path:
         aria-label={label}
         className="group relative w-10 h-10 flex items-center justify-center rounded-full
                    bg-white/5 border border-white/10
-                   hover:bg-white/10 hover:border-green-500/40
+                   hover:bg-white/10 hover:border-primary-500/40
                    hover:shadow-[0_0_16px_rgba(34,197,94,0.25)]
                    transition-all duration-300"
     >
@@ -46,7 +46,7 @@ const Footer = () => {
             {/* Ambient glow — chỉ hiện trong dark mode */}
             <div className="pointer-events-none absolute -top-32 left-1/2 -translate-x-1/2
                             w-[600px] h-40 rounded-full
-                            bg-green-500/5 blur-3xl dark:bg-green-500/8" />
+                            bg-primary-500/5 blur-3xl dark:bg-primary-500/8" />
 
             <div className="relative max-w-screen-xl mx-auto px-6 pt-12 pb-6 space-y-10">
 

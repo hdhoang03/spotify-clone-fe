@@ -15,8 +15,8 @@ const ToggleSwitch = ({ isOn, onToggle }: { isOn: boolean; onToggle: () => void 
     return (
         <button
             onClick={onToggle}
-            className={`relative w-11 h-6 rounded-full transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500
-                ${isOn ? 'bg-green-500' : 'bg-gray-300 dark:bg-zinc-700'}`}
+            className={`relative w-11 h-6 rounded-full transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500
+                ${isOn ? 'bg-primary-500' : 'bg-gray-300 dark:bg-zinc-700'}`}
         >
             <span
                 className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full shadow-sm transition-transform duration-300 transform
@@ -42,7 +42,7 @@ const FilterButton = ({
             onClick={onClick}
             className={`px-5 py-1.5 rounded-full text-sm font-bold transition-all duration-300 border border-transparent whitespace-nowrap shrink-0
                 ${isActive
-                    ? 'bg-green-500 text-black dark:bg-[#1ed760] dark:text-black shadow-[0_0_15px_rgba(34,197,94,0.3)] dark:shadow-[0_0_20px_rgba(30,215,96,0.25)] scale-105'
+                    ? 'bg-primary-500 text-black dark:bg-[#1ed760] dark:text-black shadow-[0_0_15px_rgba(34,197,94,0.3)] dark:shadow-[0_0_20px_rgba(30,215,96,0.25)] scale-105'
                     : 'bg-transparent text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10'
                 } ${className}`}
         >

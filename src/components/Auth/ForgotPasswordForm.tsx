@@ -47,7 +47,7 @@ const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({ onSubmitSuccess
                 <button
                     type="submit"
                     disabled={isLoading || !email}
-                    className="w-full bg-green-500 hover:bg-green-600 disabled:opacity-50 text-black font-bold py-3.5 rounded-full transition flex items-center justify-center gap-2"
+                    className="w-full bg-primary-500 hover:bg-primary-600 disabled:opacity-50 text-black font-bold py-3.5 rounded-full transition flex items-center justify-center gap-2"
                 >
                     {isLoading ? <Loader2 className="animate-spin" size={18} /> : "Send OTP"}
                 </button>

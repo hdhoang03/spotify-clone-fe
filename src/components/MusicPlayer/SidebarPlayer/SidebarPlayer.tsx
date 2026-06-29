@@ -58,7 +58,7 @@ const SidebarPlayer = ({
     const text = 'text-white';
     const subText = 'text-white/50';
     const iconBtn = 'text-white/70 hover:text-white hover:bg-white/10';
-    const activeIconBtn = 'text-green-500';
+    const activeIconBtn = 'text-primary-500';
 
     const handleClose = () => setIsSidebarPlayerOpen(false);
 
@@ -149,7 +149,7 @@ const SidebarPlayer = ({
                             onClick={onToggleLike}
                             className={`flex-shrink-0 w-9 h-9 flex items-center justify-center rounded-full transition-all mt-0.5 ${iconBtn}`}
                         >
-                            <Heart size={20} className={`transition-colors ${isLiked ? 'text-green-400 fill-green-400' : ''}`} />
+                            <Heart size={20} className={`transition-colors ${isLiked ? 'text-primary-400 fill-primary-400' : ''}`} />
                         </button>
                     )}
                 </div>

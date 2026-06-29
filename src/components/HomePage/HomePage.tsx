@@ -53,7 +53,7 @@ const HomePage = () => {
                 aria-hidden="true"
                 className="pointer-events-none absolute top-0 right-0 w-[520px] h-[520px]
                            rounded-full opacity-[0.07] dark:opacity-[0.04]
-                           bg-green-400 blur-[140px] -translate-y-1/4 translate-x-1/4"
+                           bg-primary-400 blur-[140px] -translate-y-1/4 translate-x-1/4"
             />
             <div
                 aria-hidden="true"
@@ -76,7 +76,7 @@ const HomePage = () => {
             <div className="px-4 md:px-8 mt-2 space-y-2 min-h-[50vh] relative z-10">
                 {isLoading ? (
                     <div className="w-full h-64 flex items-center justify-center gap-3">
-                        <Loader2 className="animate-spin text-green-500" size={28} />
+                        <Loader2 className="animate-spin text-primary-500" size={28} />
                         <span className="font-medium text-gray-400">{t('home.syncing')}</span>
                     </div>
                 ) : (

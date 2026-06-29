@@ -5,6 +5,7 @@ import SettingsSection from './components/SettingsSection';
 import SettingsToggle from './components/SettingsToggle';
 import BlockedListModal from './components/BlockedListModal';
 import CustomSelect from './components/CustomSelect';
+import ThemeSettings from './components/ThemeSettings';
 import BackButton from '../../components/common/BackButton';
 import { useAppSettings } from '../../hooks/useAppSettings';
 import { usePrivacySettings } from './hooks/usePrivacySettings';
@@ -55,9 +56,9 @@ const SettingsPage = () => {
                         checked={settings.autoplay}
                         onChange={() => updateSetting('autoplay', !settings.autoplay)}
                     />
-                    <div className="px-5 py-3 bg-green-500/5 dark:bg-green-500/5 border-t border-zinc-100 dark:border-zinc-800/70">
+                    <div className="px-5 py-3 bg-primary-500/5 dark:bg-primary-500/5 border-t border-zinc-100 dark:border-zinc-800/70">
                         <div className="flex items-start gap-2">
-                            <Radio size={13} className="text-green-500 mt-0.5 flex-shrink-0" />
+                            <Radio size={13} className="text-primary-500 mt-0.5 flex-shrink-0" />
                             <p className="text-[11px] text-zinc-500 dark:text-zinc-400 leading-relaxed">
                                 <Trans
                                     i18nKey="settings.autoplay_note"
@@ -87,7 +88,7 @@ const SettingsPage = () => {
                         onClick={() => setShowBlockedModal(true)}
                     >
                         <div className="pr-4 flex-1">
-                            <p className="font-semibold text-sm text-zinc-900 dark:text-white group-hover:text-green-500 dark:group-hover:text-green-400 transition-colors">
+                            <p className="font-semibold text-sm text-zinc-900 dark:text-white group-hover:text-primary-500 dark:group-hover:text-primary-400 transition-colors">
                                 {t('settings.blocked_users')}
                             </p>
                             <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
@@ -95,7 +96,7 @@ const SettingsPage = () => {
                             </p>
                         </div>
                         <div className="p-2 bg-zinc-100 dark:bg-zinc-800 rounded-xl text-zinc-600 dark:text-zinc-300
-                                        group-hover:bg-green-500 group-hover:text-white transition-all duration-200">
+                                        group-hover:bg-primary-500 group-hover:text-white transition-all duration-200">
                             <UserX size={16} />
                         </div>
                     </div>
@@ -105,7 +106,7 @@ const SettingsPage = () => {
                 <SettingsSection title={t('settings.gestures_shortcuts')}>
                     <div className="px-5 py-4 border-b border-zinc-100 dark:border-zinc-800/70">
                         <p className="font-semibold text-sm text-zinc-900 dark:text-white flex items-center gap-2">
-                            <span className="w-1.5 h-1.5 rounded-full bg-green-500" />
+                            <span className="w-1.5 h-1.5 rounded-full bg-primary-500" />
                             {t('settings.drag_sidebar')}
                         </p>
                         <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1 leading-relaxed pl-3.5">
@@ -114,7 +115,7 @@ const SettingsPage = () => {
                     </div>
                     <div className="px-5 py-4">
                         <p className="font-semibold text-sm text-zinc-900 dark:text-white flex items-center gap-2">
-                            <Keyboard size={14} className="text-green-500" />
+                            <Keyboard size={14} className="text-primary-500" />
                             {t('settings.esc_key')}
                         </p>
                         <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1 leading-relaxed pl-5">
@@ -132,6 +133,9 @@ const SettingsPage = () => {
                         onChange={() => updateSetting('lowPerf', !settings.lowPerf)}
                     />
                 </SettingsSection>
+
+                {/* Giao diện (Theme & Colors) */}
+                <ThemeSettings />
 
                 {/* Hiển thị */}
                 <SettingsSection title={t('settings.display')}>

@@ -32,7 +32,7 @@ const LoginPreviewModal = ({ isOpen, onClose, onLoginClick }: LoginPreviewModalP
                         className="relative w-full max-w-sm bg-white dark:bg-zinc-900 rounded-3xl shadow-2xl overflow-hidden border border-zinc-200 dark:border-zinc-800/80 p-6 flex flex-col items-center text-center select-none"
                     >
                         {/* Premium Crown/Lock Circle Icon */}
-                        <div className="w-16 h-16 bg-green-100 dark:bg-green-500/10 rounded-full flex items-center justify-center mb-5 text-green-600 dark:text-green-500 animate-bounce">
+                        <div className="w-16 h-16 bg-primary-100 dark:bg-primary-500/10 rounded-full flex items-center justify-center mb-5 text-primary-600 dark:text-primary-500 animate-bounce">
                             <Lock size={28} />
                         </div>
 
@@ -47,7 +47,7 @@ const LoginPreviewModal = ({ isOpen, onClose, onLoginClick }: LoginPreviewModalP
                         <div className="flex flex-col gap-3 w-full">
                             <button
                                 onClick={onLoginClick}
-                                className="w-full py-3 rounded-full font-bold text-black bg-green-500 hover:bg-green-400 shadow-lg shadow-green-500/20 transition-transform active:scale-95 text-sm"
+                                className="w-full py-3 rounded-full font-bold text-black bg-primary-500 hover:bg-primary-400 shadow-lg shadow-primary-500/20 transition-transform active:scale-95 text-sm"
                             >
                                 Đăng nhập ngay
                             </button>

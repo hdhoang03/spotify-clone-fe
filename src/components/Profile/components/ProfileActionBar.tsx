@@ -70,7 +70,7 @@ const ProfileActionBar = ({
                         onClick={onToggleFollow}
                         className={`px-6 py-2 rounded-full text-sm font-bold border transition active:scale-95 ${isFollowing
                             ? 'border-zinc-400 dark:border-zinc-600 text-zinc-900 dark:text-white hover:scale-105'
-                            : 'bg-green-500 text-white border-transparent hover:bg-green-600 hover:scale-105'
+                            : 'bg-primary-500 text-white border-transparent hover:bg-primary-600 hover:scale-105'
                             }`}
                     >
                         {isFollowing ? t('profile.following_btn') : t('profile.follow_btn')}
