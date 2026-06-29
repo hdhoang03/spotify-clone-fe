@@ -37,6 +37,8 @@ interface MusicContextType {
     /** Trạng thái sidebar player (panel phải bằng màn hình điện thoại) — chỉ desktop/tablet */
     isSidebarPlayerOpen: boolean;
     setIsSidebarPlayerOpen: (open: boolean) => void;
+    isFullScreenPlayerOpen: boolean;
+    setIsFullScreenPlayerOpen: (open: boolean) => void;
 }
 
 const MusicContext = createContext<MusicContextType | undefined>(undefined);
@@ -49,6 +51,7 @@ export const MusicProvider = ({ children }: { children: ReactNode }) => {
     const [playbackSource, setPlaybackSource] = useState<PlaybackSource>(null);
     const [playlistName, setPlaylistName] = useState<string | null>(null);
     const [isSidebarPlayerOpen, setIsSidebarPlayerOpen] = useState(false);
+    const [isFullScreenPlayerOpen, setIsFullScreenPlayerOpen] = useState(false);
     const { t } = useTranslation();
 
     useEffect(() => {
@@ -105,6 +108,7 @@ export const MusicProvider = ({ children }: { children: ReactNode }) => {
             playSong, playPlaylist, playRadio, togglePlay, isShuffling, toggleShuffle,
             setIsPlaying, updateCurrentSong,
             isSidebarPlayerOpen, setIsSidebarPlayerOpen,
+            isFullScreenPlayerOpen, setIsFullScreenPlayerOpen,
         }}>
             {children}
         </MusicContext.Provider>

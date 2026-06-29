@@ -84,10 +84,10 @@ const MusicPlayer = () => {
         currentSong, playlist, playPlaylist, playbackSource, playRadio,
         setIsPlaying, updateCurrentSong,
         isSidebarPlayerOpen, setIsSidebarPlayerOpen,
+        isFullScreenPlayerOpen, setIsFullScreenPlayerOpen
     } = useMusic();
 
     const dominantColor = useDominantColor(currentSong?.coverUrl, currentSong?.id);
-    const [isExpanded, setIsExpanded] = useState(false);
     const [isVisible, setIsVisible] = useState(true);
     const { isLiked, toggleLike } = useLikeSong(currentSong?.id);
     const [isLoggedIn, setIsLoggedIn] = useState(() => Boolean(localStorage.getItem('token')));
@@ -345,17 +345,17 @@ const MusicPlayer = () => {
 
             {/* ── FullScreenPlayer ── */}
             <AnimatePresence>
-                {isExpanded && isVisible && !isSidebarPlayerOpen && (
+                {isFullScreenPlayerOpen && isVisible && !isSidebarPlayerOpen && (
                     <FullScreenPlayer
                         key="full-player"
                         {...sharedPlayerProps}
-                        onCollapse={() => setIsExpanded(false)}
+                        onCollapse={() => setIsFullScreenPlayerOpen(false)}
                     />
                 )}
             </AnimatePresence>
 
             {/* ── MiniPlayer Desktop (drag-snap sang phải → SidebarPlayer) ── */}
-            {isVisible && !isExpanded && !isSidebarPlayerOpen && (
+            {isVisible && !isFullScreenPlayerOpen && !isSidebarPlayerOpen && (
                 <motion.div
                     key="mini-player-desktop"
                     className="hidden md:block relative z-50"
@@ -379,7 +379,7 @@ const MusicPlayer = () => {
                         currentSong={currentSong}
                         isPlaying={player.isPlaying}
                         onTogglePlay={player.togglePlay}
-                        onExpand={() => setIsExpanded(true)}
+                        onExpand={() => setIsFullScreenPlayerOpen(true)}
                         progress={progressPercent}
                         onClose={() => setIsVisible(false)}
                         speed={player.speed}
@@ -397,13 +397,13 @@ const MusicPlayer = () => {
             )}
 
             {/* ── MiniPlayer Mobile (không có snap, không dùng AnimatePresence) ── */}
-            {isVisible && !isExpanded && !isSidebarPlayerOpen && (
+            {isVisible && !isFullScreenPlayerOpen && !isSidebarPlayerOpen && (
                 <div className="md:hidden relative z-50">
                     <MiniPlayer
                         currentSong={currentSong}
                         isPlaying={player.isPlaying}
                         onTogglePlay={player.togglePlay}
-                        onExpand={() => setIsExpanded(true)}
+                        onExpand={() => setIsFullScreenPlayerOpen(true)}
                         progress={progressPercent}
                         onClose={() => setIsVisible(false)}
                         speed={player.speed}

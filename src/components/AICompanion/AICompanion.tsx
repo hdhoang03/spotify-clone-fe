@@ -6,7 +6,7 @@ import { ChatDrawer } from './ChatDrawer';
 import type { Message } from './types';
 
 export const AICompanion: React.FC = () => {
-    const { currentSong, playSong } = useMusic();
+    const { currentSong, playSong, setIsFullScreenPlayerOpen } = useMusic();
     const { systemSongs } = useSystemSongs();
     
     const [isOpen, setIsOpen] = useState(false);
@@ -113,6 +113,8 @@ export const AICompanion: React.FC = () => {
                 const songToPlay = systemSongs.find(s => s.id === songId);
                 if (songToPlay && songToPlay.audioUrl) {
                     playSong(songToPlay as any);
+                    // Tự động mở FullScreenPlayer để trải nghiệm tốt hơn
+                    setIsFullScreenPlayerOpen(true);
                 }
                 // Xoá tag ẩn khỏi giao diện
                 replyText = replyText.replace(/\[PLAY_SONG:(.+?)\]/g, '').trim();
