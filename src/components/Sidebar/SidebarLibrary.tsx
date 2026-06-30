@@ -42,7 +42,7 @@ const Sidebar = ({ activeTab, onTabChange, isCollapsed, onToggleCollapse, classN
     const [isCreating, setIsCreating] = useState(false);
     const navigate = useNavigate();
     const { t } = useTranslation();
-    
+
     const handleCreatePlaylist = async (formData: FormData) => {
         setIsCreating(true);
         try {

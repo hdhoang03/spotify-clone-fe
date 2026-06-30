@@ -108,7 +108,7 @@ const SidebarPlayer = ({
                                 <p className={`text-[11px] font-bold truncate ${text}`}>{subLabel}</p>
                             </>
                         ) : (
-                            <p className={`text-[9px] font-semibold tracking-widest uppercase ${subText}`}>{t('player.now_playing')}</p>
+                            <p className={`text-[9px] font-semibold tracking-widest uppercase ${subText}`}>{t('player.playing')}</p>
                         )}
                     </div>
 
