@@ -100,7 +100,9 @@
 		"no_following": "아직 아티스트를 팔로우하지 않았거나 팔로우하는 아티스트의 새 노래/앨범이 없습니다.",
 		"artist_role": "아티스트",
 		"most_liked": "가장 많이 좋아요를 받음",
-		"limit": "제한된 음악"
+		"limit": "제한된 음악",
+		"smart_picks": "스마트 추천",
+		"long_time_no_hear": "오랫동안 듣지 않은 곡"
 	},
 	"filter": {
 		"all": "모두",

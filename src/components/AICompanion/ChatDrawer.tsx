@@ -5,6 +5,9 @@ import { ApiKeySettings } from './ApiKeySettings';
 import { MessageList } from './MessageList';
 import { QuickActions } from './QuickActions';
 import type { Message } from './types';
+import { i18n } from './i18n';
+import type { ChatLanguage } from './i18n'
+import { Globe } from 'lucide-react';
 
 interface ChatDrawerProps {
     isOpen: boolean;
@@ -17,15 +20,20 @@ interface ChatDrawerProps {
     isLoading: boolean;
     errorMsg: string | null;
     currentSong: any;
-    triggerQuickAction: (type: 'explain' | 'translate' | 'recommend' | 'chat') => void;
+    triggerQuickAction: (type: 'explain' | 'translate' | 'recommend' | 'chat' | 'recommend_taste') => void;
+    language: ChatLanguage;
+    onLanguageChange: (lang: ChatLanguage) => void;
 }
 
 export const ChatDrawer: React.FC<ChatDrawerProps> = ({
     isOpen, onClose, apiKey, onSaveKey, messages, onClearChat,
-    onSendMessage, isLoading, errorMsg, currentSong, triggerQuickAction
+    onSendMessage, isLoading, errorMsg, currentSong, triggerQuickAction,
+    language, onLanguageChange
 }) => {
     const [showKeySettings, setShowKeySettings] = useState(false);
+    const [showLangMenu, setShowLangMenu] = useState(false);
     const [inputValue, setInputValue] = useState('');
+    const [drawerWidth, setDrawerWidth] = useState(420);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -35,6 +43,30 @@ export const ChatDrawer: React.FC<ChatDrawerProps> = ({
         }
     };
 
+    const handlePointerDown = (e: React.PointerEvent) => {
+        e.preventDefault();
+        const startX = e.clientX;
+        const startWidth = drawerWidth;
+
+        const handlePointerMove = (moveEvent: PointerEvent) => {
+            const diffX = startX - moveEvent.clientX;
+            const newWidth = Math.min(Math.max(startWidth + diffX, 320), window.innerWidth - 40);
+            setDrawerWidth(newWidth);
+        };
+
+        const handlePointerUp = () => {
+            document.removeEventListener('pointermove', handlePointerMove);
+            document.removeEventListener('pointerup', handlePointerUp);
+            document.body.style.userSelect = '';
+        };
+
+        document.body.style.userSelect = 'none';
+        document.addEventListener('pointermove', handlePointerMove);
+        document.addEventListener('pointerup', handlePointerUp);
+    };
+
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+
     return (
         <AnimatePresence>
             {isOpen && (
@@ -43,20 +75,63 @@ export const ChatDrawer: React.FC<ChatDrawerProps> = ({
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: 400 }}
                     transition={{ type: 'spring', damping: 28, stiffness: 260 }}
-                    className="fixed top-0 right-0 z-50 w-full md:w-[420px] h-full shadow-[0_0_50px_rgba(0,0,0,0.1)] dark:shadow-[0_0_50px_rgba(0,0,0,0.5)] flex flex-col
-                        bg-white/95 dark:bg-[#0A0A0A]/95 backdrop-blur-2xl border-l border-zinc-200/50 dark:border-zinc-800/50 text-zinc-900 dark:text-zinc-100"
+                    className="fixed top-0 right-0 z-50 h-full shadow-[-10px_0_50px_rgba(0,0,0,0.15)] dark:shadow-[-10px_0_50px_rgba(0,0,0,0.5)] flex flex-col
+                        bg-white/80 dark:bg-[#0A0A0A]/80 backdrop-blur-[40px] border-l border-white/20 dark:border-white/5 text-zinc-900 dark:text-zinc-100 overflow-hidden"
+                    style={{ width: isMobile ? '100%' : `${drawerWidth}px`, maxWidth: '100vw' }}
                 >
+                    {/* Resizer Handle */}
+                    {!isMobile && (
+                        <div
+                            className="absolute top-0 left-0 w-1.5 h-full cursor-col-resize z-50 hover:bg-primary-500/50 active:bg-primary-500 transition-colors opacity-0 hover:opacity-100 active:opacity-100"
+                            onPointerDown={handlePointerDown}
+                        />
+                    )}
+                    {/* Background Ambient Glow */}
+                    <div className="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-primary-500/10 to-transparent pointer-events-none" />
                     {/* Header */}
-                    <div className="px-5 py-4 border-b border-zinc-200/50 dark:border-zinc-800/50 flex items-center justify-between">
+                    <div className="relative px-5 py-4 border-b border-zinc-200/50 dark:border-zinc-800/50 flex items-center justify-between bg-white/50 dark:bg-black/20 backdrop-blur-md z-10">
                         <div>
-                            <h3 className="font-semibold text-[15px] tracking-tight">Springtunes AI</h3>
+                            <h3 className="font-bold text-[16px] tracking-tight bg-gradient-to-r from-primary-600 to-purple-600 dark:from-primary-400 dark:to-purple-400 bg-clip-text text-transparent">
+                                Springtunes AI
+                            </h3>
                             <div className="flex items-center gap-2 mt-0.5">
-                                <span className="w-1.5 h-1.5 rounded-full bg-primary-500 animate-pulse" />
-                                <span className="text-[11px] text-zinc-500 dark:text-zinc-400 font-medium">Ready to assist</span>
+                                <span className="relative flex h-2 w-2">
+                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary-400 opacity-75"></span>
+                                    <span className="relative inline-flex rounded-full h-2 w-2 bg-primary-500"></span>
+                                </span>
+                                <span className="text-[11px] text-zinc-500 dark:text-zinc-400 font-medium">{i18n[language].ready}</span>
                             </div>
                         </div>
 
-                        <div className="flex items-center gap-1">
+                        <div className="flex items-center gap-1 relative">
+                            <button
+                                onClick={() => setShowLangMenu(!showLangMenu)}
+                                className={`p-2 rounded-full transition-colors flex items-center justify-center ${showLangMenu ? 'bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100' : 'hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-400 dark:text-zinc-500'}`}
+                                title="Ngôn ngữ"
+                            >
+                                <Globe className="w-4 h-4" />
+                            </button>
+
+                            {showLangMenu && (
+                                <div className="absolute top-10 right-24 w-32 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl shadow-lg z-50 overflow-hidden">
+                                    {(Object.keys(i18n) as ChatLanguage[]).map((lang) => (
+                                        <button
+                                            key={lang}
+                                            onClick={() => {
+                                                onLanguageChange(lang);
+                                                setShowLangMenu(false);
+                                            }}
+                                            className={`w-full text-left px-4 py-2 text-[12px] transition-colors ${language === lang
+                                                ? 'bg-primary-50 dark:bg-primary-500/10 text-primary-600 dark:text-primary-400 font-medium'
+                                                : 'hover:bg-zinc-50 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300'
+                                                }`}
+                                        >
+                                            {i18n[lang].name}
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
+
                             <button
                                 onClick={() => setShowKeySettings(!showKeySettings)}
                                 className={`p-2 rounded-full transition-colors ${showKeySettings ? 'bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100' : 'hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-400 dark:text-zinc-500'}`}
@@ -98,6 +173,7 @@ export const ChatDrawer: React.FC<ChatDrawerProps> = ({
                             onAction={(type) => {
                                 triggerQuickAction(type);
                             }}
+                            language={language}
                         />
 
                         {currentSong && (
@@ -119,21 +195,21 @@ export const ChatDrawer: React.FC<ChatDrawerProps> = ({
                             </div>
                         )}
 
-                        <form onSubmit={handleSubmit} className="flex gap-2">
+                        <form onSubmit={handleSubmit} className="relative flex items-center gap-2 p-1 bg-zinc-100/80 dark:bg-zinc-900/80 backdrop-blur-md border border-zinc-200/50 dark:border-zinc-800/50 rounded-2xl shadow-inner focus-within:ring-2 focus-within:ring-primary-500/30 transition-all">
                             <input
                                 type="text"
                                 value={inputValue}
                                 onChange={(e) => setInputValue(e.target.value)}
-                                placeholder="Hỏi tôi bất cứ điều gì..."
+                                placeholder={i18n[language].placeholder}
                                 disabled={isLoading}
-                                className="flex-1 px-4 py-3 text-[13px] rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-[#121212] focus:outline-none focus:border-zinc-400 dark:focus:border-zinc-600 transition-colors disabled:opacity-50 placeholder:text-zinc-400 dark:placeholder:text-zinc-600"
+                                className="flex-1 px-4 py-3 text-[13px] bg-transparent focus:outline-none transition-colors disabled:opacity-50 placeholder:text-zinc-500 dark:placeholder:text-zinc-400"
                             />
                             <button
                                 type="submit"
                                 disabled={!inputValue.trim() || isLoading}
-                                className="p-3 rounded-xl text-white bg-primary-500 hover:bg-primary-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shrink-0 flex items-center justify-center w-12 h-12"
+                                className="p-3 rounded-xl text-white bg-gradient-to-br from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 shadow-md shadow-primary-500/25 disabled:opacity-50 disabled:cursor-not-allowed transition-all shrink-0 flex items-center justify-center w-10 h-10 mr-1"
                             >
-                                <Send className="w-4 h-4" />
+                                <Send className="w-4 h-4 translate-x-[-1px] translate-y-[1px]" />
                             </button>
                         </form>
                     </div>

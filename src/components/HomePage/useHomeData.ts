@@ -25,6 +25,8 @@ export const useHomeData = (activeTab: string, isFollowingMode: boolean) => {
         topStreamedSongs: [] as any[],
         newAlbums: [] as any[],
         artists: [] as any[],
+        myLikedSongs: [] as any[],
+        allSongs: [] as any[],
     });
     const [isLoading, setIsLoading] = useState(true);
 
@@ -37,23 +39,40 @@ export const useHomeData = (activeTab: string, isFollowingMode: boolean) => {
                 const followingSuffix = isLoggedIn && isFollowingMode ? '?following=true' : '';
                 const artistEndpoint = (isLoggedIn && isFollowingMode) ? '/user/artist/me' : '/artist/all';
 
-                const [streamRes, albumRes, artistRes, likedRes] = await Promise.allSettled([
+                const apiCalls = [
                     api.get(`/stream/top${followingSuffix}`),
                     api.get(`/albums/all${followingSuffix}`),
                     api.get(`${artistEndpoint}${followingSuffix}`),
-                    api.get(`/like/top${followingSuffix}`)
-                ]);
+                    api.get(`/like/top${followingSuffix}`),
+                    api.get('/song/allSongs', { params: { size: 100 } })
+                ];
 
-                const rawStreamed = streamRes.status === 'fulfilled' ? streamRes.value.data?.result || [] : [];
-                const albums = albumRes.status === 'fulfilled' ? albumRes.value.data?.result?.content || [] : [];
-                const artists = artistRes.status === 'fulfilled' ? artistRes.value.data?.result?.content || [] : [];
-                const rawLiked = likedRes.status === 'fulfilled' ? likedRes.value.data?.result?.content || [] : [];
+                if (isLoggedIn) {
+                    apiCalls.push(api.get('/like/my', { params: { size: 100 } }));
+                }
+
+                const results = await Promise.allSettled(apiCalls);
+
+                const rawStreamed = results[0].status === 'fulfilled' ? results[0].value.data?.result || [] : [];
+                const albums = results[1].status === 'fulfilled' ? results[1].value.data?.result?.content || [] : [];
+                const artists = results[2].status === 'fulfilled' ? results[2].value.data?.result?.content || [] : [];
+                const rawLiked = results[3].status === 'fulfilled' ? results[3].value.data?.result?.content || [] : [];
+                const rawAllSongs = results[4].status === 'fulfilled' ? results[4].value.data?.result?.content || [] : [];
+                
+                let rawMyLiked: any[] = [];
+                if (isLoggedIn && results.length > 5 && results[5].status === 'fulfilled') {
+                    const myLikedData = results[5].value.data?.result?.content || [];
+                    // Extract song objects from like objects
+                    rawMyLiked = myLikedData.map((item: any) => item.song).filter(Boolean);
+                }
 
                 setData({
                     topStreamedSongs: rawStreamed.map(normalizeSong),
                     topLikedSongs: rawLiked.map(normalizeSong),
                     newAlbums: albums,
                     artists: artists,
+                    allSongs: rawAllSongs.map(normalizeSong),
+                    myLikedSongs: rawMyLiked.map(normalizeSong),
                 });
             } catch (error) {
                 console.error('Lỗi tải dữ liệu trang chủ:', error);

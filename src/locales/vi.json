@@ -100,7 +100,9 @@
 		"no_following": "Bạn chưa theo dõi nghệ sĩ nào hoặc những nghệ sĩ bạn theo dõi chưa có bài hát/album mới.",
 		"artist_role": "Nghệ sĩ",
 		"most_liked": "Được yêu thích nhất",
-		"limit": "Âm nhạc có giới hạn"
+		"limit": "Âm nhạc có giới hạn",
+		"smart_picks": "Khám phá hôm nay",
+		"long_time_no_hear": "Lâu rồi bạn chưa nghe"
 	},
 	"filter": {
 		"all": "Tất cả",

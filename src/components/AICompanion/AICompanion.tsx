@@ -4,10 +4,16 @@ import { useSystemSongs } from './useSystemSongs';
 import { ChatFAB } from './ChatFAB';
 import { ChatDrawer } from './ChatDrawer';
 import type { Message } from './types';
+import { i18n } from './i18n';
+import type { ChatLanguage } from './i18n'
 
 export const AICompanion: React.FC = () => {
     const { currentSong, playSong, setIsFullScreenPlayerOpen } = useMusic();
     const { systemSongs, likedSongs } = useSystemSongs();
+
+    const [language, setLanguage] = useState<ChatLanguage>(() => {
+        return (localStorage.getItem('gemini_chat_lang') as ChatLanguage) || 'vi';
+    });
 
     const [isOpen, setIsOpen] = useState(false);
     const [apiKey, setApiKey] = useState<string>(() => {
@@ -21,10 +27,11 @@ export const AICompanion: React.FC = () => {
                 return JSON.parse(saved);
             } catch (e) { }
         }
+        const initialLang = (localStorage.getItem('gemini_chat_lang') as ChatLanguage) || 'vi';
         return [
             {
                 role: 'model',
-                text: 'Chào bạn! Mình là Springtunes AI đây. Mình có thể dịch lời, kể chuyện về nghệ sĩ, hoặc tìm cho bạn một giai điệu hợp mood hôm nay. Bạn muốn nghe gì nè?'
+                text: i18n[initialLang].welcome
             }
         ];
     });
@@ -46,9 +53,14 @@ export const AICompanion: React.FC = () => {
         setMessages([
             {
                 role: 'model',
-                text: 'Đã xóa lịch sử trò chuyện nha. Tụi mình bắt đầu lại nhé, bạn muốn nghe nhạc gì nào?'
+                text: i18n[language].clearChat
             }
         ]);
+    };
+
+    const handleLanguageChange = (lang: ChatLanguage) => {
+        setLanguage(lang);
+        localStorage.setItem('gemini_chat_lang', lang);
     };
 
     const handleSend = async (textToSend?: string) => {
@@ -61,14 +73,14 @@ export const AICompanion: React.FC = () => {
 
         if (!apiKey) {
             setIsLoading(false);
-            setErrorMsg('Vui lòng cấu hình API Key để tiếp tục trò chuyện.');
+            setErrorMsg(i18n[language].errorKey);
             return;
         }
 
         try {
             // Build the system instruction context with current playing song and the available songs list
             let systemInstruction =
-                `Bạn là Springtunes AI, một người bạn đồng hành nghe nhạc thân thiện, hiểu biết, trò chuyện tự nhiên như một người bạn có thể hơi GenZ hòa nhập người chat (xưng hô là "mình" và "bạn", hoặc "AI" tuỳ lúc). ` +
+                `${i18n[language].systemInstruction}\n` +
                 `Không dùng quá nhiều icon hay định dạng rườm rà. Hãy trả lời ngắn gọn (khoảng 3-4 câu) và tự nhiên nhất có thể.\n\n`;
 
             if (currentSong) {
@@ -82,8 +94,8 @@ export const AICompanion: React.FC = () => {
 
             if (systemSongs.length > 0) {
                 const songsContext = systemSongs.map(s => {
-                    const featured = s.featuredArtists && s.featuredArtists.length > 0 
-                        ? ` ft. ${s.featuredArtists.map((fa: any) => fa.name || fa).join(', ')}` 
+                    const featured = s.featuredArtists && s.featuredArtists.length > 0
+                        ? ` ft. ${s.featuredArtists.map((fa: any) => fa.name || fa).join(', ')}`
                         : '';
                     const lyricsInfo = s.lyrics ? ` | Lời bài hát: ${s.lyrics.substring(0, 500).replace(/\n/g, ' ')}...` : '';
                     return `- ID: ${s.id} | "${s.title}" (bởi ${s.artist}${featured})${lyricsInfo}`;
@@ -135,14 +147,14 @@ export const AICompanion: React.FC = () => {
 
         } catch (error: any) {
             console.error('Error calling Gemini API:', error);
-            let userFriendlyError = 'Xin lỗi, kết nối với máy chủ hơi chập chờn. Bạn thử lại sau nhé.';
+            let userFriendlyError = i18n[language].errorNetwork;
             if (error.message?.includes('API_KEY_INVALID')) {
-                userFriendlyError = 'Hình như API Key không đúng rồi. Bạn kiểm tra lại cài đặt nhé.';
+                userFriendlyError = i18n[language].errorInvalidKey;
             } else if (error.message?.includes('quota') || error.message?.includes('429') || error.message?.includes('Too Many Requests')) {
-                userFriendlyError = 'AI đang bị quá tải xíu (hết lượt gọi miễn phí trong phút này). Bạn đợi khoảng 1 phút rồi hỏi lại mình nha! ⏳';
+                userFriendlyError = i18n[language].errorQuota;
             }
             setErrorMsg(userFriendlyError);
-            setMessages(prev => [...prev, { role: 'model', text: `❌ Lỗi: ${userFriendlyError}` }]);
+            setMessages(prev => [...prev, { role: 'model', text: `❌ ${userFriendlyError}` }]);
         } finally {
             setIsLoading(false);
         }
@@ -152,21 +164,22 @@ export const AICompanion: React.FC = () => {
         if (!currentSong && actionType !== 'chat' && actionType !== 'recommend_taste') return;
 
         let promptText = '';
+        const title = currentSong?.title || '';
         switch (actionType) {
             case 'explain':
-                promptText = `Giải thích ngắn gọn ý nghĩa của bài hát "${currentSong?.title}" giúp mình với.`;
+                promptText = i18n[language].promptExplain.replace('$TITLE', title);
                 break;
             case 'translate':
-                promptText = `Bạn có thể dịch bài "${currentSong?.title}" sang tiếng Việt giúp mình được không?`;
+                promptText = i18n[language].promptTranslate.replace('$TITLE', title);
                 break;
             case 'recommend':
-                promptText = `Có bài hát nào có sẵn trong hệ thống mang phong cách giống bài này không? Gợi ý cho mình vài bài nhé.`;
+                promptText = i18n[language].promptRecommend;
                 break;
             case 'recommend_taste':
-                promptText = `Gợi ý nhạc dựa theo gu của mình nhé! (Dựa vào những bài hát mình đã thích)`;
+                promptText = i18n[language].promptTaste;
                 break;
             case 'chat':
-                promptText = `Gợi ý cho mình một bài hát vui tươi trong hệ thống để nghe ngay lúc này đi!`;
+                promptText = i18n[language].promptChat;
                 break;
         }
         handleSend(promptText);
@@ -188,6 +201,8 @@ export const AICompanion: React.FC = () => {
                 errorMsg={errorMsg}
                 currentSong={currentSong}
                 triggerQuickAction={triggerQuickAction}
+                language={language}
+                onLanguageChange={handleLanguageChange}
             />
         </>
     );

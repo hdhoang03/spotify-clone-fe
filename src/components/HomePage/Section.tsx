@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { motion } from 'framer-motion';
 import { ChevronRight } from 'lucide-react';
 
@@ -12,7 +12,7 @@ const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
         opacity: 1,
-        transition: { staggerChildren: 0.07 }
+        transition: { staggerChildren: 0.05 }
     }
 };
 
@@ -44,13 +44,22 @@ const Section = ({ title, onSeeAll, children }: SectionProps) => {
             </div>
 
             <motion.div
-                className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4"
+                className="flex gap-4 overflow-x-auto hide-scrollbar snap-x pb-4 -mx-1 px-1"
                 variants={containerVariants}
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true, amount: 0.1 }}
             >
-                {children}
+                {React.Children.map(children, (child) => {
+                    if (React.isValidElement(child)) {
+                        return (
+                            <div className="w-[150px] md:w-[180px] xl:w-[200px] flex-shrink-0 snap-start">
+                                {child}
+                            </div>
+                        );
+                    }
+                    return child;
+                })}
             </motion.div>
         </section>
     );

@@ -114,7 +114,9 @@
 		"no_following": "You haven't followed any artists yet, or the artists you follow don't have new songs/albums.",
 		"artist_role": "Artist",
 		"most_liked": "Most Liked",
-		"limit": "Limited Music"
+		"limit": "Limited Music",
+		"smart_picks": "Smart Picks",
+		"long_time_no_hear": "Long time no hear"
 	},
 	"filter": {
 		"all": "All",

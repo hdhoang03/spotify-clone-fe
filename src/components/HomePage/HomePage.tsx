@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Loader2 } from 'lucide-react';
 import Section from './Section';
 import TrendingSection from './TrendingSection';
@@ -10,6 +10,9 @@ import { useNavigate } from 'react-router-dom';
 import { useMusic } from '../../contexts/MusicContent';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { GreetingHeader } from './GreetingHeader';
+import { SmartPicksSection } from './SmartPicksSection';
+import { ThrowbackSection } from './ThrowbackSection';
 
 const HomePage = () => {
     const { t } = useTranslation();
@@ -45,22 +48,65 @@ const HomePage = () => {
 
     const { data, isLoading } = useHomeData(activeTab, isFollowingMode);
 
+    // Shuffle secondary sections once per mount for dynamic layout
+    const shuffledSectionKeys = useMemo(() => {
+        return ['throwback', 'smartPicks', 'topLiked', 'newAlbums'].sort(() => 0.5 - Math.random());
+    }, []);
+
+    const renderSecondarySection = (key: string) => {
+        switch (key) {
+            case 'throwback':
+                return data.myLikedSongs.length > 0 ? (
+                    <ThrowbackSection
+                        key="throwback"
+                        likedSongs={data.myLikedSongs}
+                        currentSong={currentSong}
+                        isPlaying={isPlaying}
+                        onPlay={handlePlaySong}
+                    />
+                ) : null;
+            case 'smartPicks':
+                return data.allSongs.length > 0 ? (
+                    <SmartPicksSection
+                        key="smartPicks"
+                        allSongs={data.allSongs}
+                        likedSongs={data.myLikedSongs}
+                        currentSong={currentSong}
+                        isPlaying={isPlaying}
+                        onPlay={handlePlaySong}
+                    />
+                ) : null;
+            case 'topLiked':
+                return data.topLikedSongs.length > 0 ? (
+                    <TrendingSection
+                        key="topLiked"
+                        songs={data.topLikedSongs}
+                        onPlay={(song) => handlePlaySong(song, data.topLikedSongs)}
+                    />
+                ) : null;
+            case 'newAlbums':
+                return data.newAlbums.length > 0 && activeTab === 'ALL' ? (
+                    <Section key="newAlbums" title={t('home.new_albums')}>
+                        {data.newAlbums.map((album) => (
+                            <CardItem
+                                key={album.id}
+                                title={album.name}
+                                description={album.artist?.name || album.artistName || 'Album tuyển chọn'}
+                                imageUrl={album.albumUrl || album.avatarUrl || album.coverUrl}
+                                onClick={() => navigate(`/albums/${album.id}`)}
+                            />
+                        ))}
+                    </Section>
+                ) : null;
+            default:
+                return null;
+        }
+    };
+
     return (
         <div className="w-full min-h-screen bg-transparent overflow-x-hidden relative">
 
-            {/* ── Ambient orbs (subtle depth, 2026 aesthetic) ── */}
-            <div
-                aria-hidden="true"
-                className="pointer-events-none absolute top-0 right-0 w-[520px] h-[520px]
-                           rounded-full opacity-[0.07] dark:opacity-[0.04]
-                           bg-primary-400 blur-[140px] -translate-y-1/4 translate-x-1/4"
-            />
-            <div
-                aria-hidden="true"
-                className="pointer-events-none absolute top-1/2 left-0 w-[460px] h-[460px]
-                           rounded-full opacity-[0.06] dark:opacity-[0.03]
-                           bg-violet-500 blur-[160px] -translate-x-1/3"
-            />
+            <GreetingHeader />
 
             <FilterBar
                 activeTab={activeTab}
@@ -73,7 +119,7 @@ const HomePage = () => {
                 isLoggedIn={isLoggedIn}
             />
 
-            <div className="px-4 md:px-8 mt-2 space-y-2 min-h-[50vh] relative z-10">
+            <div className="px-4 md:px-8 mt-6 space-y-6 min-h-[50vh] relative z-10">
                 {isLoading ? (
                     <div className="w-full h-64 flex items-center justify-center gap-3">
                         <Loader2 className="animate-spin text-primary-500" size={28} />
@@ -84,6 +130,7 @@ const HomePage = () => {
                         {/* ── Music & All tabs ── */}
                         {activeTab !== 'ARTIST' && (
                             <>
+                                {/* Top Streamed is always at the top */}
                                 {data.topStreamedSongs.length > 0 && (
                                     <Section title={t('home.trending')}>
                                         {data.topStreamedSongs.map((song) => (
@@ -100,26 +147,8 @@ const HomePage = () => {
                                     </Section>
                                 )}
 
-                                {data.topLikedSongs.length > 0 && (
-                                    <TrendingSection
-                                        songs={data.topLikedSongs}
-                                        onPlay={(song) => handlePlaySong(song, data.topLikedSongs)}
-                                    />
-                                )}
-
-                                {data.newAlbums.length > 0 && activeTab === 'ALL' && (
-                                    <Section title={t('home.new_albums')}>
-                                        {data.newAlbums.map((album) => (
-                                            <CardItem
-                                                key={album.id}
-                                                title={album.name}
-                                                description={album.artist?.name || album.artistName || 'Album tuyển chọn'}
-                                                imageUrl={album.albumUrl || album.avatarUrl || album.coverUrl}
-                                                onClick={() => navigate(`/albums/${album.id}`)}
-                                            />
-                                        ))}
-                                    </Section>
-                                )}
+                                {/* Render shuffled secondary sections */}
+                                {shuffledSectionKeys.map(renderSecondarySection)}
                             </>
                         )}
 
