@@ -2,7 +2,12 @@
 import { useState, useEffect } from 'react';
 import api from '../services/api';
 
-let cachedPremium: boolean | null = null; // module-level cache để tránh gọi API nhiều lần
+const getStoredPremium = (): boolean | null => {
+    const val = localStorage.getItem('is_premium');
+    return val !== null ? val === 'true' : null;
+};
+
+let cachedPremium: boolean | null = getStoredPremium(); // module-level cache để tránh gọi API nhiều lần
 
 export const usePremiumStatus = () => {
     const [isPremium, setIsPremium] = useState<boolean>(cachedPremium ?? false);
@@ -26,6 +31,7 @@ export const usePremiumStatus = () => {
                 if (res.data.code === 1000) {
                     const val = Boolean(res.data.result);
                     cachedPremium = val;
+                    localStorage.setItem('is_premium', String(val));
                     setIsPremium(val);
                 }
             })
@@ -41,6 +47,7 @@ export const usePremiumStatus = () => {
         const handler = (e: Event) => {
             const detail = (e as CustomEvent<{ isPremium: boolean }>).detail;
             cachedPremium = detail.isPremium; // Cập nhật cache module
+            localStorage.setItem('is_premium', String(detail.isPremium));
             setIsPremium(detail.isPremium);
         };
         window.addEventListener('premium-updated', handler);
@@ -56,6 +63,7 @@ export const usePremiumStatus = () => {
             if (res.data.code === 1000) {
                 const val = Boolean(res.data.result);
                 cachedPremium = val;
+                localStorage.setItem('is_premium', String(val));
                 setIsPremium(val);
             }
         } catch {

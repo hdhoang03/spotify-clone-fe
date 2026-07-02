@@ -237,7 +237,10 @@
 		"pause": "일시정지",
 		"next": "다음",
 		"previous": "이전",
-		"sidebar_drag_hint": "팁: 플레이어를 오른쪽으로 드래그하여 사이드바에 고정하세요"
+		"download": "다운로드",
+		"sidebar_drag_hint": "팁: 플레이어를 오른쪽으로 드래그하여 사이드바에 고정하세요",
+		"downloading": "다운로드 중...",
+		"download_premium_only": "음악 다운로드는 프리미엄 계정 전용입니다!"
 	},
 	"account": {
 		"title": "계정",

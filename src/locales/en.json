@@ -237,7 +237,10 @@
 		"pause": "Pause",
 		"next": "Next",
 		"previous": "Previous",
-		"sidebar_drag_hint": "Tip: Drag the player to the right → to pin it to the sidebar"
+		"download": "Download",
+		"sidebar_drag_hint": "Tip: Drag the player to the right → to pin it to the sidebar",
+		"downloading": "Downloading...",
+		"download_premium_only": "Music download is only available for Premium accounts!"
 	},
 	"account": {
 		"title": "Account",

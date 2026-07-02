@@ -35,7 +35,7 @@ export const SmartPicksSection: React.FC<SmartPicksProps> = ({
             }
         }
 
-        // Pick 5 random from candidates
+        // Pick 10 random from candidates
         const shuffled = [...candidateSongs].sort(() => 0.5 - Math.random());
         setPicks(shuffled.slice(0, 5));
     }, [allSongs.length, likedSongs.length]);

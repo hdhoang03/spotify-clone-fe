@@ -236,7 +236,10 @@
 		"pause": "一時停止",
 		"next": "次へ",
 		"previous": "前へ",
-		"sidebar_drag_hint": "ヒント：プレイヤーを右にドラッグしてサイドバーに固定します"
+		"download": "ダウンロード",
+		"sidebar_drag_hint": "ヒント：プレイヤーを右にドラッグしてサイドバーに固定します",
+		"downloading": "ダウンロード中...",
+		"download_premium_only": "音楽のダウンロードはプレミアムアカウント専用です！"
 	},
 	"account": {
 		"title": "アカウント",

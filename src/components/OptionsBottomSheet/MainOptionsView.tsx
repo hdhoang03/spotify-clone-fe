@@ -1,6 +1,8 @@
-import { ListPlus, Disc, Mic2, Share2, Info, ChevronRight } from 'lucide-react';
+import { ListPlus, Disc, Mic2, Share2, Info, ChevronRight, Download, Crown } from 'lucide-react';
+import api from '../../services/api';
 import ScrollingText from '../MusicPlayer/MiniPlayer/ScrollingText';
 import { useTranslation } from 'react-i18next';
+import { usePremiumStatus } from '../../hooks/usePremiumStatus';
 
 interface MainOptionsViewProps {
     song: any;
@@ -22,6 +24,55 @@ const MainOptionsView = ({
     onRequestPlaylistSelection
 }: MainOptionsViewProps) => {
     const { t } = useTranslation();
+    const { isPremium } = usePremiumStatus();
+
+    const handleDownload = async () => {
+        if (!isPremium) {
+            alert(t('player.download_premium_only') || "Tính năng tải nhạc chỉ dành cho tài khoản Premium!");
+            return;
+        }
+
+        try {
+            // Có thể hiện trạng thái đang tải...
+            alert(t('player.downloading') || "Đang chuẩn bị tải xuống...");
+
+            // Dùng api (axios config sẵn Bearer Token)
+            const response = await api.get(`/song/${song.id}/download`, {
+                responseType: 'blob' // Rất quan trọng để nhận file nhị phân
+            });
+
+            // Tạo link ẩn để tải file
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+
+            // Lấy tên từ header Content-Disposition nếu có, nếu không lấy title bài hát
+            let fileName = `${song.title}.mp3`;
+            const disposition = response.headers['content-disposition'];
+            if (disposition && disposition.indexOf('filename=') !== -1) {
+                const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                const matches = filenameRegex.exec(disposition);
+                if (matches != null && matches[1]) {
+                    fileName = matches[1].replace(/['"]/g, '');
+                }
+            }
+
+            link.setAttribute('download', fileName);
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            window.URL.revokeObjectURL(url);
+
+        } catch (error: any) {
+            console.error("Lỗi tải nhạc:", error);
+            // axios response error status
+            if (error.response && (error.response.status === 403 || error.response.status === 401)) {
+                alert(t('player.download_premium_only') || "Tính năng tải nhạc chỉ dành cho tài khoản Premium!");
+            } else {
+                alert(t('player.download_failed') || "Có lỗi xảy ra khi tải nhạc.");
+            }
+        }
+    };
 
     // Cấu hình danh sách options ngay tại đây
     const options = [
@@ -59,6 +110,20 @@ const MainOptionsView = ({
             icon: Share2,
             label: t('player.share'),
             action: onShare // Gọi hàm từ props
+        },
+        {
+            id: 'download',
+            icon: Download,
+            label: (
+                <div className="flex items-center gap-2">
+                    {t('player.download') || 'Tải xuống'}
+                    <span className="flex items-center gap-1 text-[10px] uppercase font-black tracking-wider px-1.5 py-0.5 rounded-sm bg-amber-500/20 text-amber-500 border border-amber-500/30">
+                        <Crown size={12} className="fill-amber-500/50" />
+                        Premium
+                    </span>
+                </div>
+            ) as any, // Ép kiểu vì mảng đang mong đợi string ở label cũ
+            action: handleDownload
         },
     ];
 

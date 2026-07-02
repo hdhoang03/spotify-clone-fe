@@ -6,33 +6,41 @@ Springtunes là một ứng dụng nghe nhạc trực tuyến chất lượng ca
 
 ## ✨ Tính Năng Nổi Bật
 
-### 1. Giao Diện & Trải Nghiệm Người Dùng (Premium Aesthetics)
-- **Đồng bộ hóa màu sắc thông minh**: Sử dụng thuật toán phân tích màu trung bình từ thư viện `fast-average-color` để tự động tách xuất màu sắc chủ đạo từ ảnh bìa bài hát/playlist. Màu sắc này được áp dụng làm nền gradient chuyển động mượt mà cho giao diện, đem lại trải nghiệm thị giác sống động.
-- **Đặc quyền tài khoản Premium**: Người dùng Premium sẽ sở hữu vòng hào quang động quanh ảnh đại diện, vương miện lấp lánh và hiệu ứng tên chữ ánh kim lấp lánh (Golden Shimmer Name Effect) nổi bật.
-- **Chế độ Sáng/Tối (Light/Dark Mode)**: Tùy biến chủ đề hiển thị toàn diện theo sở thích người dùng.
+### 1. Trợ Lý AI & Khám Phá Nhạc (AI Companion & Discovery)
+- **Tích hợp Gemini API**: Trợ lý ảo AI thông minh giúp tìm kiếm nhạc bằng ngôn ngữ tự nhiên và đề xuất các bài hát được cá nhân hóa theo sở thích.
+- **Giao diện Chat Động**: Tích hợp các thẻ tin nhắn (chat bubble) với Markdown (`react-markdown`) để trình bày thông tin, hiển thị đề xuất nhạc ngay trong đoạn chat cực kỳ trực quan thông qua Chat FAB.
 
-### 2. Trình Phát Nhạc Đa Dạng (Advanced Audio Player)
+### 2. Giao Diện & Trải Nghiệm Người Dùng (Premium Aesthetics)
+- **Hệ thống Theme Động (Dynamic Theme)**: Tùy biến toàn diện màu sắc chủ đạo (`primary-*`) thay thế cho màu xanh lá cố định truyền thống, đi kèm với Chế độ Sáng/Tối (Light/Dark Mode).
+- **Đồng bộ hóa màu sắc thông minh**: Sử dụng thuật toán phân tích màu trung bình từ thư viện `fast-average-color` để tự động tách xuất màu sắc chủ đạo từ ảnh bìa bài hát/playlist. Màu sắc này được áp dụng làm nền gradient chuyển động mượt mà.
+- **Đặc quyền tài khoản Premium**: Người dùng Premium sẽ sở hữu vòng hào quang động quanh ảnh đại diện, vương miện lấp lánh và hiệu ứng tên chữ ánh kim lấp lánh (Golden Shimmer Name Effect) nổi bật.
+
+### 3. Trình Phát Nhạc Đa Dạng (Advanced Audio Player)
 Hỗ trợ 3 trạng thái phát nhạc linh hoạt phù hợp với nhu cầu thao tác:
 - **MiniPlayer**: Trình phát thu nhỏ thông minh hỗ trợ kéo thả (drag-and-drop) tự do đến bất kỳ vị trí nào trên màn hình.
 - **Sidebar Player**: Tích hợp trực tiếp bên cạnh thanh điều hướng để tối giản hóa vùng làm việc.
 - **Fullscreen Player**: Chế độ phát nhạc toàn màn hình tuyệt đẹp với lời bài hát (Lyrics) cuộn tự động theo thời gian thực và thông tin nghệ sĩ chi tiết.
 - **Hàng đợi & Tự động phát (Queue & Autoplay)**: Tiếp tục phát tự động các bài hát liên quan khi danh sách bài hát hiện tại kết thúc.
 
-### 3. Tối Ưu Hóa Thiết Bị Cấu Hình Thấp (Low Performance Mode)
+### 4. Khám Phá & Quản Lý Thư Viện
+- **Tìm kiếm trong Danh sách phát**: Bộ lọc tìm kiếm nhanh bài hát/nghệ sĩ ngay trong Playlist và Liked Songs, hoạt động mượt mà trên cả desktop và mobile.
+- **Đồng bộ Thông báo Thời gian thực**: Cập nhật tức thời (Real-time Notification Sync) cho số lượng thông báo chưa đọc, đồng bộ ngay lập tức khi xóa/xem thông báo.
+
+### 5. Tối Ưu Hóa Thiết Bị Cấu Hình Thấp (Low Performance Mode)
 - **Tắt hiệu ứng nặng**: Cung cấp tùy chọn chuyển đổi nhanh trong phần cài đặt giúp vô hiệu hóa toàn bộ hiệu ứng chuyển động (`transition`), làm mờ nền (`backdrop-blur`), và các hiệu ứng keyframe animation phức tạp.
 - **Lợi ích**: Tối ưu hóa chỉ số FPS, tránh hiện tượng Reflow/Repaint, giúp ứng dụng hoạt động cực kỳ mượt mà trên các dòng máy cũ hoặc cấu hình yếu.
 
-### 4. Chia Sẻ Hồ Sơ & Mã QR
+### 6. Chia Sẻ Hồ Sơ & Mã QR
 - **Profile Share Card**: Xuất thẻ hồ sơ cá nhân đẹp mắt dưới dạng hình ảnh chất lượng cao kèm mã QR tự động (sử dụng `html-to-image` và `qrcode.react`) để chia sẻ nhanh lên mạng xã hội.
 - **Chỉnh sửa hồ sơ trực quan**: Thay đổi ảnh đại diện tích hợp công cụ cắt ảnh (`react-easy-crop`) chuẩn xác.
 
-### 5. Bộ Máy Kết Nối API Nâng Cao (Axios Client in `api.ts`)
+### 7. Bộ Máy Kết Nối API Nâng Cao (Axios Client in `api.ts`)
 Bộ điều phối yêu cầu HTTP của ứng dụng sở hữu các cơ chế xử lý cực kỳ mạnh mẽ:
 - **Cơ chế Dự Phòng Điểm Cuối (Endpoint Fallback)**: Nếu một máy chủ API gặp sự cố mạng (`ERR_NETWORK`), ứng dụng sẽ tự động chuyển sang địa chỉ API dự phòng tiếp theo trong danh sách cấu hình và thực hiện lại yêu cầu ngay lập tức mà không làm gián đoạn trải nghiệm người dùng.
 - **Hàng Đợi Làm Mới Token (Mutex-based Refresh Token Queue)**: Khi nhiều yêu cầu đồng thời bị từ chối do Token hết hạn (Lỗi 401), bộ lọc sẽ tạm giữ các yêu cầu này trong một hàng đợi. Ứng dụng chỉ gửi duy nhất 1 yêu cầu refresh token lên backend. Khi nhận được token mới, nó sẽ tự động phân phối lại cho toàn bộ các yêu cầu đang chờ và thực thi tiếp.
 - **Hỗ trợ Ngrok**: Tự động đính kèm tiêu đề `'ngrok-skip-browser-warning': 'true'` giúp bỏ qua màn hình cảnh báo khi nhà phát triển sử dụng ngrok làm đường truyền tunnel để test API cục bộ.
 
-### 6. Đa Ngôn Ngữ (i18n)
+### 8. Đa Ngôn Ngữ (i18n)
 - Hỗ trợ đầy đủ **4 ngôn ngữ**: **Tiếng Việt (VI)**, **Tiếng Anh (EN)**, **Tiếng Hàn (KO)**, và **Tiếng Nhật (JA)**.
 
 ---
@@ -46,6 +54,7 @@ Bộ điều phối yêu cầu HTTP của ứng dụng sở hữu các cơ chế
 - **API Client**: Axios
 - **Localization**: i18next & i18next-browser-languagedetector
 - **Media Helpers**: fast-average-color, html-to-image, qrcode.react, react-easy-crop
+- **Markdown & AI**: react-markdown (Hiển thị văn bản AI sinh ra)
 - **Icons**: Lucide React
 - **Charts**: Recharts (Sử dụng trong Admin Dashboard)
 
@@ -56,17 +65,20 @@ Bộ điều phối yêu cầu HTTP của ứng dụng sở hữu các cơ chế
 ```bash
 src/
 ├── components/          # Các components giao diện chính
+│   ├── AICompanion/     # Trợ lý ảo AI, Chat FAB và xử lý Markdown
 │   ├── Account/         # Quản lý tài khoản (Thông tin cá nhân, Bảo mật, Đăng ký Premium)
 │   ├── Admin/           # Dashboard quản trị, biểu đồ thống kê dành cho Admin
 │   ├── Artist/          # Trang nghệ sĩ, thông tin discography, danh sách bài hát nổi bật
 │   ├── Auth/            # Đăng nhập, đăng ký, OTP, xác thực Google OAuth, ReCAPTCHA v3
+│   ├── Header/          # Thanh điều hướng trên cùng, chuông thông báo
 │   ├── HomePage/        # Trang chủ, danh mục thịnh hành, Footer hệ thống
 │   ├── MusicPlayer/     # Trình phát nhạc (Mini, Fullscreen, Sidebar, Lyrics)
 │   ├── Profile/         # Trang cá nhân, chia sẻ hồ sơ, quản lý blocklist
-│   ├── Search/          # Tính năng tìm kiếm và bộ lọc thể loại
+│   ├── Search/          # Tính năng tìm kiếm tổng hợp và bộ lọc thể loại
 │   ├── Settings/        # Cài đặt ngôn ngữ, quyền riêng tư, và Low Performance Mode
 │   ├── Sidebar/         # Sidebar điều hướng và Thư viện nhạc cá nhân (Library)
-│   └── common/          # Các component dùng chung (Toast, Loader, Button, v.v.)
+│   ├── Shared/          # Các component có thể tái sử dụng ở nhiều nơi
+│   └── common/          # Các component tiện ích cơ bản (Toast, Loader, Button, v.v.)
 ├── contexts/            # Context API toàn cục
 ├── hooks/               # Custom hooks toàn cục
 ├── locales/             # Tệp tin ngôn ngữ (vi.json, en.json, ko.json, ja.json)

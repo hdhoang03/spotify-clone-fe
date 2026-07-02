@@ -237,7 +237,10 @@
 		"pause": "Tạm dừng",
 		"next": "Tiếp theo",
 		"previous": "Trước đó",
-		"sidebar_drag_hint": "Mẹo: Kéo trình phát sang phải → để ghim vào thanh bên"
+		"download": "Tải xuống",
+		"sidebar_drag_hint": "Mẹo: Kéo trình phát sang phải → để ghim vào thanh bên",
+		"downloading": "Đang tải xuống...",
+		"download_premium_only": "Tính năng tải nhạc chỉ dành cho tài khoản Premium!"
 	},
 	"account": {
 		"title": "Tài khoản",

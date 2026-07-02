@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../../services/api'
+import { useMusic } from '../../contexts/MusicContent';
 
 export interface ArtistData {
     id: string;
@@ -19,6 +20,7 @@ export interface ArtistData {
 export const useArtist = () => {
     const { id } = useParams<{ id: string }>(); // Lấy ID từ URL
     const navigate = useNavigate();
+    const { playRadio } = useMusic();
     const [artistData, setArtistData] = useState<ArtistData | null>(null);
     const [popularTracks, setPopularTracks] = useState<any[]>([]);
     const [discography, setDiscography] = useState<any[]>([]);
@@ -110,7 +112,23 @@ export const useArtist = () => {
                             artistId: song.artistId,
                             artistAvatar: song.artistAvatar || song.artist?.avatarUrl || null,
                             audioUrl: song.audioUrl,
-                            featuredArtists: song.featuredArtists || []
+                            featuredArtists: song.featuredArtists || [],
+                            onClick: () => {
+                                if (song.audioUrl) {
+                                    playRadio([{
+                                        id: song.id,
+                                        title: song.title,
+                                        artist: song.artist || song.artistName || currentArtistName,
+                                        artistId: song.artistId,
+                                        coverUrl: song.coverUrl,
+                                        duration: song.duration,
+                                        audioUrl: song.audioUrl,
+                                        featuredArtists: song.featuredArtists || []
+                                    }], 0, `${currentArtistName} - Single`);
+                                } else {
+                                    navigate(`/song/${song.id}`);
+                                }
+                            }
                         }));
 
                     setDiscography([...mappedAlbums, ...mappedSingles]);
