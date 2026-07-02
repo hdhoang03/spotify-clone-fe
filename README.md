@@ -1,131 +1,131 @@
-# 🎵 Springtunes Client (Frontend)
+# Springtunes Client (Frontend)
 
-Springtunes là một ứng dụng nghe nhạc trực tuyến chất lượng cao lấy cảm hứng từ Spotify, được xây dựng trên nền tảng **React 19**, **TypeScript**, và **Vite**. Dự án hướng tới một giao diện hiện đại (Premium Aesthetics), mượt mà, hỗ trợ đa ngôn ngữ và sở hữu các tối ưu hóa đặc biệt giúp chạy ổn định trên các thiết bị cấu hình cũ.
-
----
-
-## ✨ Tính Năng Nổi Bật
-
-### 1. Trợ Lý AI & Khám Phá Nhạc (AI Companion & Discovery)
-- **Tích hợp Gemini API**: Trợ lý ảo AI thông minh giúp tìm kiếm nhạc bằng ngôn ngữ tự nhiên và đề xuất các bài hát được cá nhân hóa theo sở thích.
-- **Giao diện Chat Động**: Tích hợp các thẻ tin nhắn (chat bubble) với Markdown (`react-markdown`) để trình bày thông tin, hiển thị đề xuất nhạc ngay trong đoạn chat cực kỳ trực quan thông qua Chat FAB.
-
-### 2. Giao Diện & Trải Nghiệm Người Dùng (Premium Aesthetics)
-- **Hệ thống Theme Động (Dynamic Theme)**: Tùy biến toàn diện màu sắc chủ đạo (`primary-*`) thay thế cho màu xanh lá cố định truyền thống, đi kèm với Chế độ Sáng/Tối (Light/Dark Mode).
-- **Đồng bộ hóa màu sắc thông minh**: Sử dụng thuật toán phân tích màu trung bình từ thư viện `fast-average-color` để tự động tách xuất màu sắc chủ đạo từ ảnh bìa bài hát/playlist. Màu sắc này được áp dụng làm nền gradient chuyển động mượt mà.
-- **Đặc quyền tài khoản Premium**: Người dùng Premium sẽ sở hữu vòng hào quang động quanh ảnh đại diện, vương miện lấp lánh và hiệu ứng tên chữ ánh kim lấp lánh (Golden Shimmer Name Effect) nổi bật.
-
-### 3. Trình Phát Nhạc Đa Dạng (Advanced Audio Player)
-Hỗ trợ 3 trạng thái phát nhạc linh hoạt phù hợp với nhu cầu thao tác:
-- **MiniPlayer**: Trình phát thu nhỏ thông minh hỗ trợ kéo thả (drag-and-drop) tự do đến bất kỳ vị trí nào trên màn hình.
-- **Sidebar Player**: Tích hợp trực tiếp bên cạnh thanh điều hướng để tối giản hóa vùng làm việc.
-- **Fullscreen Player**: Chế độ phát nhạc toàn màn hình tuyệt đẹp với lời bài hát (Lyrics) cuộn tự động theo thời gian thực và thông tin nghệ sĩ chi tiết.
-- **Hàng đợi & Tự động phát (Queue & Autoplay)**: Tiếp tục phát tự động các bài hát liên quan khi danh sách bài hát hiện tại kết thúc.
-
-### 4. Khám Phá & Quản Lý Thư Viện
-- **Tìm kiếm trong Danh sách phát**: Bộ lọc tìm kiếm nhanh bài hát/nghệ sĩ ngay trong Playlist và Liked Songs, hoạt động mượt mà trên cả desktop và mobile.
-- **Đồng bộ Thông báo Thời gian thực**: Cập nhật tức thời (Real-time Notification Sync) cho số lượng thông báo chưa đọc, đồng bộ ngay lập tức khi xóa/xem thông báo.
-
-### 5. Tối Ưu Hóa Thiết Bị Cấu Hình Thấp (Low Performance Mode)
-- **Tắt hiệu ứng nặng**: Cung cấp tùy chọn chuyển đổi nhanh trong phần cài đặt giúp vô hiệu hóa toàn bộ hiệu ứng chuyển động (`transition`), làm mờ nền (`backdrop-blur`), và các hiệu ứng keyframe animation phức tạp.
-- **Lợi ích**: Tối ưu hóa chỉ số FPS, tránh hiện tượng Reflow/Repaint, giúp ứng dụng hoạt động cực kỳ mượt mà trên các dòng máy cũ hoặc cấu hình yếu.
-
-### 6. Chia Sẻ Hồ Sơ & Mã QR
-- **Profile Share Card**: Xuất thẻ hồ sơ cá nhân đẹp mắt dưới dạng hình ảnh chất lượng cao kèm mã QR tự động (sử dụng `html-to-image` và `qrcode.react`) để chia sẻ nhanh lên mạng xã hội.
-- **Chỉnh sửa hồ sơ trực quan**: Thay đổi ảnh đại diện tích hợp công cụ cắt ảnh (`react-easy-crop`) chuẩn xác.
-
-### 7. Bộ Máy Kết Nối API Nâng Cao (Axios Client in `api.ts`)
-Bộ điều phối yêu cầu HTTP của ứng dụng sở hữu các cơ chế xử lý cực kỳ mạnh mẽ:
-- **Cơ chế Dự Phòng Điểm Cuối (Endpoint Fallback)**: Nếu một máy chủ API gặp sự cố mạng (`ERR_NETWORK`), ứng dụng sẽ tự động chuyển sang địa chỉ API dự phòng tiếp theo trong danh sách cấu hình và thực hiện lại yêu cầu ngay lập tức mà không làm gián đoạn trải nghiệm người dùng.
-- **Hàng Đợi Làm Mới Token (Mutex-based Refresh Token Queue)**: Khi nhiều yêu cầu đồng thời bị từ chối do Token hết hạn (Lỗi 401), bộ lọc sẽ tạm giữ các yêu cầu này trong một hàng đợi. Ứng dụng chỉ gửi duy nhất 1 yêu cầu refresh token lên backend. Khi nhận được token mới, nó sẽ tự động phân phối lại cho toàn bộ các yêu cầu đang chờ và thực thi tiếp.
-- **Hỗ trợ Ngrok**: Tự động đính kèm tiêu đề `'ngrok-skip-browser-warning': 'true'` giúp bỏ qua màn hình cảnh báo khi nhà phát triển sử dụng ngrok làm đường truyền tunnel để test API cục bộ.
-
-### 8. Đa Ngôn Ngữ (i18n)
-- Hỗ trợ đầy đủ **4 ngôn ngữ**: **Tiếng Việt (VI)**, **Tiếng Anh (EN)**, **Tiếng Hàn (KO)**, và **Tiếng Nhật (JA)**.
+Springtunes is a high-quality streaming application inspired by Spotify, built with **React 19**, **TypeScript**, and **Vite**. The project aims to deliver a modern (Premium Aesthetics), smooth, and multilingual interface, equipped with specific optimizations to ensure stable performance on older devices.
 
 ---
 
-## 🛠️ Công Nghệ Sử Dụng
+## Key Features
+
+### 1. AI Companion & Discovery
+- **Gemini API Integration**: An intelligent AI assistant that allows natural language search and provides personalized music recommendations based on user preferences.
+- **Dynamic Chat Interface**: Features Markdown-supported chat bubbles (`react-markdown`) for clear information presentation, displaying music recommendations directly within the intuitive Chat FAB.
+
+### 2. Premium Aesthetics & User Experience
+- **Dynamic Theme System**: Comprehensive customization of primary colors (`primary-*`), replacing the traditional fixed green color, complete with Light/Dark Mode support.
+- **Intelligent Color Synchronization**: Utilizes the `fast-average-color` library to automatically extract dominant colors from song/playlist cover art. This color is applied as a smooth dynamic gradient background.
+- **Premium Account Perks**: Premium users receive a dynamic glowing aura around their avatars, a sparkling crown, and an exclusive Golden Shimmer Name Effect.
+
+### 3. Advanced Audio Player
+Supports 3 flexible playback states tailored to user interaction needs:
+- **MiniPlayer**: A smart, compact player with drag-and-drop support, allowing placement anywhere on the screen.
+- **Sidebar Player**: Integrated directly alongside the navigation bar to minimize workspace clutter.
+- **Fullscreen Player**: A stunning fullscreen playback mode featuring real-time scrolling lyrics and detailed artist information.
+- **Queue & Autoplay**: Automatically continues playback with related tracks when the current playlist ends.
+
+### 4. Discovery & Library Management
+- **Playlist Search**: Quick search filters for songs and artists within Playlists and Liked Songs, operating smoothly on both desktop and mobile.
+- **Real-time Notification Sync**: Instant updates for unread notification counts, synchronizing immediately upon reading or deleting notifications.
+
+### 5. Low Performance Mode
+- **Effect Disabling**: Provides a quick toggle in settings to disable all transitions, background blurs (`backdrop-blur`), and complex keyframe animations.
+- **Benefits**: Optimizes FPS and prevents Reflow/Repaint issues, ensuring extremely smooth operation on older or low-spec devices.
+
+### 6. Profile Sharing & QR Codes
+- **Profile Share Card**: Exports beautifully designed personal profile cards as high-quality images with automated QR codes (using `html-to-image` and `qrcode.react`) for quick social media sharing.
+- **Visual Profile Editing**: Avatar modification equipped with a precise image cropping tool (`react-easy-crop`).
+
+### 7. Advanced API Client (`api.ts`)
+The application's HTTP request coordinator features highly robust processing mechanisms:
+- **Endpoint Fallback**: If an API server encounters a network error (`ERR_NETWORK`), the application automatically switches to the next fallback API address in the configuration and retries the request instantly without disrupting the user experience.
+- **Mutex-based Refresh Token Queue**: When multiple concurrent requests are rejected due to an expired token (401 Error), the interceptor holds these requests in a queue. The application sends only 1 refresh token request to the backend. Upon receiving the new token, it automatically distributes it to all pending requests and resumes execution.
+- **Ngrok Support**: Automatically attaches the `'ngrok-skip-browser-warning': 'true'` header, bypassing the warning screen when developers use ngrok as a tunnel for local API testing.
+
+### 8. Internationalization (i18n)
+- Full support for **4 languages**: **English (EN)**, **Vietnamese (VI)**, **Korean (KO)**, and **Japanese (JA)**.
+
+---
+
+## Technologies Used
 
 - **Core**: React 19, TypeScript, Vite
 - **Styling**: Tailwind CSS, Vanilla CSS
 - **Animations**: Framer Motion
-- **State Management**: Zustand (Quản lý trạng thái trình phát nhạc, hàng đợi phát, cài đặt giao diện)
+- **State Management**: Zustand (Manages audio player state, playback queue, and UI settings)
 - **API Client**: Axios
 - **Localization**: i18next & i18next-browser-languagedetector
 - **Media Helpers**: fast-average-color, html-to-image, qrcode.react, react-easy-crop
-- **Markdown & AI**: react-markdown (Hiển thị văn bản AI sinh ra)
+- **Markdown & AI**: react-markdown (Renders AI-generated text)
 - **Icons**: Lucide React
-- **Charts**: Recharts (Sử dụng trong Admin Dashboard)
+- **Charts**: Recharts (Used in the Admin Dashboard)
 
 ---
 
-## 📁 Cấu Trúc Thư Mục Dự Án
+## Project Structure
 
 ```bash
 src/
-├── components/          # Các components giao diện chính
-│   ├── AICompanion/     # Trợ lý ảo AI, Chat FAB và xử lý Markdown
-│   ├── Account/         # Quản lý tài khoản (Thông tin cá nhân, Bảo mật, Đăng ký Premium)
-│   ├── Admin/           # Dashboard quản trị, biểu đồ thống kê dành cho Admin
-│   ├── Artist/          # Trang nghệ sĩ, thông tin discography, danh sách bài hát nổi bật
-│   ├── Auth/            # Đăng nhập, đăng ký, OTP, xác thực Google OAuth, ReCAPTCHA v3
-│   ├── Header/          # Thanh điều hướng trên cùng, chuông thông báo
-│   ├── HomePage/        # Trang chủ, danh mục thịnh hành, Footer hệ thống
-│   ├── MusicPlayer/     # Trình phát nhạc (Mini, Fullscreen, Sidebar, Lyrics)
-│   ├── Profile/         # Trang cá nhân, chia sẻ hồ sơ, quản lý blocklist
-│   ├── Search/          # Tính năng tìm kiếm tổng hợp và bộ lọc thể loại
-│   ├── Settings/        # Cài đặt ngôn ngữ, quyền riêng tư, và Low Performance Mode
-│   ├── Sidebar/         # Sidebar điều hướng và Thư viện nhạc cá nhân (Library)
-│   ├── Shared/          # Các component có thể tái sử dụng ở nhiều nơi
-│   └── common/          # Các component tiện ích cơ bản (Toast, Loader, Button, v.v.)
-├── contexts/            # Context API toàn cục
-├── hooks/               # Custom hooks toàn cục
-├── locales/             # Tệp tin ngôn ngữ (vi.json, en.json, ko.json, ja.json)
-├── services/            # Tương tác API (likeApi, notificationService, api.ts)
-├── utils/               # Các hàm bổ trợ
-├── App.tsx              # Cấu hình Router và Layout chính
-├── main.tsx             # Điểm khởi chạy ứng dụng
-└── index.css            # Style toàn cục và biến tối ưu hóa CSS
+├── components/          # Main UI components
+│   ├── AICompanion/     # AI Assistant, Chat FAB, and Markdown processing
+│   ├── Account/         # Account management (Profile, Security, Premium Subscription)
+│   ├── Admin/           # Admin dashboard, statistical charts
+│   ├── Artist/          # Artist page, discography, top tracks
+│   ├── Auth/            # Login, Registration, OTP, Google OAuth, ReCAPTCHA v3
+│   ├── Header/          # Top navigation bar, notification bell
+│   ├── HomePage/        # Homepage, trending categories, system footer
+│   ├── MusicPlayer/     # Audio player (Mini, Fullscreen, Sidebar, Lyrics)
+│   ├── Profile/         # User profile, profile sharing, blocklist management
+│   ├── Search/          # Global search and genre filters
+│   ├── Settings/        # Language, privacy, and Low Performance Mode settings
+│   ├── Sidebar/         # Navigation sidebar and personal Library
+│   ├── Shared/          # Reusable components
+│   └── common/          # Basic utility components (Toast, Loader, Button, etc.)
+├── contexts/            # Global Context API
+├── hooks/               # Global custom hooks
+├── locales/             # Language files (vi.json, en.json, ko.json, ja.json)
+├── services/            # API interaction services (likeApi, notificationService, api.ts)
+├── utils/               # Helper utility functions
+├── App.tsx              # Main Router and Layout configuration
+├── main.tsx             # Application entry point
+└── index.css            # Global styles and CSS optimization variables
 ```
 
 ---
 
-## 🚀 Hướng Dẫn Cài Đặt & Chạy Dự Án
+## Installation & Setup
 
-### Yêu Cầu Hệ Thống
-- Đã cài đặt **Node.js** (Khuyến nghị phiên bản LTS v18 trở lên).
-- Trình quản lý gói: **npm** hoặc **yarn**.
+### System Requirements
+- **Node.js** (LTS version v18 or higher recommended).
+- Package Manager: **npm** or **yarn**.
 
-### Bước 1: Clone Kho Lưu Trữ
+### Step 1: Clone the Repository
 ```bash
 git clone https://github.com/hdhoang03/spotify-clone-fe.git
 cd spotify-clone-fe
 ```
 
-### Bước 2: Cài Đặt Các Thư Viện Phụ Thuộc
+### Step 2: Install Dependencies
 ```bash
 npm install
 ```
 
-### Bước 3: Cấu Hình Biến Môi Trường
-Tạo tệp tin `.env` ở thư mục gốc của dự án (cùng cấp với `package.json`) và điền cấu hình:
+### Step 3: Configure Environment Variables
+Create a `.env` file in the root directory (alongside `package.json`) and add the following configuration:
 ```env
-# Địa chỉ API của Backend (Có thể điền nhiều URL ngăn cách bằng dấu phẩy để kích hoạt cơ chế dự phòng)
+# Backend API address (Multiple comma-separated URLs can be provided to enable fallback mechanism)
 VITE_API_URL=http://localhost:8080/spotify,https://spotify-clone-8xkm.onrender.com
 
-# Khóa Public Google reCAPTCHA v3
+# Google reCAPTCHA v3 Public Key
 VITE_RECAPTCHA_SITE_KEY=your_recaptcha_site_key_here
 ```
 
-### Bước 4: Khởi Động Ở Môi Trường Phát Triển
+### Step 4: Start the Development Server
 ```bash
 npm run dev
 ```
-Ứng dụng sẽ chạy tại địa chỉ: `http://localhost:5173`
+The application will run at: `http://localhost:5173`
 
-### Bước 5: Biên Tập Cho Môi Trường Production
+### Step 5: Build for Production
 ```bash
 npm run build
 ```
-Mã nguồn sau khi được tối ưu hóa và nén sẽ nằm trong thư mục `/dist`.
+The optimized and minified source code will be located in the `/dist` directory.
