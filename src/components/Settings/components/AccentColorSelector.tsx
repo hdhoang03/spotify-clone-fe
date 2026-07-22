@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 type AccentColor = 'emerald' | 'java_blue' | 'purple' | 'rose' | 'amber' | 'cyan' | 'teal' | 'indigo';
 
@@ -9,16 +10,18 @@ interface AccentColorSelectorProps {
 
 const AccentColorSelector: React.FC<AccentColorSelectorProps> = ({ accentColor, onChange }) => {
     
+    const { t } = useTranslation();
+    
     // We can define the literal color hexes here just for the UI display block
     const colors: { id: AccentColor; name: string; desc: string; hex: string }[] = [
-        { id: 'java_blue', name: 'Java Blue', desc: 'Mặc định, hiện đại và dễ nhìn', hex: '#3b82f6' },
-        { id: 'emerald', name: 'Emerald', desc: 'Xanh lá êm dịu, cảm giác tập trung', hex: '#10b981' },
-        { id: 'purple', name: 'Purple', desc: 'Tím công nghệ, nổi bật cá tính', hex: '#a855f7' },
-        { id: 'rose', name: 'Rose', desc: 'Đỏ hồng ấm áp, lãng mạn', hex: '#f43f5e' },
-        { id: 'amber', name: 'Amber', desc: 'Vàng cam tràn đầy năng lượng', hex: '#f59e0b' },
-        { id: 'cyan', name: 'Cyan', desc: 'Xanh lơ mát mẻ, sáng sủa', hex: '#06b6d4' },
-        { id: 'teal', name: 'Teal', desc: 'Cân bằng, thoải mái để học tập dài', hex: '#14b8a6' },
-        { id: 'indigo', name: 'Indigo', desc: 'Sâu thẳm, mang đậm chất coder', hex: '#6366f1' },
+        { id: 'java_blue', name: 'Java Blue', desc: t('settings.accent_java_blue'), hex: '#3b82f6' },
+        { id: 'emerald', name: 'Emerald', desc: t('settings.accent_emerald'), hex: '#10b981' },
+        { id: 'purple', name: 'Purple', desc: t('settings.accent_purple'), hex: '#a855f7' },
+        { id: 'rose', name: 'Rose', desc: t('settings.accent_rose'), hex: '#f43f5e' },
+        { id: 'amber', name: 'Amber', desc: t('settings.accent_amber'), hex: '#f59e0b' },
+        { id: 'cyan', name: 'Cyan', desc: t('settings.accent_cyan'), hex: '#06b6d4' },
+        { id: 'teal', name: 'Teal', desc: t('settings.accent_teal'), hex: '#14b8a6' },
+        { id: 'indigo', name: 'Indigo', desc: t('settings.accent_indigo'), hex: '#6366f1' },
     ];
 
     return (
@@ -29,7 +32,7 @@ const AccentColorSelector: React.FC<AccentColorSelectorProps> = ({ accentColor, 
                     <button
                         key={color.id}
                         onClick={() => onChange(color.id)}
-                        className={`relative flex items-center gap-4 p-4 rounded-2xl border-2 transition-all overflow-hidden ${
+                        className={`relative flex items-center gap-4 p-4 rounded-lg border-2 transition-all overflow-hidden ${
                             isSelected 
                             ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20' 
                             : 'border-zinc-200 dark:border-zinc-800 bg-white dark:bg-[#121212] hover:border-zinc-300 dark:hover:border-zinc-700'

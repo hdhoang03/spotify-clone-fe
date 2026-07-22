@@ -2,7 +2,7 @@ import { Play } from 'lucide-react';
 
 export const TopSongsTable = ({ data }: { data: any[] }) => {
     return (
-        <div className="bg-white dark:bg-zinc-900 p-4 md:p-6 rounded-2xl border border-gray-100 dark:border-white/5 shadow-sm h-full flex flex-col">
+        <div className="bg-white dark:bg-zinc-900 p-4 md:p-6 rounded-lg border border-gray-100 dark:border-white/5 shadow-sm h-full flex flex-col">
             <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">Top Bài Hát</h3>
 
             <div className="space-y-3 md:space-y-4 overflow-y-auto flex-1 pr-1 custom-scrollbar">

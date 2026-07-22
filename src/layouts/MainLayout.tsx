@@ -86,7 +86,7 @@ const MainLayout = ({ children, activeTab = 'HOME', onTabChange }: MainLayoutPro
 				)}
 
 				{/* Main Content */}
-				<div className="flex-1 relative bg-white dark:bg-[#121212] rounded-2xl border border-black/5 dark:border-white/5 overflow-hidden shadow-sm min-w-0">
+				<div className="flex-1 relative bg-white dark:bg-[#121212] rounded-lg border border-black/5 dark:border-white/5 overflow-hidden shadow-sm min-w-0">
 					<div className="absolute inset-0 z-0 dark:opacity-0 transition-opacity pointer-events-none" style={{ background: 'linear-gradient(to bottom, #fff7ed 0%, #ffffff 80%)' }} />
 					<div className="absolute inset-0 z-0 bg-gradient-to-b from-zinc-800 to-black opacity-0 dark:opacity-100 transition-opacity pointer-events-none" />
 
@@ -108,7 +108,7 @@ const MainLayout = ({ children, activeTab = 'HOME', onTabChange }: MainLayoutPro
 				{!isMobile && (
 					<div
 						id="sidebar-player-slot"
-						className="flex-shrink-0 h-full bg-black rounded-2xl overflow-hidden transition-[width] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]"
+						className="flex-shrink-0 h-full bg-black rounded-lg overflow-hidden transition-[width] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]"
 						style={{ width: isSidebarPlayerOpen ? 280 : 0 }}
 					/>
 				)}

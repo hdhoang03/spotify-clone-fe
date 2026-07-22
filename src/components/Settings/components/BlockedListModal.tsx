@@ -57,7 +57,7 @@ const BlockedListModal = ({ isOpen, onClose }: BlockedListModalProps) => {
     const portal = !isOpen ? null : createPortal(
         <div className="fixed inset-0 z-[30] flex items-center justify-center p-4">
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose} className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
-            <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} className="relative w-full max-w-md bg-white dark:bg-[#181818] rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
+            <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} className="relative w-full max-w-md bg-white dark:bg-[#181818] rounded-lg shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
 
                 {/* HEADER */}
                 <div className="flex items-center justify-between p-4 md:p-6 border-b border-zinc-100 dark:border-zinc-800">

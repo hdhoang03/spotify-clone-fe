@@ -35,7 +35,7 @@ const PlaylistHero = ({ playlist, songs, isOwner, onEditClick, onColorExtracted 
                 src={playlist.coverUrl || 'https://via.placeholder.com/240'}
                 alt={playlist.name}
                 sizeClass="w-56 h-56 md:w-60 md:h-60"
-                radiusClass="rounded-xl"
+                radiusClass="rounded-md"
                 maxTilt={7}
                 onClick={isOwner ? onEditClick : undefined}
             />

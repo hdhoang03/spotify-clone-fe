@@ -27,11 +27,11 @@ const ProfileDropdown = ({ user, onLogout, onClose }: ProfileDropdownProps) => {
 
     const isAdmin = user.roles?.some(role => role.name === 'ADMIN');
 
-    const itemClass = "flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-lg transition w-full text-left";
+    const itemClass = "flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-md transition w-full text-left";
 
     return (
         // <div className="absolute right-0 top-full mt-2 w-64 bg-white dark:bg-zinc-900 border border-gray-200 dark:border-white/10 rounded-xl shadow-2xl p-2 animate-in fade-in zoom-in-95 duration-200 origin-top-right z-50">
-        <div className="absolute right-0 top-[calc(100%+12px)] w-64 bg-white/95 dark:bg-[#1a1a1a]/95 backdrop-blur-3xl ring-1 ring-black/5 dark:ring-white/10 rounded-2xl shadow-[0_16px_40px_rgb(0,0,0,0.1)] dark:shadow-[0_16px_40px_rgb(0,0,0,0.5)] p-2 animate-in fade-in zoom-in-95 duration-200 origin-top-right z-50">
+        <div className="absolute right-0 top-[calc(100%+12px)] w-64 bg-white/95 dark:bg-[#1a1a1a]/95 backdrop-blur-3xl ring-1 ring-black/5 dark:ring-white/10 rounded-lg shadow-[0_16px_40px_rgb(0,0,0,0.1)] dark:shadow-[0_16px_40px_rgb(0,0,0,0.5)] p-2 animate-in fade-in zoom-in-95 duration-200 origin-top-right z-50">
             {/* Header thông tin user */}
             <div className="px-4 py-3 border-b border-gray-100 dark:border-white/5 mb-2">
                 <p className="text-sm font-bold text-gray-900 dark:text-white truncate">{user.name}</p>
@@ -44,7 +44,7 @@ const ProfileDropdown = ({ user, onLogout, onClose }: ProfileDropdownProps) => {
                     <>
                         <button
                             onClick={() => handleNavigate('/admin/dashboard')}
-                            className="flex items-center gap-3 px-4 py-2 text-sm text-red-600 dark:text-red-400 font-bold bg-red-50 dark:bg-red-900/10 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-lg transition w-full text-left mb-1"
+                            className="flex items-center gap-3 px-4 py-2 text-sm text-red-600 dark:text-red-400 font-bold bg-red-50 dark:bg-red-900/10 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-md transition w-full text-left mb-1"
                         >
                             <ShieldCheck size={18} />
                             {t('header.admin_page')}
@@ -91,7 +91,7 @@ const ProfileDropdown = ({ user, onLogout, onClose }: ProfileDropdownProps) => {
 
                 {/* Theme Toggle (Mobile) */}
                 <div
-                    className="md:hidden flex items-center justify-between px-4 py-2 hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-lg transition cursor-pointer"
+                    className="md:hidden flex items-center justify-between px-4 py-2 hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-md transition cursor-pointer"
                     onClick={(e) => e.stopPropagation()}
                 >
                     <span className="text-sm text-gray-700 dark:text-gray-200">{t('header.theme')}</span>
@@ -106,7 +106,7 @@ const ProfileDropdown = ({ user, onLogout, onClose }: ProfileDropdownProps) => {
                         onLogout();
                         if (onClose) onClose();
                     }}
-                    className="flex items-center gap-3 px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition w-full text-left"
+                    className="flex items-center gap-3 px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-md transition w-full text-left"
                 >
                     <LogOut size={18} />
                     {t('header.logout')}

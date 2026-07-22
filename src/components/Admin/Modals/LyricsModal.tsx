@@ -101,7 +101,7 @@ const LyricsModal = ({ isOpen, onClose, songId, songTitle }: LyricsModalProps) =
     return (
         <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
             <div className="absolute inset-0 bg-black/60 backdrop-blur-sm -mt-20" onClick={onClose} />
-            <div className="relative z-10 bg-white dark:bg-zinc-900 rounded-2xl shadow-2xl w-full max-w-3xl flex flex-col max-h-[85vh]">
+            <div className="relative z-10 bg-white dark:bg-zinc-900 rounded-lg shadow-2xl w-full max-w-3xl flex flex-col max-h-[85vh]">
                 <div className="flex items-center justify-between p-5 border-b border-gray-100 dark:border-white/5 bg-gray-50/50 dark:bg-zinc-800/50">
                     <div>
                         <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">

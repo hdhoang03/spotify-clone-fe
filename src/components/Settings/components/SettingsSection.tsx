@@ -7,7 +7,7 @@ const SettingsSection = ({ title, children }: { title: string, children: React.R
                 {title}
             </h2>
         </div>
-        <div className="bg-white/60 dark:bg-zinc-900/60 backdrop-blur-xl rounded-2xl border border-zinc-200/80 dark:border-zinc-800/80 shadow-sm relative">
+        <div className="bg-white/60 dark:bg-zinc-900/60 backdrop-blur-xl rounded-lg border border-zinc-200/80 dark:border-zinc-800/80 shadow-sm relative">
             {children}
         </div>
     </div>

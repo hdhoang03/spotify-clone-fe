@@ -50,7 +50,7 @@ export const ArtistGrid = ({
                     const daysLeft = isViewDeleted ? getDaysRemaining(artist.deletedAt) : 0;
 
                     return (
-                        <div key={artist.id} className={`group relative flex flex-col items-center bg-white/70 dark:bg-zinc-950/40 backdrop-blur-xl p-5 md:p-6 rounded-3xl border transition-all duration-300 shadow-[0_2px_12px_rgba(0,0,0,0.03)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:hover:shadow-[0_8px_30px_rgba(0,0,0,0.3)] hover:-translate-y-0.5 ${isViewDeleted ? 'border-red-200 dark:border-red-900/35' : 'border-zinc-200/50 dark:border-zinc-800/40 hover:border-emerald-500/35'}`}>
+                        <div key={artist.id} className={`group relative flex flex-col items-center bg-white/70 dark:bg-zinc-950/40 backdrop-blur-xl p-5 md:p-6 rounded-lg border transition-all duration-300 shadow-[0_2px_12px_rgba(0,0,0,0.03)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:hover:shadow-[0_8px_30px_rgba(0,0,0,0.3)] hover:-translate-y-0.5 ${isViewDeleted ? 'border-red-200 dark:border-red-900/35' : 'border-zinc-200/50 dark:border-zinc-800/40 hover:border-emerald-500/35'}`}>
 
                             {/* Badge ngày còn lại */}
                             {isViewDeleted && (
@@ -131,7 +131,7 @@ export const ArtistGrid = ({
 
             {/* Empty State */}
             {artists.length === 0 && (
-                <div className="col-span-full text-center py-12 text-gray-500 flex flex-col items-center justify-center min-h-[200px] border border-dashed border-gray-200 dark:border-zinc-700 rounded-2xl">
+                <div className="col-span-full text-center py-12 text-gray-500 flex flex-col items-center justify-center min-h-[200px] border border-dashed border-gray-200 dark:border-zinc-700 rounded-lg">
                     <p>{isViewDeleted ? "Thùng rác trống!" : `Không tìm thấy kết quả cho "${searchTerm}"`}</p>
                 </div>
             )}

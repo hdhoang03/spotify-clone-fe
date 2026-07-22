@@ -93,14 +93,14 @@ const PlanCard = () => {
 
     if (isLoading) {
         return (
-            <div className="bg-white dark:bg-zinc-900/50 rounded-2xl p-6 border border-zinc-200 dark:border-zinc-800 shadow-sm h-full flex items-center justify-center">
+            <div className="bg-white dark:bg-zinc-900/50 rounded-lg p-6 border border-zinc-200 dark:border-zinc-800 shadow-sm h-full flex items-center justify-center">
                 <Loader2 className="animate-spin text-zinc-400" size={24} />
             </div>
         );
     }
 
     return (
-        <div className="bg-white dark:bg-zinc-900/50 rounded-2xl p-4 sm:p-6 border border-zinc-200 dark:border-zinc-800 shadow-sm h-full flex flex-col">
+        <div className="bg-white dark:bg-zinc-900/50 rounded-lg p-4 sm:p-6 border border-zinc-200 dark:border-zinc-800 shadow-sm h-full flex flex-col">
             <div className="flex items-center justify-between mb-6">
                 <h2 className="text-xl font-bold flex items-center gap-2">
                     <CreditCard className="text-purple-500" />
@@ -112,7 +112,7 @@ const PlanCard = () => {
             </div>
 
             <div className={`
-                    flex-1 rounded-[16px] sm:rounded-[20px] p-4 sm:p-7 relative overflow-hidden transition-all duration-500
+                    flex-1 rounded-lg p-4 sm:p-7 relative overflow-hidden transition-all duration-500
                     ${isPremium
                     ? 'bg-gradient-to-br from-primary-500 via-emerald-700 to-teal-900 text-white shadow-lg shadow-primary-900/20'
                     : 'bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200/50 dark:border-white/5 text-zinc-900 dark:text-white'}

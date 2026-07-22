@@ -39,7 +39,7 @@ const Dashboard = () => {
                         <GenrePieChart data={genreData} />
 
                         {/* Thẻ phụ (Tip hoặc Hoạt động) */}
-                        <div className="bg-gradient-to-br from-indigo-600 to-purple-600 rounded-2xl p-6 text-white shadow-lg flex flex-col justify-center">
+                        <div className="bg-gradient-to-br from-indigo-600 to-purple-600 rounded-lg p-6 text-white shadow-lg flex flex-col justify-center">
                             <h3 className="text-xl font-bold mb-2">Thống kê nhanh</h3>
                             <p className="opacity-90 text-sm mb-4 leading-relaxed">
                                 Lượt nghe tháng này tăng trưởng <strong>12%</strong> so với tháng trước.

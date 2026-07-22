@@ -83,7 +83,7 @@ const PlanDetailsModal = ({ isOpen, onClose, onRenew, isLoadingPayment }: PlanDe
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.95, y: 20 }}
                     transition={{ type: 'spring', duration: 0.4 }}
-                    className="relative w-full max-w-md bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6 shadow-2xl overflow-hidden z-10 text-zinc-900 dark:text-white"
+                    className="relative w-full max-w-md bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg p-6 shadow-2xl overflow-hidden z-10 text-zinc-900 dark:text-white"
                 >
                     {/* Golden accent glow at top */}
                     <div className="absolute top-0 left-0 right-0 h-[4px] bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600" />

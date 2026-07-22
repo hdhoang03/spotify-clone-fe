@@ -296,7 +296,7 @@ const MusicPlayer = () => {
                             if (!wasDragged.current) setIsVisible(true);
                             wasDragged.current = false;
                         }}
-                        className="flex items-center gap-3 px-4 py-2.5 rounded-2xl select-none backdrop-blur-xl shadow-2xl"
+                        className="flex items-center gap-3 px-4 py-2.5 rounded-xl select-none backdrop-blur-xl shadow-2xl"
                         style={{
                             x: dragX, y: dragY,
                             position: 'fixed', bottom: '5rem', left: '50%', translateX: '-50%', zIndex: 70,

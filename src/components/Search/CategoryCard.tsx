@@ -20,7 +20,7 @@ const CategoryCard = ({ title, color, hex, onClick, index = 0, coverUrl }: Categ
             transition={{ duration: 0.3, ease: 'easeOut', delay: index * 0.045 }}
             whileHover={{ scale: 1.03, y: -2 }}
             whileTap={{ scale: 0.96 }}
-            className={`${color} group relative overflow-hidden rounded-xl
+            className={`${color} group relative overflow-hidden rounded-lg
                 aspect-[16/9] sm:aspect-square cursor-pointer p-4
                 shadow-md hover:shadow-2xl transition-shadow duration-300`}
             style={hex ? { boxShadow: `0 4px 24px -6px ${hex}55` } : undefined}

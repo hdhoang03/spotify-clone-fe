@@ -12,7 +12,7 @@ interface StreamChartProps {
 
 export const StreamChart = ({ data, timeRange, setTimeRange, year, setYear, month, setMonth }: StreamChartProps) => {
     return (
-        <div className="bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-gray-100 dark:border-white/5 shadow-sm h-full flex flex-col">
+        <div className="bg-white dark:bg-zinc-900 p-6 rounded-lg border border-gray-100 dark:border-white/5 shadow-sm h-full flex flex-col">
 
             {/* Header Area */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">

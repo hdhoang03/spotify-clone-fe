@@ -135,7 +135,7 @@ const CreateSongModal = ({ isOpen, onClose, onCreate }: CreateSongModalProps) =>
             <div className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity -mt-20" onClick={onClose} />
 
             <div
-                className="relative bg-white dark:bg-zinc-900 rounded-2xl w-full max-w-2xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh] animate-in fade-in zoom-in-95 duration-200"
+                className="relative bg-white dark:bg-zinc-900 rounded-lg w-full max-w-2xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh] animate-in fade-in zoom-in-95 duration-200"
                 onClick={e => e.stopPropagation()}
             >
                 <div className="p-5 md:p-6 border-b border-gray-100 dark:border-white/5 flex items-center justify-between bg-gray-50/50 dark:bg-zinc-800/50">

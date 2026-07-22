@@ -45,7 +45,7 @@ const SidebarItem = ({ icon, label, isActive, onClick, imageUrl, variant = 'nav'
                 <div className={`
                     relative flex items-center transition-all duration-400 ease-out cursor-pointer active:scale-[0.97]
                     ${isCollapsed ? 'justify-center px-2 py-2' : 'gap-3 px-3 py-2.5'}
-                    ${isPlaylist ? 'rounded-2xl' : 'rounded-full'}
+                    ${isPlaylist ? 'rounded-lg' : 'rounded-full'}
                     ${isActive
                         ? (isPlaylist
                             ? 'bg-white shadow-[0_2px_10px_rgba(0,0,0,0.05)] dark:bg-white/10 dark:shadow-none border border-black/5 dark:border-transparent'
@@ -56,7 +56,7 @@ const SidebarItem = ({ icon, label, isActive, onClick, imageUrl, variant = 'nav'
                     <div className={`
                         flex-shrink-0 overflow-hidden flex items-center justify-center transition-all duration-500 ease-out
                         ${isPlaylist
-                            ? (isCollapsed ? 'w-10 h-10 rounded-[12px]' : 'w-[46px] h-[46px] rounded-[14px]')
+                            ? (isCollapsed ? 'w-10 h-10 rounded-md' : 'w-[46px] h-[46px] rounded-md')
                             : 'w-5 h-5 bg-transparent'
                         }
                         shadow-sm ring-1 ring-black/5 dark:ring-white/10 

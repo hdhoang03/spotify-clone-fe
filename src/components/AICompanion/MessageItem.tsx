@@ -17,7 +17,7 @@ export const MessageItem: React.FC<MessageItemProps> = ({ message }) => {
                     <Sparkles className="w-4 h-4 text-white" />
                 </div>
             )}
-            <div className={`max-w-[75%] rounded-2xl px-5 py-3.5 text-[14px] shadow-sm ${isUser
+            <div className={`max-w-[75%] rounded-lg px-5 py-3.5 text-[14px] shadow-sm ${isUser
                     ? 'bg-gradient-to-br from-primary-500 to-primary-600 text-white border-transparent rounded-br-sm shadow-primary-500/25 shadow-md'
                     : 'bg-white/80 dark:bg-[#1A1A1A]/80 backdrop-blur-xl border border-white/40 dark:border-white/5 text-zinc-800 dark:text-zinc-200 rounded-tl-sm shadow-xl'
                 }`}>

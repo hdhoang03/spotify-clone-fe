@@ -22,7 +22,7 @@ export const SongTable = ({
     onPageChange, onEdit, onDelete, onRestore, onHardDelete, onManageLyrics
 }: SongTableProps) => {
     return (
-        <div className="bg-white/75 dark:bg-zinc-950/45 backdrop-blur-xl rounded-2xl border border-zinc-200/50 dark:border-zinc-800/40 overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.03)] flex flex-col">
+        <div className="bg-white/75 dark:bg-zinc-950/45 backdrop-blur-xl rounded-lg border border-zinc-200/50 dark:border-zinc-800/40 overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.03)] flex flex-col">
             <div className="overflow-x-auto w-full">
                 <table className="w-full text-left border-collapse min-w-[800px]">
                     <thead>

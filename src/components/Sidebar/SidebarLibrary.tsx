@@ -57,7 +57,7 @@ const Sidebar = ({ activeTab, onTabChange, isCollapsed, onToggleCollapse, classN
     };
 
     return (
-        <div className={`flex h-full flex-col transition-all duration-500 ease-in-out bg-zinc-50/90 dark:bg-[#121212]/80 backdrop-blur-2xl rounded-[24px] border border-black/5 dark:border-white/10 shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.1)] overflow-hidden ${className}`}>
+        <div className={`flex h-full flex-col transition-all duration-500 ease-in-out bg-zinc-50/90 dark:bg-[#121212]/80 backdrop-blur-2xl rounded-lg border border-black/5 dark:border-white/10 shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.1)] overflow-hidden ${className}`}>
 
             {/* Phần Header & Nút Tạo (+) */}
             <div className="flex items-center justify-between">

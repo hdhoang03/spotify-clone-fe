@@ -43,7 +43,7 @@ const NoResults = ({ query }: { query: string }) => {
             animate={{ opacity: 1, y: 0 }}
             className="mt-20 text-center"
         >
-            <div className="w-20 h-20 rounded-2xl bg-zinc-100 dark:bg-zinc-800/80 flex items-center justify-center mx-auto mb-5 shadow-inner">
+            <div className="w-20 h-20 rounded-lg bg-zinc-100 dark:bg-zinc-800/80 flex items-center justify-center mx-auto mb-5 shadow-inner">
                 <Music size={32} className="text-zinc-400" />
             </div>
             <h3 className="text-xl font-bold text-zinc-900 dark:text-white mb-2">

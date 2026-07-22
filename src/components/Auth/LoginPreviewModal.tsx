@@ -29,7 +29,7 @@ const LoginPreviewModal = ({ isOpen, onClose, onLoginClick }: LoginPreviewModalP
                         initial={{ opacity: 0, scale: 0.95, y: 15 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95, y: 15 }}
-                        className="relative w-full max-w-sm bg-white dark:bg-zinc-900 rounded-3xl shadow-2xl overflow-hidden border border-zinc-200 dark:border-zinc-800/80 p-6 flex flex-col items-center text-center select-none"
+                        className="relative w-full max-w-sm bg-white dark:bg-zinc-900 rounded-lg shadow-2xl overflow-hidden border border-zinc-200 dark:border-zinc-800/80 p-6 flex flex-col items-center text-center select-none"
                     >
                         {/* Premium Crown/Lock Circle Icon */}
                         <div className="w-16 h-16 bg-primary-100 dark:bg-primary-500/10 rounded-full flex items-center justify-center mb-5 text-primary-600 dark:text-primary-500 animate-bounce">

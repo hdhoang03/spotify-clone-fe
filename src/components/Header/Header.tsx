@@ -65,7 +65,7 @@ const Header = ({ onMenuClick, onNaviagate, activeTab }: HeaderProps) => {
         <>
             <header className="h-16 shrink-0 w-full bg-white dark:bg-[#121212] text-black dark:text-white
                         flex items-center justify-between px-4 border border-black/5
-                        dark:border-white/5 rounded-2xl z-50 transition-colors duration-300 shadow-sm">
+                        dark:border-white/5 rounded-lg z-50 transition-colors duration-300 shadow-sm">
 
                 {/* Left Section */}
                 <div className="flex items-center gap-4 shrink-0">

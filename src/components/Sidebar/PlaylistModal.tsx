@@ -55,7 +55,7 @@ const PlaylistModal = ({ isOpen, onClose, onSubmit, initialData, isLoading }: Pl
         <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onClose} />
 
-            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="relative w-full max-w-md bg-white dark:bg-[#282828] rounded-xl shadow-2xl p-6">
+            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="relative w-full max-w-md bg-white dark:bg-[#282828] rounded-lg shadow-2xl p-6">
                 <div className="flex justify-between items-center mb-6">
                     <h2 className="text-xl font-bold text-zinc-900 dark:text-white">
                         {initialData ? t('playlist.edit_info') : t('playlist.create_playlist')}

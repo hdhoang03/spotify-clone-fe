@@ -106,7 +106,7 @@ export const TiltCard = ({
                     transformStyle: 'preserve-3d',
                     willChange: 'transform',
                 }}
-                className="relative overflow-hidden bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-gray-100 dark:border-white/5 shadow-sm cursor-default"
+                className="relative overflow-hidden bg-white dark:bg-zinc-900 p-6 rounded-lg border border-gray-100 dark:border-white/5 shadow-sm cursor-default"
             >
                 {/* Spotlight overlay theo chuột */}
                 <div
@@ -115,7 +115,7 @@ export const TiltCard = ({
                         opacity: tilt.isHovered ? 1 : 0,
                         transition: 'opacity 0.3s ease',
                     }}
-                    className="absolute inset-0 pointer-events-none rounded-2xl z-0"
+                    className="absolute inset-0 pointer-events-none rounded-lg z-0"
                 />
 
                 {/* Glow border khi hover */}
@@ -127,7 +127,7 @@ export const TiltCard = ({
                         opacity: tilt.isHovered ? 1 : 0,
                         transition: 'opacity 0.3s ease',
                     }}
-                    className="absolute inset-0 rounded-2xl pointer-events-none z-0"
+                    className="absolute inset-0 rounded-lg pointer-events-none z-0"
                 />
 
                 {/* Nội dung — nổi lên trên các overlay */}

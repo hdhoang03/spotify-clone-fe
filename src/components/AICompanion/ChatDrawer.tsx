@@ -113,7 +113,7 @@ export const ChatDrawer: React.FC<ChatDrawerProps> = ({
                             </button>
 
                             {showLangMenu && (
-                                <div className="absolute top-10 right-24 w-32 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl shadow-lg z-50 overflow-hidden">
+                                <div className="absolute top-10 right-24 w-32 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg shadow-lg z-50 overflow-hidden">
                                     {(Object.keys(i18n) as ChatLanguage[]).map((lang) => (
                                         <button
                                             key={lang}
@@ -177,7 +177,7 @@ export const ChatDrawer: React.FC<ChatDrawerProps> = ({
                         />
 
                         {currentSong && (
-                            <div className="flex items-center gap-3 px-3 py-2 rounded-xl bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200/50 dark:border-zinc-800/50">
+                            <div className="flex items-center gap-3 px-3 py-2 rounded-md bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200/50 dark:border-zinc-800/50">
                                 <img
                                     src={currentSong.coverUrl}
                                     alt={currentSong.title}
@@ -195,7 +195,7 @@ export const ChatDrawer: React.FC<ChatDrawerProps> = ({
                             </div>
                         )}
 
-                        <form onSubmit={handleSubmit} className="relative flex items-center gap-2 p-1 bg-zinc-100/80 dark:bg-zinc-900/80 backdrop-blur-md border border-zinc-200/50 dark:border-zinc-800/50 rounded-2xl shadow-inner focus-within:ring-2 focus-within:ring-primary-500/30 transition-all">
+                        <form onSubmit={handleSubmit} className="relative flex items-center gap-2 p-1 bg-zinc-100/80 dark:bg-zinc-900/80 backdrop-blur-md border border-zinc-200/50 dark:border-zinc-800/50 rounded-lg shadow-inner focus-within:ring-2 focus-within:ring-primary-500/30 transition-all">
                             <input
                                 type="text"
                                 value={inputValue}
@@ -207,7 +207,7 @@ export const ChatDrawer: React.FC<ChatDrawerProps> = ({
                             <button
                                 type="submit"
                                 disabled={!inputValue.trim() || isLoading}
-                                className="p-3 rounded-xl text-white bg-gradient-to-br from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 shadow-md shadow-primary-500/25 disabled:opacity-50 disabled:cursor-not-allowed transition-all shrink-0 flex items-center justify-center w-10 h-10 mr-1"
+                                className="p-3 rounded-md text-white bg-gradient-to-br from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 shadow-md shadow-primary-500/25 disabled:opacity-50 disabled:cursor-not-allowed transition-all shrink-0 flex items-center justify-center w-10 h-10 mr-1"
                             >
                                 <Send className="w-4 h-4 translate-x-[-1px] translate-y-[1px]" />
                             </button>

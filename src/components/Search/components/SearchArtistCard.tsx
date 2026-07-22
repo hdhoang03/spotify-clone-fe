@@ -19,7 +19,7 @@ const SearchArtistCard = ({ artist, index }: Props) => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.25, delay: index * 0.05 }}
             onClick={() => navigate(`/artist/${artist.id}`)}
-            className="group flex flex-col items-center p-4 rounded-2xl cursor-pointer
+            className="group flex flex-col items-center p-4 rounded-lg cursor-pointer
                 bg-zinc-50 dark:bg-zinc-900/60
                 hover:bg-zinc-100 dark:hover:bg-zinc-800/80
                 border border-transparent hover:border-zinc-200 dark:hover:border-zinc-700/60

@@ -74,7 +74,7 @@ const SidebarPlayer = ({
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.97 }}
             transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            className="relative w-full h-full overflow-hidden rounded-2xl border border-black/5 dark:border-white/5 shadow-xl"
+            className="relative w-full h-full overflow-hidden rounded-lg border border-black/5 dark:border-white/5 shadow-xl"
             style={{
                 // Giảm opacity của dominantColor xuống 33% (55) ở đỉnh và 13% (22) ở giữa để nền luôn tối và sang trọng
                 background: `linear-gradient(170deg, ${dominantColor}55 0%, ${dominantColor}22 40%, #0d0d0d 100%)`,
@@ -116,7 +116,7 @@ const SidebarPlayer = ({
                 </div>
 
                 {/* ── Album Art ── */}
-                <div className="relative w-full aspect-square rounded-2xl overflow-hidden shadow-2xl mb-5 group flex-shrink-0">
+                <div className="relative w-full aspect-square rounded-lg overflow-hidden shadow-2xl mb-5 group flex-shrink-0">
                     <img
                         src={currentSong.coverUrl}
                         alt={currentSong.title}
@@ -207,7 +207,7 @@ const SidebarPlayer = ({
                         )}
                     </div>
 
-                    <div className={`rounded-2xl overflow-hidden ${isLight ? 'bg-black/5' : 'bg-white/5'} border ${isLight ? 'border-black/5' : 'border-white/10'} flex-1 flex flex-col`}
+                    <div className={`rounded-lg overflow-hidden ${isLight ? 'bg-black/5' : 'bg-white/5'} border ${isLight ? 'border-black/5' : 'border-white/10'} flex-1 flex flex-col`}
                         style={{ minHeight: 270 }}
                     >
                         {isLyricsLoading ? (

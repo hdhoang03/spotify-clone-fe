@@ -2,7 +2,7 @@ import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from 'recha
 
 export const GenrePieChart = ({ data }: { data: any[] }) => {
     return (
-        <div className="bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-gray-100 dark:border-white/5 shadow-sm h-full flex flex-col">
+        <div className="bg-white dark:bg-zinc-900 p-6 rounded-lg border border-gray-100 dark:border-white/5 shadow-sm h-full flex flex-col">
             <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">Phân bố thể loại</h3>
 
             <div className="flex-1 min-h-[250px] w-full">

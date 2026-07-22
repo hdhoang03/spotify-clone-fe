@@ -98,7 +98,7 @@ const PlaylistTrackList = ({ songs, playlistId, isOwner = true, onPlaySong, onRe
     if (songs.length === 0) {
         return (
             <div className="px-4 md:px-8 py-16 flex flex-col items-center justify-center gap-4 text-center">
-                <div className="w-16 h-16 rounded-2xl bg-zinc-100 dark:bg-white/[0.06]
+                <div className="w-16 h-16 rounded-lg bg-zinc-100 dark:bg-white/[0.06]
                                 border border-black/[0.04] dark:border-white/10
                                 flex items-center justify-center">
                     <Music2 size={28} className="text-zinc-400 dark:text-zinc-500" />
@@ -153,7 +153,7 @@ const PlaylistTrackList = ({ songs, playlistId, isOwner = true, onPlaySong, onRe
                                 grid grid-cols-[auto_1fr_auto] md:grid-cols-[32px_minmax(120px,_4fr)_2fr_minmax(80px,_1fr)_40px]
                                 lg:grid-cols-[32px_minmax(120px,_4fr)_2fr_2fr_minmax(80px,_1fr)_40px]
                                 gap-3 md:gap-4 px-2 md:px-4 py-2 md:py-2.5 items-center text-sm
-                                transition-all duration-200 cursor-pointer group rounded-xl
+                                transition-all duration-200 cursor-pointer group rounded-md
                                 ${isDeleted ? 'opacity-50 grayscale cursor-not-allowed' : (isActive
                                     ? 'bg-primary-50/70 dark:bg-primary-500/[0.08] border-l-2 border-primary-500 pl-[6px] md:pl-[14px]'
                                     : 'border-l-2 border-transparent hover:bg-zinc-50/80 dark:hover:bg-white/[0.05]')

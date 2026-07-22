@@ -24,7 +24,7 @@ export const UserGrid = ({
                     const isAdmin = user.roles.some(r => r.name === 'ADMIN');
 
                     return (
-                        <div key={user.id} className={`bg-white/70 dark:bg-zinc-950/40 backdrop-blur-xl p-5 rounded-2xl border shadow-[0_2px_12px_rgba(0,0,0,0.03)] flex items-start gap-4 relative group transition-all duration-300 hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:hover:shadow-[0_8px_30px_rgba(0,0,0,0.3)] hover:-translate-y-0.5
+                        <div key={user.id} className={`bg-white/70 dark:bg-zinc-950/40 backdrop-blur-xl p-5 rounded-lg border shadow-[0_2px_12px_rgba(0,0,0,0.03)] flex items-start gap-4 relative group transition-all duration-300 hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:hover:shadow-[0_8px_30px_rgba(0,0,0,0.3)] hover:-translate-y-0.5
                             ${isAdmin ? 'border-purple-500/20 dark:border-purple-500/10' : 'border-zinc-200/50 dark:border-zinc-800/40 hover:border-emerald-500/30'}`}>
 
                             {/* Avatar */}

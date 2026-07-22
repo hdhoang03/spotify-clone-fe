@@ -24,7 +24,7 @@ const AlbumDetail = () => {
     return (
         <div className="space-y-6 md:space-y-8 animate-in fade-in duration-500">
             {/* 1. THÔNG TIN ALBUM */}
-            <div className="flex flex-col md:flex-row items-center md:items-start gap-6 bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-gray-200 dark:border-white/5 shadow-sm">
+            <div className="flex flex-col md:flex-row items-center md:items-start gap-6 bg-white dark:bg-zinc-900 p-6 rounded-lg border border-gray-200 dark:border-white/5 shadow-sm">
                 {/* Dùng avatarUrl thay vì coverUrl */}
                 <div className="w-40 h-40 md:w-48 md:h-48 rounded-xl overflow-hidden shadow-xl border border-gray-100 dark:border-zinc-800 flex-shrink-0 group relative">
                     <img src={album.avatarUrl} alt={album.name} className="w-full h-full object-cover" />

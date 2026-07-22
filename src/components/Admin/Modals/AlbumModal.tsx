@@ -96,7 +96,7 @@ const AlbumModal = ({ isOpen, onClose, albumData, onSubmit }: AlbumModalProps) =
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
             <div className="absolute inset-0 bg-black/60 backdrop-blur-sm -mt-20" onClick={onClose} />
-            <div className="relative w-full max-w-lg bg-white dark:bg-zinc-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-zinc-800 animate-in fade-in zoom-in duration-200">
+            <div className="relative w-full max-w-lg bg-white dark:bg-zinc-900 rounded-lg shadow-2xl border border-gray-200 dark:border-zinc-800 animate-in fade-in zoom-in duration-200">
 
                 {/* Header */}
                 <div className="flex items-center justify-between p-5 border-b border-gray-100 dark:border-zinc-800">

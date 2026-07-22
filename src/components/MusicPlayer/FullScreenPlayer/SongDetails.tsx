@@ -31,7 +31,7 @@ const SongDetails = ({ songId, coverUrl, title, artist, song, isLiked, dominantC
                     style={{ background: dominantColor || 'rgba(255,255,255,0.15)' }}
                 />
                 {/* Album art container */}
-                <div className="relative w-full aspect-square rounded-2xl overflow-hidden ring-1 ring-white/10 shadow-[0_24px_64px_rgba(0,0,0,0.7)]">
+                <div className="relative w-full aspect-square rounded-lg overflow-hidden ring-1 ring-white/10 shadow-[0_24px_64px_rgba(0,0,0,0.7)]">
                     <img
                         src={coverUrl}
                         alt="cover"

@@ -63,7 +63,7 @@ const ProfileCard = () => {
     };
 
     return (
-        <div className="bg-white dark:bg-zinc-900/50 rounded-2xl p-6 border border-zinc-200 dark:border-zinc-800 shadow-sm relative overflow-hidden">
+        <div className="bg-white dark:bg-zinc-900/50 rounded-lg p-6 border border-zinc-200 dark:border-zinc-800 shadow-sm relative overflow-hidden">
             <div className="flex items-center justify-between mb-8">
                 <h2 className="text-xl font-bold flex items-center gap-2">
                     <User className="text-primary-500" /> {t('account.personal_profile')}

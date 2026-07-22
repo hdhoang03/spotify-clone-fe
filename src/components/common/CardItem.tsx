@@ -31,7 +31,7 @@ const CardItem = ({
             variants={itemVariants}
             onClick={onClick}
             className={`
-                group p-3 rounded-2xl cursor-pointer transition-all duration-300 relative
+                group p-3 rounded-lg cursor-pointer transition-all duration-300 relative
                 ${isCurrent
                     ? 'bg-primary-500/[0.07] dark:bg-primary-500/[0.05] ring-1 ring-primary-500/20'
                     : 'hover:bg-zinc-100 dark:hover:bg-white/[0.06]'
@@ -45,7 +45,7 @@ const CardItem = ({
                     src={imageUrl}
                     alt={title}
                     sizeClass="w-full aspect-square"
-                    radiusClass={isRound ? 'rounded-full' : 'rounded-xl'}
+                    radiusClass={isRound ? 'rounded-full' : 'rounded-md'}
                     maxTilt={6}
                     onClick={onClick}
                     hoverOverlay={
@@ -77,7 +77,7 @@ const CardItem = ({
 
                 {/* Shadow under card */}
                 {!isRound && (
-                    <div className="absolute -bottom-1 left-2 right-2 h-4 bg-black/[0.08] dark:bg-black/20 blur-md rounded-xl -z-10" />
+                    <div className="absolute -bottom-1 left-2 right-2 h-4 bg-black/[0.08] dark:bg-black/20 blur-md rounded-md -z-10" />
                 )}
             </div>
 

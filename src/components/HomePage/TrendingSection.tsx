@@ -56,7 +56,7 @@ const SongRow = ({
             viewport={{ once: true, amount: 0.2 }}
             transition={{ delay: index * 0.04, duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
             className={`
-                group relative flex items-center gap-4 pr-3 py-2 rounded-xl cursor-pointer
+                group relative flex items-center gap-4 pr-3 py-2 rounded-md cursor-pointer
                 transition-all duration-200 select-none
                 ${isCurrent
                     ? 'bg-primary-500/10 dark:bg-primary-500/[0.08]'

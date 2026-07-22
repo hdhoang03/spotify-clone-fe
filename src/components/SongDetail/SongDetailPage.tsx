@@ -75,13 +75,13 @@ const SongDetailPage = () => {
     };
 
     return (
-        <div className="relative flex flex-col items-center justify-center min-h-[85vh] w-full px-4 py-12 select-none overflow-hidden rounded-3xl bg-gradient-to-b from-zinc-900 to-black text-white shadow-2xl border border-zinc-800/20">
+        <div className="relative flex flex-col items-center justify-center min-h-[85vh] w-full px-4 py-12 select-none overflow-hidden rounded-lg bg-gradient-to-b from-zinc-900 to-black text-white shadow-2xl border border-zinc-800/20">
             {/* Ambient Background Glow */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] bg-primary-500/10 rounded-full blur-[100px] pointer-events-none" />
 
             {/* TRẠNG THÁI ĐANG TẢI */}
             {isLoading && (
-                <div className="relative z-10 flex flex-col items-center gap-4 bg-zinc-900/80 p-8 rounded-2xl border border-zinc-800/80 backdrop-blur-md animate-pulse">
+                <div className="relative z-10 flex flex-col items-center gap-4 bg-zinc-900/80 p-8 rounded-lg border border-zinc-800/80 backdrop-blur-md animate-pulse">
                     <Loader2 className="w-10 h-10 text-primary-500 animate-spin" />
                     <p className="text-zinc-350 font-medium">Đang nhận diện bài hát từ mã QR...</p>
                 </div>
@@ -89,7 +89,7 @@ const SongDetailPage = () => {
 
             {/* TRẠNG THÁI LỖI (CORS / KHÔNG TỒN TẠI ID / SAI ĐƯỜNG DẪN) */}
             {error && (
-                <div className="relative z-10 flex flex-col items-center gap-4 bg-zinc-900/90 p-8 rounded-3xl border border-red-950/30 max-w-sm text-center backdrop-blur-md animate-in fade-in duration-300 shadow-2xl">
+                <div className="relative z-10 flex flex-col items-center gap-4 bg-zinc-900/90 p-8 rounded-lg border border-red-950/30 max-w-sm text-center backdrop-blur-md animate-in fade-in duration-300 shadow-2xl">
                     <AlertCircle className="w-12 h-12 text-red-500" />
                     <h3 className="text-xl font-bold text-red-400">Không thể phát nhạc</h3>
                     <p className="text-zinc-400 text-sm leading-relaxed">{error}</p>
@@ -104,13 +104,13 @@ const SongDetailPage = () => {
 
             {/* TRẠNG THÁI THÀNH CÔNG VÀ SẴN SÀNG PHÁT CHUYỂN TIẾP */}
             {!isLoading && !error && songData && (
-                <div className="relative z-10 flex flex-col items-center bg-zinc-950/85 p-8 rounded-3xl border border-zinc-800/80 shadow-[0_20px_50px_rgba(0,0,0,0.6)] max-w-sm w-full backdrop-blur-md animate-in fade-in zoom-in-95 duration-500">
+                <div className="relative z-10 flex flex-col items-center bg-zinc-950/85 p-8 rounded-lg border border-zinc-800/80 shadow-[0_20px_50px_rgba(0,0,0,0.6)] max-w-sm w-full backdrop-blur-md animate-in fade-in zoom-in-95 duration-500">
                     <span className="text-[10px] font-black uppercase tracking-[0.2em] text-primary-500 mb-6 bg-primary-500/10 px-3 py-1.5 rounded-full border border-primary-500/20">
                         Springtunes Share
                     </span>
 
                     {/* Khung ảnh cover bài hát */}
-                    <div className="w-44 h-44 rounded-2xl overflow-hidden shadow-2xl relative group mb-6 bg-zinc-900 flex items-center justify-center border border-zinc-800/50">
+                    <div className="w-44 h-44 rounded-md overflow-hidden shadow-2xl relative group mb-6 bg-zinc-900 flex items-center justify-center border border-zinc-800/50">
                         {songData.coverUrl ? (
                             <img
                                 src={songData.coverUrl}
@@ -134,11 +134,11 @@ const SongDetailPage = () => {
 
                     {/* Báo hiệu nghe thử nếu chưa đăng nhập */}
                     {songData.is_deleted ? (
-                        <div className="w-full bg-red-500/10 border border-red-500/20 rounded-2xl p-4 mb-6 text-center text-xs text-red-400 shadow-inner">
+                        <div className="w-full bg-red-500/10 border border-red-500/20 rounded-lg p-4 mb-6 text-center text-xs text-red-400 shadow-inner">
                             Nội dung này không khả dụng. Bài hát có thể đã bị xóa.
                         </div>
                     ) : !isLoggedIn && (
-                        <div className="w-full bg-zinc-900/60 border border-zinc-800/80 rounded-2xl p-4 mb-6 text-center text-xs text-zinc-400 shadow-inner">
+                        <div className="w-full bg-zinc-900/60 border border-zinc-800/80 rounded-lg p-4 mb-6 text-center text-xs text-zinc-400 shadow-inner">
                             Bạn chưa đăng nhập. Bài hát sẽ phát thử <span className="text-primary-500 font-black">20 giây</span>.
                             <button
                                 onClick={handleLoginPrompt}

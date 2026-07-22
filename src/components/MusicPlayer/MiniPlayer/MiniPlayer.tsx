@@ -82,7 +82,7 @@ const MiniPlayer = ({
         <div
             onClick={onExpand}
             className="fixed bottom-[80px] md:bottom-8 left-4 right-4 md:left-1/2 md:-translate-x-1/2 md:w-[620px]
-                       backdrop-blur-2xl border rounded-2xl p-3 pr-4
+                       backdrop-blur-2xl border rounded-xl p-3 pr-4
                        flex items-center justify-between cursor-pointer z-40
                        shadow-[0_12px_40px_rgba(0,0,0,0.3)]
                        hover:shadow-[0_16px_48px_rgba(0,0,0,0.35)]
@@ -96,7 +96,7 @@ const MiniPlayer = ({
             {/* Left: Cover + Info */}
             <div className="flex items-center gap-3.5 overflow-hidden flex-1 min-w-0">
                 {/* Cover art with equalizer overlay */}
-                <div className="relative w-11 h-11 rounded-xl overflow-hidden flex-shrink-0 shadow-lg">
+                <div className="relative w-11 h-11 rounded-md overflow-hidden flex-shrink-0 shadow-lg">
                     <img
                         src={currentSong.coverUrl}
                         alt="cover"
@@ -221,7 +221,7 @@ const MiniPlayer = ({
                     onClick={(e) => e.stopPropagation()}
                     className="hidden md:flex absolute bottom-[calc(100%+14px)] left-1/2 -translate-x-1/2 
                                bg-zinc-950/95 dark:bg-zinc-900/95 text-white text-[12px] font-medium 
-                               px-4 py-2.5 rounded-xl border border-white/10 shadow-2xl 
+                               px-4 py-2.5 rounded-lg border border-white/10 shadow-2xl 
                                items-center gap-2.5 backdrop-blur-md select-none z-50 w-max max-w-sm
                                transition-all duration-300"
                 >

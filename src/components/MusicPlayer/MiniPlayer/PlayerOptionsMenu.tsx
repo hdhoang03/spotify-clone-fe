@@ -56,7 +56,7 @@ const PlayerOptionsMenu = ({
             onClick={(e) => e.stopPropagation()}
             className={`absolute bottom-full right-0 mb-4 
             backdrop-blur-2xl bg-white/85 dark:bg-[#18181b]/85
-            border border-black/5 dark:border-white/10 rounded-2xl shadow-[0_12px_40px_rgba(0,0,0,0.15)] p-4 z-50 
+            border border-black/5 dark:border-white/10 rounded-lg shadow-[0_12px_40px_rgba(0,0,0,0.15)] p-4 z-50 
             animate-in slide-in-from-bottom-2 fade-in zoom-in-95 duration-200 ease-out cursor-default
             ${type === 'speed' ? 'w-64' : 'w-72'}`}
         >

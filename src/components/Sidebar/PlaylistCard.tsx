@@ -21,7 +21,7 @@ const PlaylistCard = ({ id, title, description, imageUrl, index = 0, onPlay }: P
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.35, delay: index * 0.05, ease: [0.25, 0.46, 0.45, 0.94] }}
             onClick={() => navigate(`/playlist/${id}`)}
-            className="group relative p-3 md:p-4 rounded-2xl cursor-pointer
+            className="group relative p-3 md:p-4 rounded-lg cursor-pointer
                        bg-white/60 dark:bg-zinc-900/70
                        border border-black/[0.04] dark:border-white/[0.06]
                        backdrop-blur-sm
@@ -36,7 +36,7 @@ const PlaylistCard = ({ id, title, description, imageUrl, index = 0, onPlay }: P
                     src={imageUrl}
                     alt={title}
                     sizeClass="w-full aspect-square"
-                    radiusClass="rounded-xl"
+                    radiusClass="rounded-md"
                     maxTilt={6}
                     hoverOverlay={
                         <div className="absolute inset-0 flex items-end justify-end p-2.5">

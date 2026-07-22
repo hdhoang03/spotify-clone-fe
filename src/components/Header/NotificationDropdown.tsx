@@ -168,7 +168,7 @@ const NotificationDropdown = ({ onClose, onUpdateUnreadCount, externalUnreadCoun
     return (
         <div className="fixed md:absolute z-50 right-2 md:right-0 top-[70px] md:top-full md:mt-2 w-[calc(100vw-1rem)] sm:w-[22rem] md:w-96">
             {/* Container chính */}
-            <div className="bg-white dark:bg-zinc-900 border dark:border-white/10 rounded-2xl shadow-2xl overflow-hidden">
+            <div className="bg-white dark:bg-zinc-900 border dark:border-white/10 rounded-lg shadow-2xl overflow-hidden">
 
                 {/* Header */}
                 <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 dark:border-white/5">

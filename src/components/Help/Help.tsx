@@ -66,7 +66,7 @@ const HelpPage = () => {
                             </h2>
                         </div>
 
-                        <div className="bg-white/60 dark:bg-zinc-900/60 backdrop-blur-xl rounded-2xl border border-zinc-200/80 dark:border-zinc-800/80 overflow-hidden shadow-sm">
+                        <div className="bg-white/60 dark:bg-zinc-900/60 backdrop-blur-xl rounded-lg border border-zinc-200/80 dark:border-zinc-800/80 overflow-hidden shadow-sm">
                             {FAQ_DATA.map((item, idx) => (
                                 <FAQItem key={idx} question={item.q} answer={item.a} isLast={idx === FAQ_DATA.length - 1} />
                             ))}
@@ -113,7 +113,7 @@ const HelpPage = () => {
                                 </h2>
                             </div>
 
-                            <div className="bg-white/60 dark:bg-zinc-900/60 backdrop-blur-xl rounded-2xl border border-zinc-200/80 dark:border-zinc-800/80 p-6 shadow-sm">
+                            <div className="bg-white/60 dark:bg-zinc-900/60 backdrop-blur-xl rounded-lg border border-zinc-200/80 dark:border-zinc-800/80 p-6 shadow-sm">
                                 <ContactForm />
                             </div>
                         </div>

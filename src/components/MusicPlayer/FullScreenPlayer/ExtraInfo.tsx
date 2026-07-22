@@ -116,7 +116,7 @@ const ExtraInfo = ({ name, artistId, songId, songTitle, currentTime, onCollapse,
             <div className="flex flex-col gap-6 mt-8 px-2">
 
                 {/* --- LYRICS CARD --- */}
-                <div className="backdrop-blur-xl bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 rounded-3xl overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.1)] transition-all duration-300">
+                <div className="backdrop-blur-xl bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 rounded-lg overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.1)] transition-all duration-300">
                     <div className="flex items-center justify-between px-6 pt-5 pb-3">
                         <h3 className="font-bold text-lg">{t('player.lyrics')}</h3>
                         {hasLyrics && !isLyricsLoading && (
@@ -153,7 +153,7 @@ const ExtraInfo = ({ name, artistId, songId, songTitle, currentTime, onCollapse,
                         <h3 className="font-bold text-lg px-2">{t('player.about_artist')}</h3>
                         <div
                             onClick={handleArtistClick}
-                            className="backdrop-blur-xl bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 rounded-3xl overflow-hidden hover:bg-black/10 dark:hover:bg-white/10 transition-all duration-500 cursor-pointer group shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.1)]"
+                            className="backdrop-blur-xl bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 rounded-lg overflow-hidden hover:bg-black/10 dark:hover:bg-white/10 transition-all duration-500 cursor-pointer group shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.1)]"
                         >
                             <div className="h-44 w-full relative overflow-hidden">
                                 <img

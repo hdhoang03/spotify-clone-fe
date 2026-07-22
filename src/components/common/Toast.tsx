@@ -77,7 +77,7 @@ const Toast = ({ message, type = 'info', duration = 3000, onClose }: ToastProps)
             className={`
                 fixed bottom-28 left-1/2 z-[9999]
                 flex items-center gap-3.5
-                px-4 py-3.5 rounded-2xl
+                px-4 py-3.5 rounded-xl
                 
                 /* Đồng bộ nền: Sáng thì trắng đục, tối thì đen đục (backdrop-blur) */
                 bg-white/85 dark:bg-zinc-900/85

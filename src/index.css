@@ -34,6 +34,18 @@
 	--color-primary-800: 6, 95, 70;
 	--color-primary-900: 6, 78, 59;
 	--color-primary-950: 2, 44, 34;
+	--color-background: 24, 24, 27; /* zinc-900 */
+}
+
+/* Font Families */
+:root, :root[data-font="inter"] {
+	--font-sans: 'Inter', 'Noto Sans KR', 'Noto Sans JP', system-ui, -apple-system, sans-serif;
+}
+:root[data-font="figtree"] {
+	--font-sans: 'Figtree', 'Noto Sans KR', 'Noto Sans JP', system-ui, -apple-system, sans-serif;
+}
+:root[data-font="lexend"] {
+	--font-sans: 'Lexend', 'Noto Sans KR', 'Noto Sans JP', system-ui, -apple-system, sans-serif;
 }
 
 /* ─── Java Blue ─── */
@@ -375,7 +387,7 @@
 
 	::-webkit-scrollbar-thumb {
 		background: rgba(113, 113, 122, 0.25);
-		border-radius: 20px;
+		border-radius: 8px;
 		border: 2px solid transparent;
 		background-clip: content-box;
 		transition: background 0.2s ease;

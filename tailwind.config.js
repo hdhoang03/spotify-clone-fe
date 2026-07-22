@@ -31,12 +31,7 @@ export default {
 	theme: {
 		extend: {
 			fontFamily: {
-				sans: [
-					'Lexend',
-					'Inter',
-					'system-ui',
-					'sans-serif',
-				],
+				sans: ['var(--font-sans)'],
 			},
 
 			colors: {

@@ -47,7 +47,7 @@ const CreateUserModal = ({ isOpen, onClose, onCreate }: CreateUserModalProps) =>
             <div className="absolute inset-0 bg-black/60 backdrop-blur-sm -mt-20" onClick={onClose} />
 
             {/* Modal Content */}
-            <div className="relative -mt-20 bg-white dark:bg-zinc-900 w-full max-w-md rounded-2xl shadow-2xl overflow-hidden border border-gray-200 dark:border-white/10 animate-in fade-in zoom-in-95 duration-200">
+            <div className="relative -mt-20 bg-white dark:bg-zinc-900 w-full max-w-md rounded-lg shadow-2xl overflow-hidden border border-gray-200 dark:border-white/10 animate-in fade-in zoom-in-95 duration-200">
                 <div className="px-6 py-4 border-b border-gray-100 dark:border-white/5 flex justify-between items-center">
                     <h3 className="text-lg font-bold text-gray-900 dark:text-white">Thêm người dùng mới</h3>
                     <button onClick={onClose} className="text-gray-400 hover:text-black dark:hover:text-white transition">

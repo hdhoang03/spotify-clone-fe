@@ -61,7 +61,7 @@ const AddSongToCategoryModal = ({ isOpen, onClose, currentSongIds, onAdd }: AddS
             />
 
             {/* Hộp thoại Modal - Thêm relative và z-10 để nổi lên trên lớp nền */}
-            <div className="relative z-10 bg-white dark:bg-zinc-900 rounded-2xl shadow-2xl w-full max-w-lg border border-gray-100 dark:border-white/10 flex flex-col max-h-[85vh]">
+            <div className="relative z-10 bg-white dark:bg-zinc-900 rounded-lg shadow-2xl w-full max-w-lg border border-gray-100 dark:border-white/10 flex flex-col max-h-[85vh]">
                 <div className="flex items-center justify-between p-5 md:p-6 border-b border-gray-100 dark:border-white/5">
                     <div>
                         <h2 className="text-xl font-bold text-gray-900 dark:text-white">Thêm bài hát</h2>

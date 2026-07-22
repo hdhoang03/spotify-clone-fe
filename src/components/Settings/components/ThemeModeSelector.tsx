@@ -11,9 +11,9 @@ const ThemeModeSelector: React.FC<ThemeModeSelectorProps> = ({ themeMode, onChan
     const { t } = useTranslation();
 
     const modes = [
-        { id: 'light', icon: Sun, label: 'Light', desc: 'Sáng sủa, dễ nhìn ban ngày' },
-        { id: 'dark', icon: Moon, label: 'Dark', desc: 'Tối màu, bảo vệ mắt ban đêm' },
-        { id: 'system', icon: Monitor, label: 'System', desc: 'Tự động theo thiết bị' }
+        { id: 'light', icon: Sun, label: t('settings.theme_light') },
+        { id: 'dark', icon: Moon, label: t('settings.theme_dark') },
+        { id: 'system', icon: Monitor, label: t('settings.theme_system') }
     ] as const;
 
     return (
@@ -25,7 +25,7 @@ const ThemeModeSelector: React.FC<ThemeModeSelectorProps> = ({ themeMode, onChan
                     <button
                         key={mode.id}
                         onClick={() => onChange(mode.id)}
-                        className={`relative flex flex-col items-center justify-center p-4 rounded-2xl border-2 transition-all ${
+                        className={`relative flex flex-col items-center justify-center p-4 rounded-lg border-2 transition-all ${
                             isSelected 
                             ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20' 
                             : 'border-zinc-200 dark:border-zinc-800 bg-white dark:bg-[#121212] hover:border-zinc-300 dark:hover:border-zinc-700'
@@ -42,9 +42,6 @@ const ThemeModeSelector: React.FC<ThemeModeSelectorProps> = ({ themeMode, onChan
                         <h4 className={`font-semibold ${isSelected ? 'text-primary-600 dark:text-primary-400' : 'text-zinc-900 dark:text-zinc-100'}`}>
                             {mode.label}
                         </h4>
-                        <p className="text-xs text-center text-zinc-500 dark:text-zinc-400 mt-1">
-                            {mode.desc}
-                        </p>
                     </button>
                 );
             })}

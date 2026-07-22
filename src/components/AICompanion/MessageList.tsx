@@ -23,7 +23,7 @@ export const MessageList: React.FC<MessageListProps> = ({ messages, isLoading, e
             
             {isLoading && (
                 <div className="flex gap-3 justify-start">
-                    <div className="max-w-[75%] rounded-2xl px-5 py-4 bg-white dark:bg-[#1A1A1A] border border-zinc-200/50 dark:border-zinc-800/50 rounded-bl-sm shadow-sm flex items-center gap-1.5">
+                    <div className="max-w-[75%] rounded-lg px-5 py-4 bg-white dark:bg-[#1A1A1A] border border-zinc-200/50 dark:border-zinc-800/50 rounded-bl-sm shadow-sm flex items-center gap-1.5">
                         <span className="w-1.5 h-1.5 rounded-full bg-zinc-400 dark:bg-zinc-600 animate-bounce" style={{ animationDelay: '0ms' }} />
                         <span className="w-1.5 h-1.5 rounded-full bg-zinc-400 dark:bg-zinc-600 animate-bounce" style={{ animationDelay: '150ms' }} />
                         <span className="w-1.5 h-1.5 rounded-full bg-zinc-400 dark:bg-zinc-600 animate-bounce" style={{ animationDelay: '300ms' }} />
