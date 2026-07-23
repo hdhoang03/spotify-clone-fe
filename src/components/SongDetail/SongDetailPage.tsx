@@ -25,13 +25,13 @@ const SongDetailPage = () => {
                 const response = await api.get(`/song/${id}`);
                 const song = response.data?.result;
                 if (!song) {
-                    throw new Error("Không tìm thấy thông tin bài hát.");
+                    throw new Error("Song not found.");
                 }
                 setSongData(song);
 
             } catch (err: any) {
-                console.error("Lỗi khi tải bài hát từ QR Code:", err);
-                const errMsg = err.response?.data?.message || err.message || "Không thể kết nối tới hệ thống Backend.";
+                console.error("Error when loading song:", err);
+                const errMsg = err.response?.data?.message || err.message || "Failed to connect to the Backend system.";
                 setError(errMsg);
             } finally {
                 setIsLoading(false);
