@@ -121,7 +121,11 @@
 		"most_liked": "Được yêu thích nhất",
 		"limit": "Âm nhạc có giới hạn",
 		"smart_picks": "Khám phá hôm nay",
-		"long_time_no_hear": "Lâu rồi bạn chưa nghe"
+		"long_time_no_hear": "Lâu rồi bạn chưa nghe",
+		"morning": "Chào buổi sáng",
+		"afternoon": "Chiều năng suất nhé!",
+		"evening": "Tối chill nhẹ nhàng thôi!",
+		"night": "Khuya rồi, nghe nhạc thư giãn nhé!"
 	},
 	"filter": {
 		"all": "Tất cả",

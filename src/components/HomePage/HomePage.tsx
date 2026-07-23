@@ -93,6 +93,7 @@ const HomePage = () => {
                                 title={album.name}
                                 description={album.artist?.name || album.artistName || 'Album tuyển chọn'}
                                 imageUrl={album.albumUrl || album.avatarUrl || album.coverUrl}
+                                shape="landscape"
                                 onClick={() => navigate(`/albums/${album.id}`)}
                             />
                         ))}
@@ -161,7 +162,7 @@ const HomePage = () => {
                                         title={artist.name}
                                         description={t('home.artist_role')}
                                         imageUrl={artist.avatarUrl}
-                                        isRound={true}
+                                        shape="circle"
                                         onClick={() => navigate(`/artist/${artist.id}`)}
                                     />
                                 ))}

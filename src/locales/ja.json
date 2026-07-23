@@ -121,7 +121,11 @@
 		"most_liked": "最もいいねされた",
 		"limit": "制限された音楽",
 		"smart_picks": "スマートピックス",
-		"long_time_no_hear": "長い時間聞かない"
+		"long_time_no_hear": "長い時間聞かない",
+		"morning": "おはよう！",
+		"afternoon": "午後のリラックスタイム！",
+		"evening": "心地よい夜の始まり！",
+		"night": "夜はゆったり音楽を聴きましょう"
 	},
 	"filter": {
 		"all": "すべて",

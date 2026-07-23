@@ -10,9 +10,10 @@ interface SidebarItemProps {
     onClick?: () => void;
     variant?: 'nav' | 'playlist';
     isCollapsed?: boolean;
+    description?: string;
 }
 
-const SidebarItem = ({ icon, label, isActive, onClick, imageUrl, variant = 'nav', isCollapsed = false }: SidebarItemProps) => {
+const SidebarItem = ({ icon, label, isActive, onClick, imageUrl, variant = 'nav', isCollapsed = false, description }: SidebarItemProps) => {
     const isPlaylist = variant === 'playlist';
 
     // 2. State để lưu vị trí hiển thị Tooltip
@@ -78,12 +79,17 @@ const SidebarItem = ({ icon, label, isActive, onClick, imageUrl, variant = 'nav'
                         )}
                     </div>
 
-                    {/* Text Label (Chỉ hiện khi mở rộngss) */}
+                    {/* Text Label & Description (Chỉ hiện khi mở rộng) */}
                     {!isCollapsed && (
                         <div className="flex flex-col min-w-0 flex-1 ml-1 animate-in fade-in duration-200 justify-center">
                             <span className={`truncate leading-tight ${isPlaylist ? 'text-[15px]' : 'text-sm'} ${isActive ? 'font-semibold text-black dark:text-white' : 'font-medium text-zinc-600 dark:text-zinc-300 group-hover/item:text-black dark:group-hover/item:text-white'}`}>
                                 {label}
                             </span>
+                            {description && (
+                                <span className="text-[12px] text-zinc-500 dark:text-zinc-400 truncate mt-0.5">
+                                    {description}
+                                </span>
+                            )}
                         </div>
                     )}
                 </div>

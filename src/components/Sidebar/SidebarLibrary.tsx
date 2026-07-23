@@ -92,6 +92,7 @@ const Sidebar = ({ activeTab, onTabChange, isCollapsed, onToggleCollapse, classN
                                     variant="playlist"
                                     imageUrl={playlist.coverUrl}
                                     label={playlist.name}
+                                    description={`${playlist.songCount || 0} ${t('playlist.songs')}`}
                                     isActive={activeTab === `PLAYLIST_${playlist.id}`}
                                     onClick={() => {
                                         onTabChange?.(`PLAYLIST_${playlist.id}`); // Giữ lại nếu bạn cần quản lý state tab

@@ -7,14 +7,17 @@ const getStoredPremium = (): boolean | null => {
     return val !== null ? val === 'true' : null;
 };
 
-let cachedPremium: boolean | null = getStoredPremium(); // module-level cache để tránh gọi API nhiều lần
+let cachedPremium: boolean | null = getStoredPremium(); // module-level cache
+let hasFetchedThisSession = false;
 
 export const usePremiumStatus = () => {
+    // Initial state from cache if available
     const [isPremium, setIsPremium] = useState<boolean>(cachedPremium ?? false);
-    const [isLoading, setIsLoading] = useState<boolean>(cachedPremium === null);
+    const [isLoading, setIsLoading] = useState<boolean>(!hasFetchedThisSession);
 
     useEffect(() => {
-        if (cachedPremium !== null) {
+        // If we already verified with server this session, just use cache
+        if (hasFetchedThisSession && cachedPremium !== null) {
             setIsPremium(cachedPremium);
             setIsLoading(false);
             return;
@@ -25,6 +28,9 @@ export const usePremiumStatus = () => {
             setIsLoading(false);
             return;
         }
+
+        // Mark as fetching to prevent duplicate calls from other components mounting simultaneously
+        hasFetchedThisSession = true;
 
         api.get('/user/my-premium')
             .then(res => {
@@ -42,16 +48,27 @@ export const usePremiumStatus = () => {
     }, []);
 
     // Lắng nghe event 'premium-updated' bắn từ PlanCard sau khi thanh toán thành công
-    // → cập nhật state cho TẤT CẢ component đang dùng hook này (PlayerOptionsMenu, ...)
+    // hoặc đăng nhập/đăng xuất
     useEffect(() => {
         const handler = (e: Event) => {
             const detail = (e as CustomEvent<{ isPremium: boolean }>).detail;
-            cachedPremium = detail.isPremium; // Cập nhật cache module
-            localStorage.setItem('is_premium', String(detail.isPremium));
-            setIsPremium(detail.isPremium);
+            if (detail && typeof detail.isPremium === 'boolean') {
+                cachedPremium = detail.isPremium;
+                localStorage.setItem('is_premium', String(detail.isPremium));
+                setIsPremium(detail.isPremium);
+            } else {
+                // Event user-update (đăng xuất/đăng nhập)
+                hasFetchedThisSession = false;
+                cachedPremium = null;
+                localStorage.removeItem('is_premium');
+            }
         };
         window.addEventListener('premium-updated', handler);
-        return () => window.removeEventListener('premium-updated', handler);
+        window.addEventListener('user-update', handler);
+        return () => {
+            window.removeEventListener('premium-updated', handler);
+            window.removeEventListener('user-update', handler);
+        };
     }, []);
 
     // Hàm để invalidate cache (gọi sau khi thanh toán thành công)

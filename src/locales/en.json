@@ -135,7 +135,11 @@
 		"most_liked": "Most Liked",
 		"limit": "Limited Music",
 		"smart_picks": "Smart Picks",
-		"long_time_no_hear": "Long time no hear"
+		"long_time_no_hear": "Long time no hear",
+		"morning": "Good morning!",
+		"afternoon": "Afternoon productivity boost!",
+		"evening": "Chill evening vibe!",
+		"night": "Relax with music tonight!"
 	},
 	"filter": {
 		"all": "All",

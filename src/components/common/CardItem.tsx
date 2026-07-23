@@ -8,7 +8,8 @@ interface CardItemProps {
     title: string;
     description: string;
     imageUrl?: string;
-    isRound?: boolean;
+    isRound?: boolean; // legacy
+    shape?: 'square' | 'landscape' | 'circle' | 'list';
     isPlaying?: boolean;
     isCurrent?: boolean;
     onClick?: () => void;
@@ -22,16 +23,29 @@ const itemVariants: Variants = {
 const CardItem = ({
     title, description, imageUrl,
     isRound = false,
+    shape,
     isPlaying = false,
     isCurrent = false,
     onClick
 }: CardItemProps) => {
+    const finalShape = shape || (isRound ? 'circle' : 'square');
+    const isCircle = finalShape === 'circle';
+    const isLandscape = finalShape === 'landscape';
+    const isList = finalShape === 'list';
+
+    // Layout configuration
+    let sizeClass = "w-full aspect-square";
+    if (isLandscape) sizeClass = "w-full aspect-[4/3] sm:aspect-[16/9]";
+    if (isList) sizeClass = "w-14 h-14 md:w-16 md:h-16 flex-shrink-0";
+
+    const isHorizontalLayout = isList;
     return (
         <motion.div
             variants={itemVariants}
             onClick={onClick}
             className={`
-                group p-3 rounded-lg cursor-pointer transition-all duration-300 relative
+                group rounded-lg cursor-pointer transition-all duration-300 relative
+                ${isHorizontalLayout ? 'flex items-center gap-3 p-2.5' : 'flex flex-col p-3'}
                 ${isCurrent
                     ? 'bg-primary-500/[0.07] dark:bg-primary-500/[0.05] ring-1 ring-primary-500/20'
                     : 'hover:bg-zinc-100 dark:hover:bg-white/[0.06]'
@@ -40,16 +54,16 @@ const CardItem = ({
             `}
         >
             {/* Cover */}
-            <div className="mb-3 relative">
+            <div className={`${isHorizontalLayout ? '' : 'mb-3'} relative flex-shrink-0`}>
                 <TiltCover
                     src={imageUrl}
                     alt={title}
-                    sizeClass="w-full aspect-square"
-                    radiusClass={isRound ? 'rounded-full' : 'rounded-md'}
-                    maxTilt={6}
+                    sizeClass={sizeClass}
+                    radiusClass={isCircle ? 'rounded-full' : 'rounded-md'}
+                    maxTilt={isHorizontalLayout ? 0 : 6}
                     onClick={onClick}
                     hoverOverlay={
-                        !isRound ? (
+                        !isCircle ? (
                             <div className="absolute inset-0 flex items-end justify-end p-2.5
                                             opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                                 <motion.button
@@ -69,20 +83,20 @@ const CardItem = ({
                 />
 
                 {/* Playing equalizer badge — bottom-left corner of cover */}
-                {isCurrent && isPlaying && !isRound && (
+                {isCurrent && isPlaying && !isCircle && (
                     <div className="absolute bottom-2 left-2 p-1 bg-black/50 backdrop-blur-md rounded-md pointer-events-none">
                         <EqualizerBars />
                     </div>
                 )}
 
                 {/* Shadow under card */}
-                {!isRound && (
+                {!isCircle && !isHorizontalLayout && (
                     <div className="absolute -bottom-1 left-2 right-2 h-4 bg-black/[0.08] dark:bg-black/20 blur-md rounded-md -z-10" />
                 )}
             </div>
 
             {/* Info */}
-            <div className="flex flex-col gap-0.5 px-0.5">
+            <div className={`flex flex-col gap-0.5 ${isHorizontalLayout ? 'min-w-0 flex-1' : 'px-0.5'}`}>
                 <h3 className={`font-bold text-sm truncate transition-colors duration-150
                     ${isCurrent ? 'text-primary-500 dark:text-primary-400' : 'text-zinc-900 dark:text-white'}`}>
                     {title}

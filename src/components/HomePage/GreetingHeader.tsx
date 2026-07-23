@@ -11,18 +11,18 @@ export const GreetingHeader: React.FC = () => {
 
     useEffect(() => {
         const hour = new Date().getHours();
-        
+
         if (hour >= 5 && hour < 12) {
-            setGreeting('Chào buổi sáng!'); // Hoặc dùng t('home.good_morning')
+            setGreeting(t('home.morning')); // Hoặc dùng t('home.good_morning')
             setOrbColors({ primary: 'bg-amber-400', secondary: 'bg-orange-500' });
         } else if (hour >= 12 && hour < 18) {
-            setGreeting('Chiều năng suất nhé!'); // Hoặc dùng t('home.good_afternoon')
+            setGreeting(t('home.afternoon')); // Hoặc dùng t('home.good_afternoon')
             setOrbColors({ primary: 'bg-sky-400', secondary: 'bg-cyan-500' });
         } else if (hour >= 18 && hour < 23) {
-            setGreeting('Tối chill nhẹ nhàng thôi!'); // Hoặc dùng t('home.good_evening')
+            setGreeting(t('home.evening')); // Hoặc dùng t('home.good_evening')
             setOrbColors({ primary: 'bg-purple-400', secondary: 'bg-pink-500' });
         } else {
-            setGreeting('Khuya rồi, nghe nhạc thư giãn nhé!'); // Hoặc dùng t('home.good_night')
+            setGreeting(t('home.night')); // Hoặc dùng t('home.good_night')
             setOrbColors({ primary: 'bg-indigo-500', secondary: 'bg-blue-600' });
         }
     }, [t]);

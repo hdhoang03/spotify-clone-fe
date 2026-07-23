@@ -50,6 +50,7 @@ export const SmartPicksSection: React.FC<SmartPicksProps> = ({
                     title={song.title}
                     description={song.artist}
                     imageUrl={song.coverUrl}
+                    shape="landscape"
                     isCurrent={currentSong?.id === song.id}
                     isPlaying={currentSong?.id === song.id && isPlaying}
                     onClick={() => onPlay(song, picks)}

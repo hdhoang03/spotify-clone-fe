@@ -35,6 +35,7 @@ export const ThrowbackSection: React.FC<ThrowbackProps> = ({
                     title={song.title}
                     description={song.artist}
                     imageUrl={song.coverUrl}
+                    shape="list"
                     isCurrent={currentSong?.id === song.id}
                     isPlaying={currentSong?.id === song.id && isPlaying}
                     onClick={() => onPlay(song, picks)}
