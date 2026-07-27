@@ -57,7 +57,7 @@ const FilterBar = ({ activeTab, onTabChange, isFollowingMode, onToggleFollowing,
     return (
         <div className="sticky top-4 z-30 flex items-center justify-between pointer-events-none transition-all duration-300 mb-8"
         >
-            <div className="flex items-center gap-2 overflow-x-auto no-scrollbar flex-1 px-4 pointer-events-auto mask-image-scroll">
+            <div className="flex items-center gap-2 overflow-x-auto no-scrollbar flex-1 px-8 pointer-events-auto mask-image-scroll">
                 {/* Floating Pill Container */}
                 <div className="flex items-center gap-1 p-1 bg-white/70 dark:bg-black/50 backdrop-blur-md rounded-full shadow-[0_4px_20px_rgba(0,0,0,0.08)] border border-black/5 dark:border-white/10">
                     <FilterButton
