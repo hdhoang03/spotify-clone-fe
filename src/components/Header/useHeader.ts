@@ -3,6 +3,7 @@ import type { UserResponse } from '../../types/backend';
 import { NotificationService } from '../../services/notificationServiceApi';
 import { AuthService } from '../../services/authService';
 import { useNotificationSSE } from '../../hooks/useNotificationSSE';
+import { UserService } from '../../services/userService';
 
 
 export const useHeader = (
@@ -87,37 +88,29 @@ export const useHeader = (
     // --- LOGIC KHỞI TẠO ---
 
     useEffect(() => {
-        // const loadUserFromStorage = () => { /* code cũ của bạn */ };
-        // loadUserFromStorage();
-
         // Lắng nghe lệnh mở cửa sổ Đăng nhập từ mọi nơi trong App
         const handleOpenAuth = () => setIsAuthModalOpen(true);
         window.addEventListener('open-auth-modal', handleOpenAuth);
-
-        // Cleanup
         return () => window.removeEventListener('open-auth-modal', handleOpenAuth);
     }, []);
 
     useEffect(() => {
-        const loadUserFromStorage = () => {
+        // Gọi API Server để lấy role THẬT của user, không tin localStorage
+        // → Kẻ tấn công sửa localStorage cũng không thể giả role ADMIN trên UI
+        const loadVerifiedUser = async () => {
             try {
-                const storedUser = localStorage.getItem('user');
-                if (storedUser) {
-                    const parsedUser = JSON.parse(storedUser);
-                    setUser(parsedUser);
-                } else {
-                    setUser(null);
-                }
-            } catch (error) {
-                console.error("Lỗi parse user:", error);
+                const verifiedUser = await UserService.getProfile();
+                setUser(verifiedUser as UserResponse | null);
+            } catch {
                 setUser(null);
             }
         };
 
-        loadUserFromStorage();
+        loadVerifiedUser();
 
-        // Lắng nghe sự kiện chính mình bắn ra (để đồng bộ các tab hoặc component khác)
-        const handleUserUpdate = () => loadUserFromStorage();
+        // Khi có sự kiện user-update (đăng nhập/đăng xuất/cập nhật profile)
+        // → Gọi lại API để đồng bộ user state mới nhất từ server
+        const handleUserUpdate = () => loadVerifiedUser();
         window.addEventListener('user-update', handleUserUpdate);
 
         return () => window.removeEventListener('user-update', handleUserUpdate);

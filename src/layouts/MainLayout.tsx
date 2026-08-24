@@ -7,6 +7,7 @@ import MobileNavigation from '../components/Sidebar/MobileNavigation';
 import { useNavigate } from 'react-router-dom';
 import { useMusic } from '../contexts/MusicContent';
 import { AICompanion } from '../components/AICompanion';
+import { UserService } from '../services/userService';
 
 
 interface MainLayoutProps {
@@ -25,11 +26,16 @@ const MainLayout = ({ children, activeTab = 'HOME', onTabChange }: MainLayoutPro
 
 	const { isSidebarPlayerOpen, setIsSidebarPlayerOpen } = useMusic();
 
-	// 2. Logic đồng bộ User từ LocalStorage + Lắng nghe sự kiện
+	// 2. Xác minh user từ Server — không tin localStorage
+	// Sidebar chỉ hiện khi server xác nhận user hợp lệ
 	useEffect(() => {
-		const checkUser = () => {
-			const stored = localStorage.getItem('user');
-			setLocalUser(stored ? JSON.parse(stored) : null);
+		const checkUser = async () => {
+			try {
+				const verifiedUser = await UserService.getProfile();
+				setLocalUser(verifiedUser);
+			} catch {
+				setLocalUser(null);
+			}
 		};
 		checkUser();
 		window.addEventListener('user-update', checkUser);
