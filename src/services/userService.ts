@@ -1,49 +1,70 @@
+import api from './api';
 import type { UserProfile } from '../constants/profile';
 
 export const UserService = {
-    // 1. GET: Lấy thông tin - Bỏ delay ảo, trả về ngay lập tức
+    // 1. GET: Lấy thông tin user thực từ server (không đọc localStorage)
     getProfile: async (): Promise<UserProfile | null> => {
-        // Lấy trực tiếp từ localStorage, không cần chờ 500ms
-        const saved = localStorage.getItem('user'); // Dùng thống nhất key 'user'
-        if (saved) {
-            return JSON.parse(saved);
+        const token = localStorage.getItem('token');
+
+        // Guest chưa đăng nhập → trả về null ngay, không gọi API
+        if (!token || token === 'null' || token === 'undefined') return null;
+
+        try {
+            const res = await api.get('/user/my');
+            const user = res.data?.result ?? null;
+
+            // Cập nhật cache localStorage với dữ liệu mới nhất từ server
+            if (user) {
+                localStorage.setItem('user', JSON.stringify(user));
+                localStorage.setItem('user_profile', JSON.stringify(user));
+            }
+            return user;
+        } catch (err: any) {
+            const status = err?.response?.status;
+
+            // Token không hợp lệ / hết hạn (401/403) → xóa session hẳn, trả về null
+            // KHÔNG fallback về cache vì cache có thể chứa token/role giả
+            if (status === 401 || status === 403) {
+                console.warn('[UserService] Token invalid, clearing session...');
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                localStorage.removeItem('user_profile');
+                window.dispatchEvent(new Event('user-update'));
+                return null;
+            }
+
+            // Lỗi mạng tạm thời (ERR_NETWORK, 5xx, ...) → fallback về cache để không mất UX
+            console.error('[UserService] Lỗi mạng, dùng cache tạm:', err);
+            const cached = localStorage.getItem('user');
+            return cached ? JSON.parse(cached) : null;
         }
-        return null;
     },
 
-    // 2. UPDATE: Cập nhật thông tin & BẮN SỰ KIỆN ĐỒNG BỘ
+    // 2. UPDATE: Gửi lên server và đồng bộ lại localStorage
     updateProfile: async (data: Partial<UserProfile>): Promise<UserProfile> => {
-        return new Promise((resolve) => {
-            // Giữ delay nhỏ ở đây để tạo cảm giác "đang lưu" cho UX (tùy chọn)
-            setTimeout(() => {
-                const saved = localStorage.getItem('user');
-                const currentUser = saved ? JSON.parse(saved) : {};
+        const res = await api.patch('/user/my', data);
+        const updatedUser = res.data?.result;
 
-                // Gộp thông tin cũ và mới
-                const updatedUser = { ...currentUser, ...data };
+        // Cập nhật cache sau khi server xác nhận thành công
+        localStorage.setItem('user', JSON.stringify(updatedUser));
+        localStorage.setItem('user_profile', JSON.stringify(updatedUser));
 
-                // Lưu lại vào cả 2 key để đảm bảo tương thích
-                localStorage.setItem('user', JSON.stringify(updatedUser));
-                localStorage.setItem('user_profile', JSON.stringify(updatedUser));
+        // Bắn sự kiện để Header (Avatar) và Sidebar cập nhật ngay lập tức
+        window.dispatchEvent(new Event('user-update'));
 
-                // --- QUAN TRỌNG NHẤT ---
-                // Bắn sự kiện để Header (Avatar) và Sidebar cập nhật ngay lập tức
-                window.dispatchEvent(new Event('user-update')); 
-                // ------------------------
-
-                resolve(updatedUser);
-            }, 300); // Delay 300ms cho mượt
-        });
+        return updatedUser;
     },
 
-    // 3. UPLOAD: Giả lập upload ảnh
+    // 3. UPLOAD: Upload ảnh lên server thực qua multipart/form-data
     uploadAvatar: async (file: File): Promise<string> => {
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                // Tạo URL ảo từ file người dùng chọn
-                const fakeUrl = URL.createObjectURL(file);
-                resolve(fakeUrl);
-            }, 1000); // Giả lập mạng chậm khi upload ảnh
+        const formData = new FormData();
+        formData.append('file', file);
+
+        const res = await api.post('/user/avatar', formData, {
+            headers: { 'Content-Type': 'multipart/form-data' }
         });
+
+        // Backend trả về URL CDN thực (Cloudinary, S3,...)
+        return res.data?.result?.avatarUrl ?? res.data?.result;
     }
 };

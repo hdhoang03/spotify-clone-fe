@@ -87,8 +87,8 @@ export const useHeader = (
     // --- LOGIC KHỞI TẠO ---
 
     useEffect(() => {
-        const loadUserFromStorage = () => { /* code cũ của bạn */ };
-        loadUserFromStorage();
+        // const loadUserFromStorage = () => { /* code cũ của bạn */ };
+        // loadUserFromStorage();
 
         // Lắng nghe lệnh mở cửa sổ Đăng nhập từ mọi nơi trong App
         const handleOpenAuth = () => setIsAuthModalOpen(true);
