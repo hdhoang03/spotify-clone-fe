@@ -1,17 +1,30 @@
 import { useState, useEffect } from 'react';
+import i18n from '../i18n';
+
+const SUPPORTED_LANGS = ['vi', 'en', 'ko', 'ja'];
+
+// Lấy ngôn ngữ hiện tại từ i18n (nguồn thật) — tránh mismatch với springtunes_settings
+const getInitialLanguage = (): string => {
+    const lang = i18n.language?.split('-')[0]; // "en-US" → "en"
+    return SUPPORTED_LANGS.includes(lang) ? lang : 'en';
+};
 
 const DEFAULT_SETTINGS = {
     autoplay: true,
-    language: 'vi',
+    language: getInitialLanguage(),
     lowPerf: false,
 };
 
 export const useAppSettings = () => {
     const [settings, setSettings] = useState(() => {
         const saved = localStorage.getItem('springtunes_settings');
-        const parsed = saved ? JSON.parse(saved) : DEFAULT_SETTINGS;
-        // Merge with DEFAULT_SETTINGS to handle updates to DEFAULT_SETTINGS
-        return { ...DEFAULT_SETTINGS, ...parsed };
+        const parsed = saved ? JSON.parse(saved) : {};
+        return {
+            ...DEFAULT_SETTINGS,
+            ...parsed,
+            // Luôn sync language từ i18n để dropdown hiển thị đúng ngôn ngữ đang dùng
+            language: parsed.language ?? getInitialLanguage(),
+        };
     });
 
     useEffect(() => {

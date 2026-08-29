@@ -10,6 +10,7 @@ import SidebarPlayer from './SidebarPlayer/SidebarPlayer';
 import { useMusic } from '../../contexts/MusicContent';
 import ArtistLinks from '../common/ArtistLinks';
 import api from '../../services/api';
+import { getUICache } from '../../utils/userStorage';
 
 import { useDominantColor } from './hooks/useDominantColor';
 import { useFloatingDrag } from './hooks/useFloatingDrag';
@@ -90,14 +91,18 @@ const MusicPlayer = () => {
     const dominantColor = useDominantColor(currentSong?.coverUrl, currentSong?.id);
     const [isVisible, setIsVisible] = useState(true);
     const { isLiked, toggleLike } = useLikeSong(currentSong?.id);
-    const [isLoggedIn, setIsLoggedIn] = useState(() => Boolean(localStorage.getItem('token')));
+    const [isLoggedIn, setIsLoggedIn] = useState(() => Boolean(getUICache()));
 
     useEffect(() => {
         const handleUserUpdate = () => {
-            setIsLoggedIn(Boolean(localStorage.getItem('token')));
+            setIsLoggedIn(Boolean(getUICache()));
         };
         window.addEventListener('user-update', handleUserUpdate);
-        return () => window.removeEventListener('user-update', handleUserUpdate);
+        window.addEventListener('user-logout', handleUserUpdate);
+        return () => {
+            window.removeEventListener('user-update', handleUserUpdate);
+            window.removeEventListener('user-logout', handleUserUpdate);
+        };
     }, []);
 
     const player = useAudioPlayer(undefined, !isLoggedIn);

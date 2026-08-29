@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import api from './services/api';
+import { setUICache } from './utils/userStorage';
 
 const OAuth2Callback = () => {
     const [searchParams] = useSearchParams();
@@ -13,20 +14,19 @@ const OAuth2Callback = () => {
         if (code) {
             // Lấy lại đúng redirectUri mà frontend đã dùng để yêu cầu code ban đầu
             const redirectUri = encodeURIComponent(`${window.location.origin}/oauth2/callback`);
-            
-            // Gửi code xuống API backend của bạn, kèm theo redirectUri
+
+            // Gửi code xuống API backend — BE sẽ set httpOnly cookie, không trả token trong body
             api.post(`/auth/outbound/authentication?code=${code}&redirectUri=${redirectUri}`)
                 .then(async (response) => {
                     const data = response.data;
                     if (data.code === 1000) {
-                        // Đăng nhập thành công, lưu Token vào localStorage
-                        localStorage.setItem('token', data.result.token);
-
+                        // Cookie đã được set tự động bởi BE
                         // Lấy thông tin user (giống với login bình thường)
                         try {
                             const userRes = await api.get('/user/my');
-                            localStorage.setItem('user', JSON.stringify(userRes.data.result));
-                            window.dispatchEvent(new Event('user-update')); // Bắn event để Header update
+                            // ✅ Chỉ lưu 3 field tối giản – không lưu email/role/...
+                            setUICache(userRes.data.result);
+                            window.dispatchEvent(new Event('user-update'));
                         } catch (err) {
                             console.error("Lỗi lấy thông tin user:", err);
                         }

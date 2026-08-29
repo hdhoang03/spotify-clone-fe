@@ -34,11 +34,16 @@ export const useUserProfile = () => {
         const handleUpdate = () => {
             fetchUser(); // Load lại data mới nhất từ localStorage
         };
+        const handleLogout = () => {
+            setUser(null);
+        };
         window.addEventListener(USER_UPDATE_EVENT, handleUpdate);
         window.addEventListener(USER_UPDATE_EVENT_GLOBAL, handleUpdate);
+        window.addEventListener('user-logout', handleLogout);
         return () => {
             window.removeEventListener(USER_UPDATE_EVENT, handleUpdate);
             window.removeEventListener(USER_UPDATE_EVENT_GLOBAL, handleUpdate);
+            window.removeEventListener('user-logout', handleLogout);
         };
     }, [fetchUser]);
 

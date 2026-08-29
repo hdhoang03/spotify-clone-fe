@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useMusic } from '../../contexts/MusicContent'; // Đảm bảo đúng đường dẫn tới MusicContext của bạn
+import { useMusic } from '../../contexts/MusicContent';
 import { Play, Loader2, Music, AlertCircle } from 'lucide-react';
 import api from '../../services/api';
+import { getUICache } from '../../utils/userStorage';
 
 const SongDetailPage = () => {
     const { id } = useParams<{ id: string }>();
@@ -41,7 +42,7 @@ const SongDetailPage = () => {
         fetchSongMetadata();
     }, [id]);
 
-    const isLoggedIn = Boolean(localStorage.getItem('token'));
+    const isLoggedIn = Boolean(getUICache());
 
     // Tự động phát khi redirect từ đăng nhập thành công
     useEffect(() => {

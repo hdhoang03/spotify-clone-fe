@@ -157,6 +157,8 @@ const ArtistActionBar = ({
                 onClose={() => setIsSheetOpen(false)}
                 artistName={artistName}
                 artistImage={artistImage}
+                onShareArtist={() => { setIsSheetOpen(false); onShareArtist?.(); }}
+                onCopyLink={() => { setIsSheetOpen(false); onCopyLink?.(); }}
             />
         </div>
     );

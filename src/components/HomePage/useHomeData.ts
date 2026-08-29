@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import api from '../../services/api';
+import { getUICache } from '../../utils/userStorage';
 
 export const normalizeSong = (song: any): any => ({
     id: song.id || song.songId,
@@ -33,7 +34,7 @@ export const useHomeData = (activeTab: string, isFollowingMode: boolean) => {
     useEffect(() => {
         const fetchHomeData = async () => {
             setIsLoading(true);
-            const isLoggedIn = !!localStorage.getItem('token');
+            const isLoggedIn = !!getUICache();
 
             try {
                 const followingSuffix = isLoggedIn && isFollowingMode ? '?following=true' : '';

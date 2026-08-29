@@ -17,6 +17,7 @@ import { useNavigate } from 'react-router-dom';
 import { useMusic } from '../../contexts/MusicContent';
 import PageLoader from '../common/PageLoader';
 import { useTranslation } from 'react-i18next';
+import { getUICache } from '../../utils/userStorage';
 
 const ProfilePage = () => {
     const { id } = useParams<{ id: string }>();
@@ -30,8 +31,7 @@ const ProfilePage = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { playPlaylist, currentSong } = useMusic();
-    const token = localStorage.getItem('token');
-    const isLoggedIn = !!token && token !== 'null' && token !== 'undefined';
+    const isLoggedIn = !!getUICache();
 
     const [showAllTracks, setShowAllTracks] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);

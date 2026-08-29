@@ -43,7 +43,11 @@ const HomePage = () => {
             setIsLoggedIn(!!(userString && userString !== 'undefined'));
         };
         window.addEventListener('user-update', checkLoginStatus);
-        return () => window.removeEventListener('user-update', checkLoginStatus);
+        window.addEventListener('user-logout', checkLoginStatus);
+        return () => {
+            window.removeEventListener('user-update', checkLoginStatus);
+            window.removeEventListener('user-logout', checkLoginStatus);
+        };
     }, []);
 
     const { data, isLoading } = useHomeData(activeTab, isFollowingMode);

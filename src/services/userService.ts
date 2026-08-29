@@ -1,53 +1,54 @@
 import api from './api';
 import type { UserProfile } from '../constants/profile';
+import { setUICache, getUICache, clearSession } from '../utils/userStorage';
 
 export const UserService = {
-    // 1. GET: Lấy thông tin user thực từ server (không đọc localStorage)
+    // 1. GET: Lấy thông tin user thực từ server (không tin localStorage)
     getProfile: async (): Promise<UserProfile | null> => {
-        const token = localStorage.getItem('token');
+        // Nếu không có ui_cache, chắc chắn là khách (Guest)
+        // -> Trả về null luôn để tránh gọi API /user/my vô ích gây lỗi 401 đỏ console.
+        if (!getUICache()) {
+            return null;
+        }
 
-        // Guest chưa đăng nhập → trả về null ngay, không gọi API
-        if (!token || token === 'null' || token === 'undefined') return null;
-
+        // Auth trạng thái được xác định bởi httpOnly cookie — không cần kiểm tra localStorage.token nữa
+        // Nếu không có cookie hợp lệ, server sẽ trả 401 → được bắt ở catch block phía dưới
         try {
             const res = await api.get('/user/my');
-            const user = res.data?.result ?? null;
+            const user: UserProfile = res.data?.result ?? null;
 
-            // Cập nhật cache localStorage với dữ liệu mới nhất từ server
             if (user) {
-                localStorage.setItem('user', JSON.stringify(user));
-                localStorage.setItem('user_profile', JSON.stringify(user));
+                // ✅ Chỉ cache 3 field tối giản cho UI (avatar, tên) – không lưu email/role
+                setUICache(user);
             }
             return user;
         } catch (err: any) {
             const status = err?.response?.status;
 
-            // Token không hợp lệ / hết hạn (401/403) → xóa session hẳn, trả về null
-            // KHÔNG fallback về cache vì cache có thể chứa token/role giả
+            // Token không hợp lệ / hết hạn (401/403) → xóa session, trả về null
+            // Điều này thường do không có cookie hoặc cookie hết hạn
             if (status === 401 || status === 403) {
-                console.warn('[UserService] Token invalid, clearing session...');
-                localStorage.removeItem('token');
-                localStorage.removeItem('user');
-                localStorage.removeItem('user_profile');
-                window.dispatchEvent(new Event('user-update'));
+                clearSession();
+                window.dispatchEvent(new Event('user-logout'));
                 return null;
             }
 
-            // Lỗi mạng tạm thời (ERR_NETWORK, 5xx, ...) → fallback về cache để không mất UX
-            console.error('[UserService] Lỗi mạng, dùng cache tạm:', err);
-            const cached = localStorage.getItem('user');
-            return cached ? JSON.parse(cached) : null;
+            // Lỗi mạng tạm thời (ERR_NETWORK, 5xx, ...) → fallback về UI cache
+            // Cache này chỉ có id/name/avatarUrl nên an toàn hơn trước
+            console.error('[UserService] Lỗi mạng, dùng UI cache tạm:', err);
+            const cached = getUICache();
+            // Trả về partial profile – caller cần handle null cho các field nhạy cảm
+            return cached as unknown as UserProfile | null;
         }
     },
 
-    // 2. UPDATE: Gửi lên server và đồng bộ lại localStorage
+    // 2. UPDATE: Gửi lên server và đồng bộ lại UI cache
     updateProfile: async (data: Partial<UserProfile>): Promise<UserProfile> => {
         const res = await api.patch('/user/my', data);
-        const updatedUser = res.data?.result;
+        const updatedUser: UserProfile = res.data?.result;
 
-        // Cập nhật cache sau khi server xác nhận thành công
-        localStorage.setItem('user', JSON.stringify(updatedUser));
-        localStorage.setItem('user_profile', JSON.stringify(updatedUser));
+        // ✅ Chỉ cập nhật UI cache sau khi server xác nhận thành công
+        setUICache(updatedUser);
 
         // Bắn sự kiện để Header (Avatar) và Sidebar cập nhật ngay lập tức
         window.dispatchEvent(new Event('user-update'));

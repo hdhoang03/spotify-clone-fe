@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, lazy, Suspense } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Loader2, Play } from 'lucide-react';
+import { getUICache } from '../../utils/userStorage';
 
 // Lazy import — chỉ tải khi cần, giảm initial bundle
 const PlaylistSkeleton = lazy(() => import('./PlaylistSkeleton'));
@@ -109,11 +110,9 @@ const PlaylistDetailPage = () => {
         }
     };
 
-    const userStr = localStorage.getItem('user');
-    const currentUser = userStr ? JSON.parse(userStr) : null;
-
-    // 2. So sánh ID để xác định quyền sở hữu[cite: 113]
-    // Lưu ý: playlist.user.id là ID trả về từ API[cite: 108]
+    // Dùng getUICache() — chuẩn mới sau khi chuyển sang cookie auth
+    // localStorage.getItem('user') luôn trả null vì token đã migrate sang httpOnly cookie
+    const currentUser = getUICache();
     const isOwner = currentUser?.id === playlist?.user?.id;
 
     // Guard đã xử lý ở trên (isLoading / isDeleting → skeleton)

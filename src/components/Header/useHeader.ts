@@ -4,6 +4,20 @@ import { NotificationService } from '../../services/notificationServiceApi';
 import { AuthService } from '../../services/authService';
 import { useNotificationSSE } from '../../hooks/useNotificationSSE';
 import { UserService } from '../../services/userService';
+import { setUICache, clearSession } from '../../utils/userStorage';
+
+/**
+ * Kiểm tra URL có an toàn để redirect không (chỉ cho phép cùng origin).
+ * Ngăn chặn Open Redirect Attack: kẻ tấn công inject URL ngoài vào sessionStorage.
+ */
+const isSafeRedirectUrl = (url: string): boolean => {
+    try {
+        const parsed = new URL(url, window.location.origin);
+        return parsed.origin === window.location.origin;
+    } catch {
+        return false;
+    }
+};
 
 
 export const useHeader = (
@@ -41,17 +55,15 @@ export const useHeader = (
         setIsProfileMenuOpen(false);
 
         // Bắn sự kiện để UI ẩn sidebar ngay lập tức
-        window.dispatchEvent(new Event('user-update'));
+        window.dispatchEvent(new Event('user-logout'));
         if (onNavigate) onNavigate('HOME');
 
-        // Gọi AuthService.logout() để invalidate token trên server và xóa sạch localStorage
+        // Gọi AuthService.logout() để invalidate token trên server và xóa sạch session
         try {
             await AuthService.logout();
         } catch (e) {
-            // Dù server lỗi vẫn đảm bảo storage được xóa
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
-            localStorage.removeItem('user_profile');
+            // Dù server lỗi vẫn đảm bảo session được xóa sạch
+            clearSession();
             window.location.reload();
         }
     };
@@ -69,19 +81,21 @@ export const useHeader = (
         setUser(fullUserData);
         setIsAuthModalOpen(false);
 
-        localStorage.setItem('user', JSON.stringify(fullUserData));
-        localStorage.setItem('user_profile', JSON.stringify(fullUserData));
+        // ✅ Chỉ lưu UI cache tối giản (id, name, avatarUrl) - không lưu full object
+        setUICache(fullUserData);
 
         // Bắn sự kiện để MainLayout cập nhật Sidebar/Menu
         window.dispatchEvent(new Event('user-update'));
 
         onLoginSuccessAction?.(fullUserData);
 
-        // Kiểm tra xem có yêu cầu chuyển hướng phát nhạc sau khi đăng nhập hay không
+        // ✅ Kiểm tra redirect an toàn - chỉ cho phép cùng origin (ngăn Open Redirect)
         const redirectUrl = sessionStorage.getItem('post_login_redirect');
         if (redirectUrl) {
             sessionStorage.removeItem('post_login_redirect');
-            window.location.href = redirectUrl;
+            if (isSafeRedirectUrl(redirectUrl)) {
+                window.location.href = redirectUrl;
+            }
         }
     };
 
@@ -111,9 +125,15 @@ export const useHeader = (
         // Khi có sự kiện user-update (đăng nhập/đăng xuất/cập nhật profile)
         // → Gọi lại API để đồng bộ user state mới nhất từ server
         const handleUserUpdate = () => loadVerifiedUser();
+        const handleUserLogout = () => setUser(null);
+        
         window.addEventListener('user-update', handleUserUpdate);
+        window.addEventListener('user-logout', handleUserLogout);
 
-        return () => window.removeEventListener('user-update', handleUserUpdate);
+        return () => {
+            window.removeEventListener('user-update', handleUserUpdate);
+            window.removeEventListener('user-logout', handleUserLogout);
+        };
     }, []);
 
     // Nhận currentUser là tham số để tránh stale closure

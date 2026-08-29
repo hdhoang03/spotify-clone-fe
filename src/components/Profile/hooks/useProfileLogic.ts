@@ -7,6 +7,7 @@ import type { ConfirmActionType } from '../../Admin/ConfirmModal';
 import { getPlaylistCover, getArtistAvatar } from '../../../utils/avatarUrl';
 import { useTranslation } from 'react-i18next';
 import { playlistApi } from '../../../components/Sidebar/playlistApi';
+import { getUICache } from '../../../utils/userStorage';
 
 export const useProfileLogic = (userId: string | undefined) => {
     const { t } = useTranslation();
@@ -165,8 +166,7 @@ export const useProfileLogic = (userId: string | undefined) => {
     const playlistsWithNavigation = useMemo(
         () => displayPlaylists.map(p => ({
             ...p, onClick: () => {
-                const token = localStorage.getItem('token');
-                if (!token || token === 'null' || token === 'undefined') {
+                if (!getUICache()) {
                     window.dispatchEvent(new Event('open-auth-modal'));
                     return;
                 }
@@ -179,8 +179,7 @@ export const useProfileLogic = (userId: string | undefined) => {
     const followingWithNavigation = useMemo(
         () => following.map(a => ({
             ...a, onClick: () => {
-                const token = localStorage.getItem('token');
-                if (!token || token === 'null' || token === 'undefined') {
+                if (!getUICache()) {
                     window.dispatchEvent(new Event('open-auth-modal'));
                     return;
                 }
@@ -219,19 +218,12 @@ export const useProfileLogic = (userId: string | undefined) => {
             const res = await api.put('/user/profile/update', formData);
 
             if (res.data.code === 1000) {
-                const updatedUser = res.data.result;
-                setProfile(updatedUser);
-
-                const currentUserStr = localStorage.getItem('user');
-                if (currentUserStr) {
-                    const currentUser = JSON.parse(currentUserStr);
-                    const newUser = { ...currentUser, name: updatedUser.name, avatarUrl: updatedUser.avatarUrl };
-                    localStorage.setItem('user', JSON.stringify(newUser));
+                    const updatedUser = res.data.result;
+                    setProfile(updatedUser);
+                    // Bắn event để Header cập nhật avatar/tên ngay lập tức
                     window.dispatchEvent(new Event('user-update'));
+                    return true;
                 }
-
-                return true;
-            }
             return false;
 
         } catch (error) {

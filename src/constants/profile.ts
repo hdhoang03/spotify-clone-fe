@@ -1,4 +1,15 @@
 // types/profile.ts
+
+/**
+ * UICacheUser – bộ dữ liệu TỐI GIẢN được phép lưu vào localStorage.
+ * Chỉ chứa những gì cần cho UI (avatar, tên hiển thị).
+ * KHÔNG lưu: email, role, birthdate, phone, hay bất kỳ dữ liệu nhạy cảm nào.
+ */
+export interface UICacheUser {
+    id: string;
+    name: string;
+    avatarUrl?: string;
+}
 export interface Artist {
     id: string;
     name: string;

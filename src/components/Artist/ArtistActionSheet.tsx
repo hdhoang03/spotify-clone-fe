@@ -10,9 +10,11 @@ interface ArtistActionSheetProps {
     onClose: () => void;
     artistName: string;
     artistImage: string;
+    onShareArtist?: () => void;
+    onCopyLink?: () => void;
 }
 
-const ArtistActionSheet = ({ isOpen, onClose, artistName, artistImage }: ArtistActionSheetProps) => {
+const ArtistActionSheet = ({ isOpen, onClose, artistName, artistImage, onShareArtist, onCopyLink }: ArtistActionSheetProps) => {
     const { t } = useTranslation();
     return createPortal(
         <AnimatePresence>
@@ -76,11 +78,16 @@ const ArtistActionSheet = ({ isOpen, onClose, artistName, artistImage }: ArtistA
 
                         {/* Menu Items: Đảm bảo có khoảng trống cuối cùng */}
                         <div className="pt-2 pb-20 overflow-y-auto">
-                            {/* <SheetItem icon={<Ban size={22}/>} label={t('player.dont_play_artist', "Don't play this artist")} />
-                            <SheetItem icon={<Flag size={22}/>} label={t('player.report', "Report")} />
-                            <div className="h-[1px] bg-zinc-100 dark:bg-white/5 my-2 mx-6"/> */}
-                            <SheetItem icon={<Share2 size={22} />} label={t('player.share', "Share")} />
-                            <SheetItem icon={<Copy size={22} />} label={t('player.copy_link', "Copy link to artist")} />
+                            <SheetItem
+                                icon={<Share2 size={22} />}
+                                label={t('player.share', "Share")}
+                                onClick={() => { onShareArtist?.(); onClose(); }}
+                            />
+                            <SheetItem
+                                icon={<Copy size={22} />}
+                                label={t('player.copy_link', "Copy link to artist")}
+                                onClick={() => { onCopyLink?.(); onClose(); }}
+                            />
                         </div>
                     </motion.div>
                 </>
@@ -90,8 +97,10 @@ const ArtistActionSheet = ({ isOpen, onClose, artistName, artistImage }: ArtistA
     );
 };
 
-const SheetItem = ({ icon, label }: { icon: React.ReactNode, label: string }) => (
-    <button className="w-full flex items-center gap-4 px-6 py-4 text-[16px] font-semibold
+const SheetItem = ({ icon, label, onClick }: { icon: React.ReactNode, label: string, onClick?: () => void }) => (
+    <button
+        onClick={onClick}
+        className="w-full flex items-center gap-4 px-6 py-4 text-[16px] font-semibold
                       text-zinc-800 dark:text-white/90 active:bg-zinc-100 dark:active:bg-white/10 transition-colors">
         <span className="text-zinc-500 dark:text-zinc-400">{icon}</span>
         <span>{label}</span>

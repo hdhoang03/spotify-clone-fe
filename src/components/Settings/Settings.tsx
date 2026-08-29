@@ -12,6 +12,7 @@ import { usePrivacySettings } from './hooks/usePrivacySettings';
 import api from '../../services/api';
 import i18n from '../../i18n';
 import { Trans, useTranslation } from 'react-i18next';
+import { getUICache } from '../../utils/userStorage';
 
 const SettingsPage = () => {
     const { settings, updateSetting } = useAppSettings();
@@ -25,8 +26,8 @@ const SettingsPage = () => {
         updateSetting('language', val);
         i18n.changeLanguage(val);
 
-        const token = localStorage.getItem('token');
-        if (token) {
+        // Chỉ gọi API khi đã đăng nhập (có ui_cache)
+        if (getUICache()) {
             try {
                 await api.patch('/user/profile/language', { language: val });
             } catch (err) {

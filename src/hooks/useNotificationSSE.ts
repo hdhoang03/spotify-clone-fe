@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-
+import { getUICache } from '../utils/userStorage';
 import api from '../services/api';
 
 // Hàm lấy endpoint dựa vào baseURL hiện tại của api (để hỗ trợ fallback URL)
@@ -74,19 +74,18 @@ export const useNotificationSSE = ({
         };
     }, [enabled]);
 
-    const getToken = (): string | null => localStorage.getItem('token');
-
     const connectSSE = () => {
-        const token = getToken();
-        if (!token) {
+        // Kiểm tra login qua ui_cache thay vì localStorage.token
+        const userCache = getUICache();
+        if (!userCache) {
             startFallbackPolling();
             return;
         }
 
         // EventSource không hỗ trợ Authorization header
-        // → truyền JWT qua query param (backend SecurityConfig cần cho phép)
-        const url = `${getSseEndpoint()}?access_token=${encodeURIComponent(token)}`;
-        const es = new EventSource(url, { withCredentials: false });
+        // Cookie httpOnly được gửi tự động khi withCredentials: true
+        const url = `${getSseEndpoint()}`;
+        const es = new EventSource(url, { withCredentials: true });
         eventSourceRef.current = es;
 
         // Timeout fallback nếu không nhận được event nào

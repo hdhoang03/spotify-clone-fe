@@ -1,13 +1,20 @@
 // src/hooks/usePremiumStatus.ts
+/**
+ * ⚠️  BẢO MẬT – is_premium trong localStorage:
+ *   - Chỉ là UI hint (để render nhanh khi load trang) – CÓ THỂ BỊ GIẢ MẠO
+ *   - KHÔNG được dùng để guard routes hoặc ẩn/hiện tính năng premium
+ *   - Mọi quyết định authorization phải dựa vào kết quả verify từ server (hook này đã làm)
+ */
 import { useState, useEffect } from 'react';
 import api from '../services/api';
 
-const getStoredPremium = (): boolean | null => {
+/** Đọc hint từ localStorage – chỉ dùng để render UI ban đầu nhanh hơn */
+const getStoredPremiumHint = (): boolean | null => {
     const val = localStorage.getItem('is_premium');
     return val !== null ? val === 'true' : null;
 };
 
-let cachedPremium: boolean | null = getStoredPremium(); // module-level cache
+let cachedPremium: boolean | null = getStoredPremiumHint(); // module-level cache
 let hasFetchedThisSession = false;
 
 export const usePremiumStatus = () => {
@@ -19,12 +26,6 @@ export const usePremiumStatus = () => {
         // If we already verified with server this session, just use cache
         if (hasFetchedThisSession && cachedPremium !== null) {
             setIsPremium(cachedPremium);
-            setIsLoading(false);
-            return;
-        }
-
-        const token = localStorage.getItem('token');
-        if (!token) {
             setIsLoading(false);
             return;
         }
@@ -65,9 +66,11 @@ export const usePremiumStatus = () => {
         };
         window.addEventListener('premium-updated', handler);
         window.addEventListener('user-update', handler);
+        window.addEventListener('user-logout', handler);
         return () => {
             window.removeEventListener('premium-updated', handler);
             window.removeEventListener('user-update', handler);
+            window.removeEventListener('user-logout', handler);
         };
     }, []);
 

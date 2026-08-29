@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { useMusic } from '../contexts/MusicContent';
 import { AICompanion } from '../components/AICompanion';
 import { UserService } from '../services/userService';
+import { getUICache } from '../utils/userStorage';
 
 
 interface MainLayoutProps {
@@ -38,8 +39,21 @@ const MainLayout = ({ children, activeTab = 'HOME', onTabChange }: MainLayoutPro
 			}
 		};
 		checkUser();
-		window.addEventListener('user-update', checkUser);
-		return () => window.removeEventListener('user-update', checkUser);
+
+		const handleUserUpdate = () => {
+			// Không gọi lại checkUser() (network request) để tránh infinite loop khi nhận 401
+			setLocalUser(getUICache());
+		};
+		const handleUserLogout = () => {
+			setLocalUser(null);
+		};
+
+		window.addEventListener('user-update', handleUserUpdate);
+		window.addEventListener('user-logout', handleUserLogout);
+		return () => {
+			window.removeEventListener('user-update', handleUserUpdate);
+			window.removeEventListener('user-logout', handleUserLogout);
+		};
 	}, []);
 
 	// 3. Logic tự động mở/đóng Sidebar dựa trên User và Mobile

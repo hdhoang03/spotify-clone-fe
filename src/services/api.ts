@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { clearSession } from '../utils/userStorage';
 
 // Lấy URL từ biến môi trường (nếu có, hỗ trợ cho production), ngược lại dùng default
 const envApiUrl = import.meta.env.VITE_API_URL;
@@ -25,37 +26,43 @@ export const getBaseUrl = () => BASE_URLS[currentBaseUrlIndex];
 
 const api = axios.create({
     baseURL: getBaseUrl(),
+    withCredentials: true, // ← Gửi httpOnly cookie tự động trong mọi request
     headers: {
-        // Cực kỳ quan trọng: Header này giúp API vượt qua màn hình cảnh báo (Warning) của ngrok
+        // Header giúp API vượt qua màn hình cảnh báo của ngrok
         'ngrok-skip-browser-warning': 'true'
     }
 });
 
-// 1. Request Interceptor: Tự đính kèm Token vào mỗi yêu cầu
-api.interceptors.request.use((config) => {
-    const token = localStorage.getItem('token');
-    if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-});
+// Request Interceptor: Cookie httpOnly được gửi tự động nhờ withCredentials:true
+// Không cần đọc localStorage hay gắn Authorization header thủ công nữa.
+api.interceptors.request.use((config) => config);
 
 // --- Mutex để tránh race condition khi nhiều request cùng lúc nhận 401 ---
 let isRefreshing = false;
 let failedQueue: { resolve: (value: any) => void; reject: (reason?: any) => void }[] = [];
 
-const processQueue = (error: any, token: string | null = null) => {
+const processQueue = (error: any) => {
     failedQueue.forEach((prom) => {
-        if (error) {
-            prom.reject(error);
-        } else {
-            prom.resolve(token);
-        }
+        if (error) prom.reject(error);
+        else prom.resolve(undefined);
     });
     failedQueue = [];
 };
 
-// 2. Response Interceptor: Xử lý khi Token hết hạn (Lỗi 401)
+// Helper: Xóa Content-Type để Axios tự gen boundary đúng khi retry FormData
+const clearFormDataContentType = (originalRequest: any) => {
+    if (originalRequest.data instanceof FormData) {
+        if (originalRequest.headers && typeof originalRequest.headers.delete === 'function') {
+            originalRequest.headers.delete('Content-Type');
+            originalRequest.headers.delete('content-type');
+        } else if (originalRequest.headers) {
+            delete originalRequest.headers['Content-Type'];
+            delete originalRequest.headers['content-type'];
+        }
+    }
+};
+
+// Response Interceptor: Xử lý khi Token hết hạn (Lỗi 401) và Rate Limit (Lỗi 429)
 api.interceptors.response.use(
     (response) => response,
     async (error) => {
@@ -64,32 +71,30 @@ api.interceptors.response.use(
         // Xử lý fallback URL nếu bị lỗi Network
         if (error.code === 'ERR_NETWORK' && !originalRequest._retryUrl) {
             originalRequest._retryUrl = true;
-            // Chuyển sang URL dự phòng
             currentBaseUrlIndex = (currentBaseUrlIndex + 1) % BASE_URLS.length;
             const newUrl = getBaseUrl();
 
             api.defaults.baseURL = newUrl;
             originalRequest.baseURL = newUrl;
 
-            // Fix lỗi FormData khi Retry bị mất boundary
-            if (originalRequest.data instanceof FormData) {
-                delete originalRequest.headers['Content-Type'];
-            }
-
+            clearFormDataContentType(originalRequest);
             return api(originalRequest);
         }
 
-        let token = localStorage.getItem('token');
-        if (token === 'null' || token === 'undefined') token = null;
+        // Rate limit (429) → throw thẳng để UI hiển thị thông báo
+        if (error.response?.status === 429) {
+            return Promise.reject(error);
+        }
 
-        // Chỉ thử refresh khi: lỗi 401 + có token thực sự + chưa retry
-        if (error.response?.status === 401 && !originalRequest._retry && token) {
+        // Chỉ thử refresh khi: lỗi 401 + chưa retry
+        // Không cần kiểm tra localStorage.token nữa — cookie sẽ có hoặc không
+        if (error.response?.status === 401 && !originalRequest._retry) {
             if (isRefreshing) {
-                // Nếu đang refresh rồi → xếp hàng chờ, không gọi refresh thêm
+                // Nếu đang refresh rồi → xếp hàng chờ, retry sau khi refresh xong
                 return new Promise((resolve, reject) => {
                     failedQueue.push({ resolve, reject });
-                }).then((newToken) => {
-                    originalRequest.headers.Authorization = `Bearer ${newToken}`;
+                }).then(() => {
+                    clearFormDataContentType(originalRequest);
                     return api(originalRequest);
                 }).catch((err) => Promise.reject(err));
             }
@@ -98,24 +103,17 @@ api.interceptors.response.use(
             isRefreshing = true;
 
             try {
-                const res = await axios.post(`${getBaseUrl()}/auth/refresh`, { token });
+                // Không cần gửi token trong body — BE đọc từ cookie tự động
+                await axios.post(`${getBaseUrl()}/auth/refresh`, {}, { withCredentials: true });
 
-                if (res.data.code === 1000) {
-                    const newToken = res.data.result.token;
-                    localStorage.setItem('token', newToken);
-                    originalRequest.headers.Authorization = `Bearer ${newToken}`;
-                    processQueue(null, newToken); // Cho hàng chờ dùng token mới
-                    return api(originalRequest);
-                } else {
-                    throw new Error('Refresh failed');
-                }
+                clearFormDataContentType(originalRequest);
+                processQueue(null);
+                return api(originalRequest); // Cookie mới đã được set bởi response
             } catch (refreshError) {
-                // Refresh thất bại → xóa session, thông báo cho hàng chờ
-                processQueue(refreshError, null);
-                localStorage.removeItem('token');
-                localStorage.removeItem('user');
-                localStorage.removeItem('user_profile');
-                window.dispatchEvent(new Event('user-update'));
+                processQueue(refreshError);
+                // Refresh thất bại → xóa session UI, thông báo cho hàng chờ
+                clearSession();
+                window.dispatchEvent(new Event('user-logout'));
                 return Promise.reject(refreshError);
             } finally {
                 isRefreshing = false;

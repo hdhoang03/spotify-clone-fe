@@ -3,6 +3,8 @@ import api from '../../services/api';
 import { likeApi } from '../../services/likeApi';
 import type { SongInfo } from './types';
 
+import { getUICache } from '../../utils/userStorage';
+
 export const useSystemSongs = () => {
     const [systemSongs, setSystemSongs] = useState<SongInfo[]>([]);
     const [likedSongs, setLikedSongs] = useState<string[]>([]);
@@ -36,6 +38,9 @@ export const useSystemSongs = () => {
         };
 
         const fetchLikedSongs = async () => {
+            // Chỉ fetch liked songs nếu user đã đăng nhập (tránh lỗi 401)
+            if (!getUICache()) return;
+
             try {
                 const res = await likeApi.getMyLikedSongs(1, 50);
                 if (res.data.code === 1000) {

@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { playlistApi } from '../components/Sidebar/playlistApi';
 import type { PlaylistResponse } from '../components/Sidebar/playlistApi';
+import { getUICache } from '../utils/userStorage';
 
 export const usePlaylists = () => {
     const [playlists, setPlaylists] = useState<PlaylistResponse[]>([]);
@@ -8,8 +9,7 @@ export const usePlaylists = () => {
     const [error, setError] = useState<string | null>(null);
 
     const fetchPlaylists = useCallback(async () => {
-        const token = localStorage.getItem('token');
-        if (!token) {
+        if (!getUICache()) {
             setIsLoading(false);
             setError("Vui lòng đăng nhập để xem thư viện.");
             return;

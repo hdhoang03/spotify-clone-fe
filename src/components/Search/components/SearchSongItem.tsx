@@ -9,6 +9,7 @@ import type { SearchSongResponse } from '../types/search.types';
 import { useTranslation } from 'react-i18next';
 import Toast from '../../common/Toast';
 import type { ToastType } from '../../common/Toast';
+import { getUICache } from '../../../utils/userStorage';
 
 interface Props {
     song: SearchSongResponse;
@@ -96,8 +97,7 @@ const SearchSongItem = ({ song, index, currentSong, isPlaying, onPlay }: Props) 
                 <button
                     onClick={(e) => {
                         e.stopPropagation();
-                        const token = localStorage.getItem('token');
-                        if (!token || token === 'null') {
+                        if (!getUICache()) {
                             window.dispatchEvent(new Event('open-auth-modal'));
                             return;
                         }

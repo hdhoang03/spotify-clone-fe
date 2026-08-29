@@ -15,13 +15,14 @@ import { useArtist } from './useArtist';
 import { Loader2 } from 'lucide-react';
 import ProfileShareCard from '../Profile/components/ProfileShareCard';
 import { useTranslation } from 'react-i18next';
+import { getUICache } from '../../utils/userStorage';
 
 const ArtistPage = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { playPlaylist, currentSong, isPlaying: globalIsPlaying, togglePlay } = useMusic();
     const { artistData, popularTracks, discography, relatedArtists, isLoading, error, toggleFollow } = useArtist();
-    const isLoggedIn = !!localStorage.getItem('token');
+    const isLoggedIn = !!getUICache();
     const [isAboutOpen, setIsAboutOpen] = useState(false);
     const [isShareModalOpen, setIsShareModalOpen] = useState(false);
     const [isShuffling, setIsShuffling] = useState(false);

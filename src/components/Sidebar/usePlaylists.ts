@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { playlistApi } from './playlistApi';
 import { usePlaylistStore } from '../../stores/usePlaylistStore'
 import { useTranslation } from 'react-i18next';
+import { getUICache } from '../../utils/userStorage';
 
 export const usePlaylists = () => {
     const { t } = useTranslation();
@@ -14,8 +15,7 @@ export const usePlaylists = () => {
     const [error, setError] = useState<string | null>(null);
 
     const fetchPlaylists = useCallback(async () => {
-        const token = localStorage.getItem('token');
-        if (!token) {
+        if (!getUICache()) {
             setIsLoading(false);
             setError(t('library.login_required'));
             return;

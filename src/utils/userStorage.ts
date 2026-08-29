@@ -1,36 +1,86 @@
 /**
  * userStorage.ts
- * Tiện ích đọc/ghi user từ localStorage với error handling đồng nhất.
- * Thay thế các chỗ dùng localStorage.getItem('user') + JSON.parse() rải rác.
+ * ──────────────────────────────────────────────────────────────────────────────
+ * Quy tắc bảo mật localStorage:
+ *   localStorage là bộ nhớ CÔNG KHAI — mọi script trên trang đều đọc được.
+ *   → Chỉ lưu dữ liệu tối giản cần cho UI: id, name, avatarUrl.
+ *   → KHÔNG lưu: email, role, birthdate, phone, hay bất kỳ dữ liệu nhạy cảm nào.
+ *   → KHÔNG dùng cache này để quyết định authorization (luôn verify từ server).
+ * ──────────────────────────────────────────────────────────────────────────────
  */
 
-const USER_KEY = 'user';
-const USER_PROFILE_KEY = 'user_profile'; // key cũ, giữ để tương thích
+import type { UICacheUser } from '../constants/profile';
 
-/** Lấy user từ localStorage, trả null nếu không có hoặc lỗi parse */
-export const getUserFromStorage = (): any | null => {
+/** Key duy nhất cho UI cache – tên rõ ràng, tránh nhầm với full user object */
+const UI_CACHE_KEY = 'ui_cache';
+
+/**
+ * Keys cũ cần migrate sạch khi logout.
+ * Xóa để không để lại dữ liệu thừa từ version trước.
+ */
+const LEGACY_KEYS = ['user', 'user_profile', 'token'];
+
+/** Session keys – bị xóa khi logout, KHÔNG xóa settings/i18n
+ *  Lưu ý: 'token' đã được chuyển sang httpOnly cookie — không còn trong localStorage
+ */
+export const SESSION_KEYS = [UI_CACHE_KEY, 'is_premium'] as const;
+
+// ─── Read ────────────────────────────────────────────────────────────────────
+
+/** Lấy UI cache từ localStorage. Trả null nếu không có hoặc lỗi parse. */
+export const getUICache = (): UICacheUser | null => {
     try {
-        const raw = localStorage.getItem(USER_KEY);
-        return raw ? JSON.parse(raw) : null;
+        const raw = localStorage.getItem(UI_CACHE_KEY);
+        return raw ? (JSON.parse(raw) as UICacheUser) : null;
     } catch {
         return null;
     }
 };
 
-/** Lưu user vào localStorage (cả 2 key để tương thích code cũ) */
-export const setUserToStorage = (user: any): void => {
-    const serialized = JSON.stringify(user);
-    localStorage.setItem(USER_KEY, serialized);
-    localStorage.setItem(USER_PROFILE_KEY, serialized);
+// ─── Write ───────────────────────────────────────────────────────────────────
+
+/**
+ * Lưu UI cache – chỉ pick 3 fields an toàn từ bất kỳ object nào.
+ * Dù truyền vào full UserProfile hay bất cứ thứ gì, chỉ 3 fields được lưu.
+ */
+export const setUICache = (user: { id: string; name: string; avatarUrl?: string }): void => {
+    const safe: UICacheUser = {
+        id: user.id,
+        name: user.name,
+        avatarUrl: user.avatarUrl,
+    };
+    localStorage.setItem(UI_CACHE_KEY, JSON.stringify(safe));
 };
 
-/** Xóa user khỏi localStorage */
-export const clearUserFromStorage = (): void => {
-    localStorage.removeItem(USER_KEY);
-    localStorage.removeItem(USER_PROFILE_KEY);
+// ─── Clear ───────────────────────────────────────────────────────────────────
+
+/**
+ * Xóa session khi logout:
+ *   - Xóa token, ui_cache, is_premium
+ *   - Xóa cả các key cũ (user, user_profile) để migration sạch
+ *   - GIỮ NGUYÊN: springtunes_settings, i18nextLng (preferences người dùng)
+ */
+export const clearSession = (): void => {
+    SESSION_KEYS.forEach((key) => localStorage.removeItem(key));
+    LEGACY_KEYS.forEach((key) => localStorage.removeItem(key));
 };
 
-/** Lấy access token từ localStorage */
-export const getTokenFromStorage = (): string | null => {
-    return localStorage.getItem('token') || localStorage.getItem('access_token') || null;
-};
+// ─── Token helpers ────────────────────────────────────────────────────────────
+
+/**
+ * @deprecated Token đã chuyển sang httpOnly Cookie — không còn lưu trong localStorage.
+ * Hàm này luôn trả về null. Giữ lại để không bể gà gọi vãn còn sỵ dụng nó.
+ */
+export const getToken = (): string | null => null;
+
+/** @deprecated Dùng getUICache() thay thế */
+export const getUserFromStorage = getUICache;
+
+/** @deprecated Dùng setUICache() thay thế */
+export const setUserToStorage = setUICache;
+
+/** @deprecated Dùng clearSession() thay thế */
+export const clearUserFromStorage = clearSession;
+
+/** @deprecated Dùng getToken() thay thế */
+export const getTokenFromStorage = getToken;

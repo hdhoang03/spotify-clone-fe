@@ -24,6 +24,7 @@ const Header = ({ onMenuClick, onNaviagate, activeTab }: HeaderProps) => {
     // Sử dụng hook useHeader đã sửa ở trên
     const {
         user,
+        handleLogout,
         isAuthModalOpen,
         isProfileMenuOpen,
         menuRef,
@@ -51,14 +52,8 @@ const Header = ({ onMenuClick, onNaviagate, activeTab }: HeaderProps) => {
     };
 
     const handleConfirmLogout = () => {
-        // Xóa dữ liệu
-        localStorage.removeItem('user');
-        localStorage.removeItem('user_profile');
-        localStorage.removeItem('token');
-
-        setIsProfileMenuOpen(false);
         setIsLogoutModalOpen(false);
-        window.location.href = '/';
+        handleLogout();
     };
 
     return (

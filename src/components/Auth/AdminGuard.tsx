@@ -8,24 +8,14 @@ const AdminGuard = () => {
     const [status, setStatus] = useState<GuardStatus>('loading');
 
     useEffect(() => {
-        const token = localStorage.getItem('token');
-
-        // Không có token → từ chối ngay, không cần gọi API
-        if (!token || token === 'null' || token === 'undefined') {
-            setStatus('denied');
-            return;
-        }
-
-        // Gọi API thực để xác minh role từ SERVER
-        // KHÔNG tin tưởng localStorage vì có thể bị giả mạo qua DevTools
+        // Không cần kiểm tra localStorage.token nữa
+        // Cookie httpOnly được gửi tự động — nếu không có cookie hợp lệ, server trả 401
         api.get('/user/my')
             .then(res => {
                 const user = res.data?.result;
                 const isAdmin = user?.roles?.some((role: any) => role.name === 'ADMIN');
 
                 if (isAdmin) {
-                    // Đồng bộ lại localStorage với dữ liệu thật từ server
-                    localStorage.setItem('user', JSON.stringify(user));
                     setStatus('allowed');
                 } else {
                     console.warn('[AdminGuard] Truy cập bị từ chối. Roles:', user?.roles);

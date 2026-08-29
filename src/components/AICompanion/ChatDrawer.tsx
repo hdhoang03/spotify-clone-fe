@@ -156,14 +156,17 @@ export const ChatDrawer: React.FC<ChatDrawerProps> = ({
                         </div>
                     </div>
 
-                    <AnimatePresence>
-                        {showKeySettings && (
-                            <ApiKeySettings apiKey={apiKey} onSave={(key) => { onSaveKey(key); setShowKeySettings(false); }} />
-                        )}
-                    </AnimatePresence>
+                    {/* Scrollable body: ApiKeySettings trên cùng, Messages bên dưới */}
+                    <div className="flex-1 flex flex-col overflow-hidden min-h-0">
+                        <AnimatePresence>
+                            {showKeySettings && (
+                                <ApiKeySettings apiKey={apiKey} onSave={(key) => { onSaveKey(key); setShowKeySettings(false); }} />
+                            )}
+                        </AnimatePresence>
 
-                    {/* Messages */}
-                    <MessageList messages={messages} isLoading={isLoading} errorMsg={errorMsg} />
+                        {/* Messages */}
+                        <MessageList messages={messages} isLoading={isLoading} errorMsg={errorMsg} />
+                    </div>
 
                     {/* Footer / Input Area */}
                     <div className="p-4 border-t border-zinc-200/50 dark:border-zinc-800/50 bg-white/50 dark:bg-[#0A0A0A]/50 space-y-4">
