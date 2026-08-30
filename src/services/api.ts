@@ -62,6 +62,25 @@ const clearFormDataContentType = (originalRequest: any) => {
     }
 };
 
+/**
+ * Danh sách các endpoint PUBLIC — không yêu cầu xác thực.
+ * Khi 401 xảy ra trên các URL này, KHÔNG thử refresh token (tránh spam /auth/refresh
+ * và tránh đưa request public vào failedQueue rồi bị reject khi refresh thất bại).
+ */
+const PUBLIC_ENDPOINTS = [
+    '/song/allSongs',
+    '/like/top',
+    '/stream/top',
+    '/albums/all',
+    '/artist/all',
+    '/song/',         // GET chi tiết bài hát
+    '/albums/',       // GET chi tiết album
+    '/artist/',       // GET chi tiết nghệ sĩ
+];
+
+const isPublicEndpoint = (url: string = ''): boolean =>
+    PUBLIC_ENDPOINTS.some((pub) => url.includes(pub));
+
 // Response Interceptor: Xử lý khi Token hết hạn (Lỗi 401) và Rate Limit (Lỗi 429)
 api.interceptors.response.use(
     (response) => response,
@@ -83,6 +102,12 @@ api.interceptors.response.use(
 
         // Rate limit (429) → throw thẳng để UI hiển thị thông báo
         if (error.response?.status === 429) {
+            return Promise.reject(error);
+        }
+
+        // Endpoint public bị 401 → reject thẳng, KHÔNG refresh
+        // (tránh spam /auth/refresh và tránh xếp vào failedQueue rồi bị reject domino)
+        if (error.response?.status === 401 && isPublicEndpoint(originalRequest?.url)) {
             return Promise.reject(error);
         }
 
