@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next';
 import { GreetingHeader } from './GreetingHeader';
 import { SmartPicksSection } from './SmartPicksSection';
 import { ThrowbackSection } from './ThrowbackSection';
+import { getUICache } from '../../utils/userStorage';
 
 const HomePage = () => {
     const { t } = useTranslation();
@@ -23,8 +24,7 @@ const HomePage = () => {
     const { playRadio, currentSong, isPlaying } = useMusic();
 
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(() => {
-        const userString = localStorage.getItem('user');
-        return !!(userString && userString !== 'undefined');
+        return !!getUICache();
     });
 
     const handlePlaySong = (song: any, queue: any[]) => {
@@ -39,8 +39,7 @@ const HomePage = () => {
 
     React.useEffect(() => {
         const checkLoginStatus = () => {
-            const userString = localStorage.getItem('user');
-            setIsLoggedIn(!!(userString && userString !== 'undefined'));
+            setIsLoggedIn(!!getUICache());
         };
         window.addEventListener('user-update', checkLoginStatus);
         window.addEventListener('user-logout', checkLoginStatus);
