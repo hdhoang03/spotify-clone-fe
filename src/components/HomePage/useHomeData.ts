@@ -59,7 +59,7 @@ export const useHomeData = (activeTab: string, isFollowingMode: boolean) => {
                 const artists = results[2].status === 'fulfilled' ? results[2].value.data?.result?.content || [] : [];
                 const rawLiked = results[3].status === 'fulfilled' ? results[3].value.data?.result?.content || [] : [];
                 const rawAllSongs = results[4].status === 'fulfilled' ? results[4].value.data?.result?.content || [] : [];
-                
+
                 let rawMyLiked: any[] = [];
                 if (isLoggedIn && results.length > 5 && results[5].status === 'fulfilled') {
                     const myLikedData = results[5].value.data?.result?.content || [];

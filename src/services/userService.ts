@@ -1,6 +1,6 @@
 import api from './api';
 import type { UserProfile } from '../constants/profile';
-import { setUICache, getUICache, clearSession } from '../utils/userStorage';
+import { setUICache, getUICache } from '../utils/userStorage';
 
 export const UserService = {
     // 1. GET: Lấy thông tin user thực từ server (không tin localStorage)
@@ -25,11 +25,10 @@ export const UserService = {
         } catch (err: any) {
             const status = err?.response?.status;
 
-            // Token không hợp lệ / hết hạn (401/403) → xóa session, trả về null
-            // Điều này thường do không có cookie hoặc cookie hết hạn
+            // Token không hợp lệ / hết hạn (401/403) → trả về null
+            // Việc clearSession() + user-logout đã được api.ts interceptor xử lý rồi
+            // Không dispatch lại ở đây để tránh double-trigger gây reload vòng lặp
             if (status === 401 || status === 403) {
-                clearSession();
-                window.dispatchEvent(new Event('user-logout'));
                 return null;
             }
 

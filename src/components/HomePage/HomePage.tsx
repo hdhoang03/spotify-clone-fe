@@ -134,10 +134,10 @@ const HomePage = () => {
                         {/* ── Music & All tabs ── */}
                         {activeTab !== 'ARTIST' && (
                             <>
-                                {/* Top Streamed is always at the top */}
-                                {data.topStreamedSongs.length > 0 && (
-                                    <Section title={t('home.trending')}>
-                                        {data.topStreamedSongs.map((song) => (
+                                {/* Top Streamed or Fallback All Songs */}
+                                {(data.topStreamedSongs.length > 0 ? data.topStreamedSongs : data.allSongs).length > 0 && (
+                                    <Section title={data.topStreamedSongs.length > 0 ? t('home.trending') : 'Bài hát đề xuất'}>
+                                        {(data.topStreamedSongs.length > 0 ? data.topStreamedSongs : data.allSongs.slice(0, 10)).map((song) => (
                                             <CardItem
                                                 key={song.id}
                                                 title={song.title}
@@ -145,7 +145,7 @@ const HomePage = () => {
                                                 imageUrl={song.coverUrl}
                                                 isCurrent={currentSong?.id === song.id}
                                                 isPlaying={currentSong?.id === song.id && isPlaying}
-                                                onClick={() => handlePlaySong(song, data.topStreamedSongs)}
+                                                onClick={() => handlePlaySong(song, data.topStreamedSongs.length > 0 ? data.topStreamedSongs : data.allSongs)}
                                             />
                                         ))}
                                     </Section>

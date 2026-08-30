@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { clearSession } from '../utils/userStorage';
+import { clearSession, getUICache } from '../utils/userStorage';
 
 // Lấy URL từ biến môi trường (nếu có, hỗ trợ cho production), ngược lại dùng default
 const envApiUrl = import.meta.env.VITE_API_URL;
@@ -86,9 +86,10 @@ api.interceptors.response.use(
             return Promise.reject(error);
         }
 
-        // Chỉ thử refresh khi: lỗi 401 + chưa retry
-        // Không cần kiểm tra localStorage.token nữa — cookie sẽ có hoặc không
-        if (error.response?.status === 401 && !originalRequest._retry) {
+        // Chỉ thử refresh khi: lỗi 401 + chưa retry + user đã từng đăng nhập
+        // Nếu không có UICache → guest, không refresh để tránh spam request thừa
+        const isLoggedIn = getUICache() !== null;
+        if (error.response?.status === 401 && !originalRequest._retry && isLoggedIn) {
             if (isRefreshing) {
                 // Nếu đang refresh rồi → xếp hàng chờ, retry sau khi refresh xong
                 return new Promise((resolve, reject) => {
