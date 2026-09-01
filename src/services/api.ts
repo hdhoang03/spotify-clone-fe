@@ -66,16 +66,19 @@ const clearFormDataContentType = (originalRequest: any) => {
  * Danh sách các endpoint PUBLIC — không yêu cầu xác thực.
  * Khi 401 xảy ra trên các URL này, KHÔNG thử refresh token (tránh spam /auth/refresh
  * và tránh đưa request public vào failedQueue rồi bị reject khi refresh thất bại).
+ *
+ * ⚠️ CHỈ liệt kê path GET read-only ở đây.
+ * KHÔNG thêm path chung như '/song/' vì sẽ match cả admin endpoints (create/update/delete).
  */
 const PUBLIC_ENDPOINTS = [
     '/song/allSongs',
     '/like/top',
     '/stream/top',
+    '/stream/count/',
+    '/stream/range/',
     '/albums/all',
     '/artist/all',
-    '/song/',         // GET chi tiết bài hát
-    '/albums/',       // GET chi tiết album
-    '/artist/',       // GET chi tiết nghệ sĩ
+    '/advanced-search',
 ];
 
 const isPublicEndpoint = (url: string = ''): boolean =>
