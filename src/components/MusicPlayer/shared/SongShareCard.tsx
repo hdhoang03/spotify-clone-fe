@@ -1,4 +1,4 @@
-import { useRef, useState, useCallback } from 'react';
+import { useRef, useState, useCallback, useEffect } from 'react';
 import { QRCodeCanvas } from 'qrcode.react';
 import { toPng } from 'html-to-image';
 import { Download, X, Loader2 } from 'lucide-react';
@@ -11,16 +11,72 @@ interface SongShareCardProps {
     onClose: () => void;
 }
 
+/**
+ * Fetch ảnh từ URL và convert thành blob URL (same-origin).
+ * Giúp html-to-image không bị lỗi CORS khi tạo canvas.
+ *
+ * Ở local dev: dùng Vite proxy (/cloudinary-proxy) để fetch same-origin.
+ * Ở production: fetch trực tiếp + cache-busting.
+ */
+const fetchImageAsBlobUrl = async (url: string): Promise<string | null> => {
+    try {
+        let fetchUrl = url;
+
+        // Ở dev mode: rewrite Cloudinary URL qua Vite proxy để tránh CORS
+        if (import.meta.env.DEV && url.includes('res.cloudinary.com')) {
+            fetchUrl = url.replace('https://res.cloudinary.com', '/cloudinary-proxy');
+        } else {
+            // Production: thêm timestamp để bust cache (tránh cached response thiếu CORS headers)
+            const separator = url.includes('?') ? '&' : '?';
+            fetchUrl = `${url}${separator}_t=${Date.now()}`;
+        }
+
+        const response = await fetch(fetchUrl, {
+            mode: 'cors',
+            cache: 'no-cache',
+        });
+        if (!response.ok) return null;
+        const blob = await response.blob();
+        return URL.createObjectURL(blob);
+    } catch (err) {
+        console.warn('fetchImageAsBlobUrl failed, will use original URL:', err);
+        return null;
+    }
+};
+
 const SongShareCard = ({ song, isOpen, onClose }: SongShareCardProps) => {
     const { t } = useTranslation();
     const cardRef = useRef<HTMLDivElement>(null);
     const imageRef = useRef<HTMLImageElement>(null);
     const [isGenerating, setIsGenerating] = useState(false);
+    const [blobCoverUrl, setBlobCoverUrl] = useState<string | null>(null);
+    const [imageError, setImageError] = useState(false);
 
     const songUrl = `${window.location.origin}/song/${song.id || '123'}`;
     const dominantColor = song.dominantColor || '#333333';
-    // Thêm timestamp để bypass browser cache, đảm bảo ảnh load mới có header CORS
-    const corsCoverUrl = `${song.coverUrl}?t=${new Date().getTime()}`;
+
+    // Pre-fetch ảnh cover thành blob URL khi card mở
+    useEffect(() => {
+        if (!isOpen || !song.coverUrl) return;
+        let revoke: string | null = null;
+
+        setBlobCoverUrl(null);
+        setImageError(false);
+
+        fetchImageAsBlobUrl(song.coverUrl).then((url) => {
+            if (url) {
+                revoke = url;
+                setBlobCoverUrl(url);
+            } else {
+                // Fallback: dùng URL gốc nếu fetch thất bại
+                setBlobCoverUrl(song.coverUrl);
+            }
+        });
+
+        return () => {
+            if (revoke) URL.revokeObjectURL(revoke);
+        };
+    }, [isOpen, song.coverUrl]);
 
     const handleDownloadImage = useCallback(async () => {
         if (!cardRef.current || isGenerating) return;
@@ -35,14 +91,13 @@ const SongShareCard = ({ song, isOpen, onClose }: SongShareCardProps) => {
 
         try {
             // Buffer nhỏ để UI ổn định trước khi chụp
-            await new Promise(resolve => setTimeout(resolve, 100));
+            await new Promise(resolve => setTimeout(resolve, 200));
 
             // Cấu hình html-to-image
             const dataUrl = await toPng(cardRef.current, {
-                cacheBust: true, // Ép tải lại resource để tránh cache lỗi
-                pixelRatio: 3,   // Tăng độ nét (tương đương scale: 3)
-                backgroundColor: 'transparent', // Giữ nền trong suốt (nếu có bo góc)
-                // Filter bỏ qua các phần tử không muốn chụp (như nút button nếu nó nằm trong card)
+                cacheBust: false, // Không cần cacheBust vì ảnh đã là blob URL
+                pixelRatio: 3,
+                backgroundColor: 'transparent',
                 filter: (node) => {
                     const element = node as HTMLElement;
                     return element.tagName !== 'BUTTON';
@@ -59,7 +114,7 @@ const SongShareCard = ({ song, isOpen, onClose }: SongShareCardProps) => {
 
         } catch (error) {
             console.error("Lỗi tạo ảnh:", error);
-            alert("Có lỗi khi tạo ảnh (CORS hoặc trình duyệt chặn). Vui lòng thử lại!");
+            alert("Có lỗi khi tạo ảnh. Vui lòng thử lại!");
         } finally {
             setIsGenerating(false);
         }
@@ -121,13 +176,19 @@ const SongShareCard = ({ song, isOpen, onClose }: SongShareCardProps) => {
                                 boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.3)'
                             }}
                         >
-                            <img
-                                ref={imageRef}
-                                src={corsCoverUrl}
-                                alt="cover"
-                                crossOrigin="anonymous"
-                                className="w-full h-full object-cover"
-                            />
+                            {blobCoverUrl ? (
+                                <img
+                                    ref={imageRef}
+                                    src={blobCoverUrl}
+                                    alt="cover"
+                                    className="w-full h-full object-cover"
+                                    onError={() => setImageError(true)}
+                                />
+                            ) : (
+                                <div className="w-full h-full flex items-center justify-center">
+                                    <Loader2 className="animate-spin text-white/50" size={32} />
+                                </div>
+                            )}
                         </div>
 
                         {/* Title & Artist */}
@@ -200,7 +261,7 @@ const SongShareCard = ({ song, isOpen, onClose }: SongShareCardProps) => {
                 {/* Nút Action */}
                 <button
                     onClick={handleDownloadImage}
-                    disabled={isGenerating || !!(imageRef.current && !imageRef.current.complete)}
+                    disabled={isGenerating || !blobCoverUrl || imageError}
                     className="mt-6 w-full bg-primary-500 hover:bg-primary-400 text-black font-bold py-3 rounded-full flex items-center justify-center gap-2 transition active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
                     style={{ boxShadow: '0 10px 15px -3px rgba(34, 197, 94, 0.2)' }}
                 >
@@ -208,7 +269,7 @@ const SongShareCard = ({ song, isOpen, onClose }: SongShareCardProps) => {
                     {isGenerating ? t('share_card.creating') : t('share_card.save_card')}
                 </button>
 
-                {imageRef.current && !imageRef.current.complete && (
+                {!blobCoverUrl && (
                     <p className="text-white/50 text-xs mt-2">{t('share_card.loading')}</p>
                 )}
             </div>

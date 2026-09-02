@@ -1,4 +1,4 @@
-import { useRef, useState, useCallback, useMemo } from 'react';
+import { useRef, useState, useCallback, useEffect } from 'react';
 import { QRCodeCanvas } from 'qrcode.react';
 import { toPng } from 'html-to-image';
 import { createPortal } from 'react-dom';
@@ -13,30 +13,80 @@ interface ProfileShareCardProps {
     type?: 'user' | 'artist';
 }
 
+/**
+ * Fetch ảnh từ URL và convert thành blob URL (same-origin).
+ * Giúp html-to-image không bị lỗi CORS khi tạo canvas.
+ *
+ * Ở local dev: dùng Vite proxy (/cloudinary-proxy) để fetch same-origin.
+ * Ở production: fetch trực tiếp + cache-busting.
+ */
+const fetchImageAsBlobUrl = async (url: string): Promise<string | null> => {
+    try {
+        let fetchUrl = url;
+
+        // Ở dev mode: rewrite Cloudinary URL qua Vite proxy để tránh CORS
+        if (import.meta.env.DEV && url.includes('res.cloudinary.com')) {
+            fetchUrl = url.replace('https://res.cloudinary.com', '/cloudinary-proxy');
+        } else {
+            // Production: thêm timestamp để bust cache (tránh cached response thiếu CORS headers)
+            const separator = url.includes('?') ? '&' : '?';
+            fetchUrl = `${url}${separator}_t=${Date.now()}`;
+        }
+
+        const response = await fetch(fetchUrl, {
+            mode: 'cors',
+            cache: 'no-cache',
+        });
+        if (!response.ok) return null;
+        const blob = await response.blob();
+        return URL.createObjectURL(blob);
+    } catch (err) {
+        console.warn('fetchImageAsBlobUrl failed, will use original URL:', err);
+        return null;
+    }
+};
+
 const ProfileShareCard = ({ user, dominantColor, isOpen, onClose, type = 'user' }: ProfileShareCardProps) => {
     const cardRef = useRef<HTMLDivElement>(null);
     const imageRef = useRef<HTMLImageElement>(null);
     const [isGenerating, setIsGenerating] = useState(false);
+    const [blobAvatarUrl, setBlobAvatarUrl] = useState<string | null>(null);
+    const [imageError, setImageError] = useState(false);
     const { t } = useTranslation();
+
     // Link chia sẻ: domain/profile/user123 hoặc domain/artist/artist123
     const profileUrl = type === 'artist' || type === t('profile.artist')
         ? `${window.location.origin}/artist/${user.id}`
         : `${window.location.origin}/profile/${user.id || 'me'}`;
 
-    // Bypass cache ảnh
-    const corsAvatarUrl = useMemo(() => {
-        if (!user.avatarUrl) return null;
+    // Pre-fetch ảnh avatar thành blob URL khi card mở
+    useEffect(() => {
+        if (!isOpen || !user.avatarUrl) return;
+        let revoke: string | null = null;
 
+        setBlobAvatarUrl(null);
+        setImageError(false);
+
+        // blob: URL đã là same-origin, không cần fetch lại
         if (user.avatarUrl.startsWith('blob:')) {
-            return user.avatarUrl;
+            setBlobAvatarUrl(user.avatarUrl);
+            return;
         }
 
-        if (user.avatarUrl.includes('googleusercontent.com')) {
-            return user.avatarUrl;
-        }
+        fetchImageAsBlobUrl(user.avatarUrl).then((url) => {
+            if (url) {
+                revoke = url;
+                setBlobAvatarUrl(url);
+            } else {
+                // Fallback: dùng URL gốc
+                setBlobAvatarUrl(user.avatarUrl);
+            }
+        });
 
-        return `${user.avatarUrl}${user.avatarUrl.includes('?') ? '&' : '?'}t=${new Date().getTime()}`;
-    }, [user.avatarUrl]);
+        return () => {
+            if (revoke) URL.revokeObjectURL(revoke);
+        };
+    }, [isOpen, user.avatarUrl]);
 
     const handleDownloadImage = useCallback(async () => {
         if (!cardRef.current || isGenerating) return;
@@ -49,10 +99,10 @@ const ProfileShareCard = ({ user, dominantColor, isOpen, onClose, type = 'user' 
         setIsGenerating(true);
 
         try {
-            await new Promise(resolve => setTimeout(resolve, 100));
+            await new Promise(resolve => setTimeout(resolve, 200));
 
             const dataUrl = await toPng(cardRef.current, {
-                cacheBust: true,
+                cacheBust: false, // Không cần cacheBust vì ảnh đã là blob URL
                 pixelRatio: 3,
                 backgroundColor: 'transparent',
                 filter: (node) => (node as HTMLElement).tagName !== 'BUTTON',
@@ -125,14 +175,18 @@ const ProfileShareCard = ({ user, dominantColor, isOpen, onClose, type = 'user' 
                                     boxShadow: '0 8px 32px rgba(0,0,0,0.3)'
                                 }}
                             >
-                                {corsAvatarUrl ? (
+                                {blobAvatarUrl ? (
                                     <img
                                         ref={imageRef}
-                                        src={corsAvatarUrl}
+                                        src={blobAvatarUrl}
                                         alt="avatar"
-                                        crossOrigin="anonymous"
                                         className="w-full h-full object-cover rounded-full"
+                                        onError={() => setImageError(true)}
                                     />
+                                ) : user.avatarUrl ? (
+                                    <div className="w-full h-full rounded-full flex items-center justify-center">
+                                        <Loader2 className="animate-spin text-white/50" size={32} />
+                                    </div>
                                 ) : (
                                     <div className="w-full h-full rounded-full bg-primary-500 flex items-center justify-center">
                                         <span className="text-6xl font-black uppercase">{user.name.charAt(0)}</span>
@@ -192,7 +246,7 @@ const ProfileShareCard = ({ user, dominantColor, isOpen, onClose, type = 'user' 
                 {/* Button Download */}
                 <button
                     onClick={handleDownloadImage}
-                    disabled={isGenerating || !!(corsAvatarUrl && imageRef.current && !imageRef.current.complete)}
+                    disabled={isGenerating || (user.avatarUrl && !blobAvatarUrl) || imageError}
                     className="mt-6 w-full bg-white text-black hover:bg-gray-200 font-bold py-3 rounded-full flex items-center justify-center gap-2 transition active:scale-95 disabled:opacity-50"
                 >
                     {isGenerating ? <Loader2 className="animate-spin" /> : <Download size={20} />}
