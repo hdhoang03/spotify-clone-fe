@@ -20,6 +20,35 @@ interface ProfileShareCardProps {
  * Ở local dev: dùng Vite proxy (/cloudinary-proxy) để fetch same-origin.
  * Ở production: fetch trực tiếp + cache-busting.
  */
+/**
+ * Fallback: Load ảnh qua Image element + canvas để tạo blob URL same-origin.
+ * Hoạt động khi Cloudinary trả CORS header (Access-Control-Allow-Origin).
+ */
+const loadImageViaCanvas = (url: string): Promise<string | null> => {
+    return new Promise((resolve) => {
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        img.onload = () => {
+            try {
+                const canvas = document.createElement('canvas');
+                canvas.width = img.naturalWidth;
+                canvas.height = img.naturalHeight;
+                const ctx = canvas.getContext('2d');
+                if (!ctx) { resolve(null); return; }
+                ctx.drawImage(img, 0, 0);
+                canvas.toBlob((blob) => {
+                    if (blob) resolve(URL.createObjectURL(blob));
+                    else resolve(null);
+                }, 'image/png');
+            } catch { resolve(null); }
+        };
+        img.onerror = () => resolve(null);
+        // Thêm timestamp để bust cache (tránh cached response thiếu CORS headers)
+        const separator = url.includes('?') ? '&' : '?';
+        img.src = `${url}${separator}_t=${Date.now()}`;
+    });
+};
+
 const fetchImageAsBlobUrl = async (url: string): Promise<string | null> => {
     try {
         let fetchUrl = url;
@@ -37,12 +66,13 @@ const fetchImageAsBlobUrl = async (url: string): Promise<string | null> => {
             mode: 'cors',
             cache: 'no-cache',
         });
-        if (!response.ok) return null;
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const blob = await response.blob();
         return URL.createObjectURL(blob);
     } catch (err) {
-        console.warn('fetchImageAsBlobUrl failed, will use original URL:', err);
-        return null;
+        console.warn('fetch blob failed, trying canvas fallback:', err);
+        // Fallback: dùng Image + canvas
+        return loadImageViaCanvas(url);
     }
 };
 
